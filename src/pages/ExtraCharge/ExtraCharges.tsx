@@ -44,11 +44,10 @@ const ExtraCharges = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         const url = `https://encodehertz.xyz/api/ECP/Delete?id=${actionID}`;
-
         fetch(url, {
           method: 'GET',
           headers: {
-            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         })

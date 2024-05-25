@@ -424,7 +424,7 @@ const AddBusLong = () => {
 
   useEffect(() => {
     if (selectedSupplier) {
-      fetch(`https://encodehertz.xyz//api/Long/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
+      fetch(`https://encodehertz.xyz/api/Long/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
