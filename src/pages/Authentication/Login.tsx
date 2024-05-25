@@ -141,7 +141,7 @@ const Login: React.FC<LoginProps> = ({ setUserToken }) => {
             <div className="flex justify-center items-center lg:mr-10">
               <img
                 className="mx-auto lg:h-20 w-auto h-12"
-                src="../src/images/logo/encode.png"
+                src="https://encode-soft.com/images/encodeaboutimg.svg"
                 alt="ENCODE logo"
               />
               <FontAwesomeIcon icon={faCodeBranch} className='text-4xl'/>
