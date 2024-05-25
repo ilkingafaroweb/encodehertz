@@ -27,6 +27,12 @@ import EditExtraCharge from './pages/ExtraCharge/Actions/Edit';
 import PreviewExtraCharge from './pages/ExtraCharge/Actions/Preview';
 import DuplicateExtraCharge from './pages/ExtraCharge/Actions/Duplicate';
 import AddBusShort from './pages/Bus/ShortOrders/Actions/Add';
+import EditBusShort from './pages/Bus/ShortOrders/Actions/Edit';
+import PreviewBusShort from './pages/Bus/ShortOrders/Actions/Preview';
+import RentLongOrders from './pages/RentaCar/LongOrders/LongOrders';
+import AddRentLong from './pages/RentaCar/LongOrders/Actions/Add';
+import EditRentLong from './pages/RentaCar/LongOrders/Actions/Edit';
+import PreviewRentLong from './pages/RentaCar/LongOrders/Actions/Preview';
 
 function App() {
   const [userToken, setUserToken] = useState(localStorage.getItem("userId") || '')
@@ -132,7 +138,7 @@ function App() {
         element={
           <>
             <PageTitle title="Bus Short Orders | ENCODE" />
-            <ShortOrders/>
+            <ShortOrders />
           </>
         }
       />
@@ -146,19 +152,69 @@ function App() {
         }
       />
       <Route
+        path="/bus/short-orders/edit"
+        element={
+          <>
+            <PageTitle title="Edit Bus Short Orders | ENCODE" />
+            <EditBusShort />
+          </>
+        }
+      />
+      <Route
         path="/bus/short-orders/preview"
         element={
           <>
             <PageTitle title="Preview Bus Short Orders | ENCODE" />
-            {/* <AddBusShort /> */}
+            <PreviewBusShort />
           </>
         }
       />
 
+      {/* Rent a car long orders start */}
+
+      <Route
+        path="/car/long-orders"
+        element={
+          <>
+            <PageTitle title="Rentacar Long Orders | ENCODE" />
+            <RentLongOrders />
+          </>
+        }
+      />
+      <Route
+        path="/car/long-orders/add"
+        element={
+          <>
+            <PageTitle title="Add Rentacar Long Orders | ENCODE" />
+            <AddRentLong />
+          </>
+        }
+      />
+      <Route
+        path="/car/long-orders/edit"
+        element={
+          <>
+            <PageTitle title="Edit Rentacar Long Orders | ENCODE" />
+            <EditRentLong />
+          </>
+        }
+      />
+      <Route
+        path="/car/long-orders/preview"
+        element={
+          <>
+            <PageTitle title="Preview Rentacar Long Orders | ENCODE" />
+            <PreviewRentLong />
+          </>
+        }
+      />
+
+      {/* Rent a car long orders end */}
 
 
 
 
+      {/*  */}
       <Route
         path="/car/short-orders"
         element={
@@ -168,15 +224,7 @@ function App() {
           </>
         }
       />
-      <Route
-        path="/car/long-orders"
-        element={
-          <>
-            <PageTitle title="Rentacar Long Orders | ENCODE" />
-            <FormLayout />
-          </>
-        }
-      />
+
       <Route
         path="/maintenance"
         element={
@@ -197,7 +245,7 @@ function App() {
       />
 
       {/* Extra charges panel */}
- 
+
       <Route
         path="/extraCharges"
         element={
@@ -353,13 +401,13 @@ function App() {
 
   return loading ? (
     <Loader />
-  ) : 
+  ) :
     <>
       {
         userToken ? privateRoutes() : publicRoutes()
       }
     </>
-  ;
+    ;
 }
 
 export default App;

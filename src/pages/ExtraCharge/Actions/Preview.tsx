@@ -37,13 +37,19 @@ const initialFormValues: ExtraChargeForm = {
 };
 
 const PreviewExtraCharge: React.FC = () => {
+  const token = localStorage.getItem('token')
   const [selectedData, setSelectedData] = useState<ExtraChargeForm>(initialFormValues);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const ActionID = localStorage.getItem("ActionID")
-        const response = await fetch(`https://encodehertz.xyz/api/ECP/Edit?id=${ActionID}`);
+        const response = await fetch(`https://encodehertz.xyz/api/ECP/Edit?id=${ActionID}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        });
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

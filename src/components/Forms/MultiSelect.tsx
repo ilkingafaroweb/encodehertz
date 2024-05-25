@@ -83,7 +83,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelecte
             {selectedOptions.map((option, index) => (
               <div key={option.id} className="my-1 flex items-center justify-center rounded border-[.5px] border-stroke bg-gray px-2.5 py-1.5 text-sm font-medium dark:border-strokedark dark:bg-white/30">
                 <div className="w-full flex flex-col lg:gap-6 items-center justify-between lg:flex-row" onClick={(e) => e.stopPropagation()}>
-                  <div className="w-40 flex justify-center items-center px-2 pb-2 mb-2 border-b-2 text-boxdark-2 dark:text-yellow-400 font-bold lg:mb-0 lg:border-0 lg:pb-0 lg:pr-6 lg:border-r lg:h-8">
+                  <div className="w-40 flex justify-center items-center px-2 pb-2 mb-2 border-b-2 text-red-500 dark:text-yellow-400 font-bold lg:text-lg lg:mb-0 lg:border-0 lg:pb-0 lg:pr-6 lg:border-r lg:h-8">
                     {option.name}
                   </div>
                   <div className="flex flex-col mb-2 lg:w-30">

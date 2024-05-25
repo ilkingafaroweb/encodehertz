@@ -7,7 +7,7 @@ import { Tooltip } from "antd";
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 
-const TableThree = ({ data, handleDelete } : {data?: any[], handleDelete: any}) => {
+const TableThree = ({ data, handleDelete } : {data: any[], handleDelete: any}) => {
 
   /* Initial table data */
   const [tableData, setTableData] = useState(data);
@@ -16,7 +16,6 @@ const TableThree = ({ data, handleDelete } : {data?: any[], handleDelete: any}) 
   useEffect(()=>{
     setTableData(data)
   },[data])
-  
 
   /* Column show/hide */
   const [visibleColumns, setVisibleColumns] = useState<string[]>(columnOrder)

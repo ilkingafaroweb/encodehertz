@@ -34,7 +34,7 @@ const initialUserProfile: UserProfile = {
 }
 
 const Profile: React.FC = () => {
-
+  const token = localStorage.getItem('token')
   const [userProfile, setUserProfile] = useState<UserProfile>(initialUserProfile);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -49,9 +49,12 @@ const Profile: React.FC = () => {
   };
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    if (userId) {
-      fetch(`https://encodehertz.xyz/api/User/Profile?id=${userId}`)
+      fetch(`https://encodehertz.xyz/api/User/Profile`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
         .then(response => response.json())
         .then(data => {
           setUserProfile(data);
@@ -59,14 +62,14 @@ const Profile: React.FC = () => {
         .catch(error => {
           console.error('Error fetching data:', error);
         });
-    }
   }, []);
 
   const handleSave = () => {
     fetch('https://encodehertz.xyz/api/User/UpdateProfile', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         id: userProfile.id,

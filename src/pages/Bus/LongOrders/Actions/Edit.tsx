@@ -236,6 +236,45 @@ const EditBusLong = () => {
     navigate("/bus/long-orders")
   };
 
+
+  const handleSend = async () => {
+    const bloId = localStorage.getItem('ActionID')
+
+    console.log(bloId);
+    
+
+    try {
+      const response = await fetch('https://encodehertz.xyz/api/Long/Send', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bloId),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const text = await response.text();
+      console.log('Data sent successfully:', text);
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Data sent to desktop successfully!',
+      });
+    } catch (error) {
+      console.error('Error sending data:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error sending data: ' + error.message,
+      });
+    }
+    navigate("/bus/long-orders")
+  }
+
   //   Vehicles list
 
   useEffect(() => {
@@ -554,10 +593,10 @@ const EditBusLong = () => {
                     <button type='button' onClick={handleCancel} className="flex w-full justify-center rounded bg-meta-1 p-3 font-medium text-gray hover:bg-opacity-90">
                       Cancel
                     </button>
-                    <button type='button' onClick={handleCancel} className="flex w-full justify-center rounded bg-meta-8 p-3 font-medium text-gray hover:bg-opacity-90">
+                    {/* <button type='button' onClick={handleCancel} className="flex w-full justify-center rounded bg-meta-8 p-3 font-medium text-gray hover:bg-opacity-90">
                       Approve
-                    </button>
-                    <button type='button' onClick={handleCancel} className="flex w-full justify-center rounded bg-meta-5 p-3 font-medium text-gray hover:bg-opacity-90">
+                    </button> */}
+                    <button type='button' onClick={handleSend} className="flex w-full justify-center rounded bg-meta-5 p-3 font-medium text-gray hover:bg-opacity-90">
                       Send to  desktop
                     </button>
                     <button type='button' onClick={handleSave} className="flex w-full justify-center rounded bg-meta-3 p-3 font-medium text-gray hover:bg-opacity-90">

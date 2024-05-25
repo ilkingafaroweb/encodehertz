@@ -20,7 +20,7 @@ const SelectDB: React.FC = () => {
           throw new Error('Token not found');
         }
         
-        const response = await fetch('http://localhost:5231/api/User/GetBusinessUnits', {
+        const response = await fetch('https://encodehertz.xyz/api/User/GetBusinessUnits', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -55,7 +55,7 @@ const SelectDB: React.FC = () => {
         throw new Error('Token not found');
       }
       
-      const response = await fetch(`http://localhost:5231/api/User/SetBusinessUnit?selectedBusinessUnit=${selectedValue}`, {
+      const response = await fetch(`https://encodehertz.xyz/api/User/SetBusinessUnit?selectedBusinessUnit=${selectedValue}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

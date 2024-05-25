@@ -35,6 +35,7 @@ const initialFormValues: ExtraChargeForm = {
 };
 
 const DuplicateExtraCharge: React.FC = () => {
+  const token = localStorage.getItem('token')
   const [selectedData, setSelectedData] = useState<ExtraChargeForm>(initialFormValues);
   const navigate = useNavigate();
 
@@ -56,7 +57,12 @@ const DuplicateExtraCharge: React.FC = () => {
     const fetchData = async () => {
       try {
         const ActionID = localStorage.getItem("ActionID")
-        const response = await fetch(`https://encodehertz.xyz/api/ECP/Duplicate?extraChargeId=${ActionID}`);
+        const response = await fetch(`https://encodehertz.xyz/api/ECP/Duplicate?extraChargeId=${ActionID}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        });
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -96,7 +102,8 @@ const DuplicateExtraCharge: React.FC = () => {
     fetch('https://encodehertz.xyz/api/ECP/Duplicate', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(postData),
     })

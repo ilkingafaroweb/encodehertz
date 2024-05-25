@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const DropdownUser = () => {
   const navigate = useNavigate() 
-
+  const token = localStorage.getItem('token')
   const [userName, setUserName] = useState('')
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -55,7 +55,12 @@ const DropdownUser = () => {
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     if (userId) {
-      fetch(`https://encodehertz.xyz/api/User/Profile?id=${userId}`)
+      fetch(`https://encodehertz.xyz/api/User/Profile`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
         .then(response => response.json())
         .then(data => {
           let userName = data.name + " " + data.surname

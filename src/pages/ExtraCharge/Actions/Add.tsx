@@ -35,6 +35,7 @@ const initialFormValues: ExtraChargeForm = {
 };
 
 const AddExtraCharge: React.FC = () => {
+  const token = localStorage.getItem('token')
   const [selectedData, setSelectedData] = useState<ExtraChargeForm>(initialFormValues);
   const navigate = useNavigate();
   const [formOptions, setFormOptions] = useState<ExtraChargeForm | null>(null);
@@ -55,7 +56,12 @@ const AddExtraCharge: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://encodehertz.xyz/api/ECP/Create');
+        const response = await fetch('https://encodehertz.xyz/api/ECP/Create', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -96,8 +102,8 @@ const AddExtraCharge: React.FC = () => {
     fetch('https://encodehertz.xyz/api/ECP/Create', {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json' 
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(postData),
     })

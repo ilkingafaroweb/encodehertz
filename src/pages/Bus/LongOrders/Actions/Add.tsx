@@ -479,7 +479,7 @@ const AddBusLong = () => {
 
                   {
                     selectedData.selectedServiceType === "M-000003" && <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                      <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "True" }, { value: '', text: "False" }]} setSelectedData={setSelectedData} disabled={false} defaultValue="" />
+                      <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue="" />
                       <SelectGroupOne text="Vehicle Class" options={formOptions.vehicleClasses || []} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
                       <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={formOptions.vehicles ? false : true} defaultValue='' />
                     </div>

@@ -5,11 +5,17 @@ import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import Swal from 'sweetalert2';
 
 const ExtraCharges = () => {
+  const token = localStorage.getItem('token')
   const [extraCharges, setExtraCharges] = useState([]);
   const [update, setUpdate] = useState(false); 
 
   useEffect(() => {
-    fetch('https://encodehertz.xyz/api/ECP/List')
+    fetch('https://encodehertz.xyz/api/ECP/List', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error('Response didnt success');
@@ -23,41 +29,6 @@ const ExtraCharges = () => {
         console.error('Error', error);
       });
 }, [])
-
-  // useEffect(() => {
-  //   setUserId();
-  // }, [update]);
-  
-  // const setUserId = async () => {
-  //   try {
-  //     const userId = localStorage.getItem('userId');
-  //     if (userId) {
-  //       const response = await fetch(`https://encodehertz.xyz/api/ECP/SetUserId?userId=${userId}`);
-  //       if (!response.ok) {
-  //         throw new Error('Failed to set user ID');
-  //       }
-  //       fetchData();
-  //     }
-  //   } catch (error) {
-  //     console.error('Error setting user ID:', error);
-  //   }
-  // };
-  
-  // const fetchData = () => {
-  //   fetch('https://encodehertz.xyz/api/ECP/List')
-  //     .then(response => {
-  //       if (!response.ok) {
-  //         throw new Error('Network response was not ok');
-  //       }
-  //       return response.json();
-  //     })
-  //     .then(data => {
-  //       setExtraCharges(data);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching data:', error);
-  //     });
-  // };
   
 
   const handleDelete = async () => {
