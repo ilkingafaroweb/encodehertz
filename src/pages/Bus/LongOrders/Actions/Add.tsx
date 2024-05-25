@@ -177,7 +177,7 @@ const AddBusLong = () => {
   // Customer monthly payment default
 
   const getCustomerMonthlyPayment = async () => {
-    if (selectedServiceType && selectedCustomer) {
+    if (!!selectedServiceType && !!selectedCustomer) {
       let apiUrl = `https://encodehertz.xyz/api/Long/GetCustomerMonthlyPayment?selectedCustomer=${selectedCustomer}&selectedServiceType=${selectedServiceType}`;
 
       setSelectedData(prevData => ({
@@ -185,7 +185,7 @@ const AddBusLong = () => {
         priceToCustomerMonthly: 0
       }));
 
-      if (selectedVehicleClass) {
+      if (!!selectedVehicleClass) {
         apiUrl = `https://encodehertz.xyz/api/Long/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}`;
       }
 
@@ -221,10 +221,10 @@ const AddBusLong = () => {
   // Outsource monthly payment default
 
   const getOutsourceMonthlyPayment = async () => {
-    if (selectedServiceType && selectedSupplier) {
+    if (!!selectedServiceType && !!selectedSupplier) {
       let apiUrl = `https://encodehertz.xyz/api/Long/GetSupplierMonthlyPayment?selectedSupplier=${selectedSupplier}&selectedServiceType=${selectedServiceType}`;
 
-      if (selectedVehicleClass) {
+      if (!!selectedVehicleClass) {
         apiUrl = `https://encodehertz.xyz/api/Long/GetSupplierMonthlyPaymentCWD?selectedSupplier=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}`;
       }
 
@@ -259,7 +259,7 @@ const AddBusLong = () => {
   // Vehicles list
 
   const getVehicleList = async () => {
-    if (!selectedVehicleClass) {
+    if (!!selectedVehicleClass) {
       await fetch(`https://encodehertz.xyz/api/Long/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -287,7 +287,6 @@ const AddBusLong = () => {
   useEffect(() => {
     getVehicleList()
   }, [selectedVehicleClass, selectedOutsourceVehicle]);
-
 
 
   // Extra charges

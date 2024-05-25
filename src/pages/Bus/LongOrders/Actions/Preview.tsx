@@ -176,7 +176,7 @@ const PreviewBusLong = () => {
   //   Vehicles list
 
   useEffect(() => {
-    if (selectedVehicleClass) {
+    if (!!selectedVehicleClass) {
       fetch(`https://encodehertz.xyz/api/Long/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -265,7 +265,7 @@ const PreviewBusLong = () => {
   };
 
   useEffect(() => {
-    if (selectedCustomer) {
+    if (!!selectedCustomer) {
       fetch(`https://encodehertz.xyz/api/Long/GetContracts?customerCode=${selectedCustomer}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -295,7 +295,7 @@ const PreviewBusLong = () => {
 
 
   useEffect(() => {
-    if (selectedSupplier) {
+    if (!!selectedSupplier) {
       fetch(`https://encodehertz.xyz//api/Long/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
         headers: {
           'Authorization': `Bearer ${token}`,

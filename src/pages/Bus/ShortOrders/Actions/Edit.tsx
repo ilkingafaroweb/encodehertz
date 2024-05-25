@@ -465,7 +465,6 @@ const EditBusShort = () => {
                 <div className="max-w-full mx-auto gap-9 sm:grid-cols-2">
                     <div className="flex flex-col gap-9">
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-
                             <form>
                                 <div className="p-6.5">
                                     <div className="mb-3 flex flex-col gap-6 xl:flex-row">
@@ -493,7 +492,6 @@ const EditBusShort = () => {
                                         <SelectGroupOne text="Driver" options={formOptions.drivers || []} setSelectedData={setSelectedData} disabled={false} />
                                     </div>
 
-
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <SelectGroupOne text="Source" options={[{ value: "Site", text: "Site" }, { value: "Advertise", text: "Advertise" }]} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
                                         <div className="w-full xl:w-full">
@@ -507,7 +505,6 @@ const EditBusShort = () => {
                                             />
                                         </div>
                                     </div>
-
                                     {
                                         selectedData.selectedServiceType === "M-000003" && <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                             <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedOutsourceVehicle ? "true" : ""} />

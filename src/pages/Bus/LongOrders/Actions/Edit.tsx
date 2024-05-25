@@ -326,7 +326,7 @@ const EditBusLong = () => {
   // Extra Charges 
 
   useEffect(() => {
-    if (selectedCustomer && selectedVehicleClass) {
+    if (!!selectedCustomer && !!selectedVehicleClass) {
       fetch(`https://encodehertz.xyz/api/Long/GetExtraCharges?customerCode=${selectedCustomer}&vehicleClass=${selectedVehicleClass}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -357,7 +357,7 @@ const EditBusLong = () => {
   // Special extra charge for the customer
 
   useEffect(() => {
-    if (selectedCustomer && selectedVehicleClass) {
+    if (!!selectedCustomer && !!selectedVehicleClass) {
       fetch(`https://encodehertz.xyz/api/Long/GetExtraCharges?customerCode=${selectedCustomer}&vehicleClass=${selectedVehicleClass}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -398,7 +398,7 @@ const EditBusLong = () => {
 
 
   useEffect(() => {
-    if (selectedCustomer) {
+    if (!!selectedCustomer) {
       fetch(`https://encodehertz.xyz/api/Long/GetContracts?customerCode=${selectedCustomer}`,{
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -428,7 +428,7 @@ const EditBusLong = () => {
 
 
   useEffect(() => {
-    if (selectedSupplier) {
+    if (!!selectedSupplier) {
       fetch(`https://encodehertz.xyz/api/Long/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
