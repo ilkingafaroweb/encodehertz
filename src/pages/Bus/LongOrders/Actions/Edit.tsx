@@ -113,6 +113,7 @@ const EditBusLong = () => {
       }
       const data = await response.json();
       setFormOptions(data as FormData);
+      console.log("FORM OPTIONS : ",formOptions);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -274,6 +275,89 @@ const EditBusLong = () => {
     }
     navigate("/bus/long-orders")
   }
+
+   // Customer monthly payment default
+
+   const getCustomerMonthlyPayment = async () => {
+    if (!!selectedServiceType && !!selectedCustomer) {
+      let apiUrl = `https://encodehertz.xyz/api/Long/GetCustomerMonthlyPayment?selectedCustomer=${selectedCustomer}&selectedServiceType=${selectedServiceType}`;
+
+      setSelectedData(prevData => ({
+        ...prevData,
+        priceToCustomerMonthly: 0
+      }));
+
+      if (!!selectedVehicleClass) {
+        apiUrl = `https://encodehertz.xyz/api/Long/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}`;
+      }
+
+      await fetch(apiUrl, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setSelectedData(prevData => ({
+            ...prevData,
+            priceToCustomerMonthly: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+  }
+
+  useEffect(() => {
+    getCustomerMonthlyPayment()
+  }, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedOutsourceVehicle]);
+
+
+  // Outsource monthly payment default
+
+  const getOutsourceMonthlyPayment = async () => {
+    if (!!selectedServiceType && !!selectedSupplier) {
+      let apiUrl = `https://encodehertz.xyz/api/Long/GetSupplierMonthlyPayment?selectedSupplier=${selectedSupplier}&selectedServiceType=${selectedServiceType}`;
+
+      if (!!selectedVehicleClass) {
+        apiUrl = `https://encodehertz.xyz/api/Long/GetSupplierMonthlyPaymentCWD?selectedSupplier=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}`;
+      }
+
+      await fetch(apiUrl, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setSelectedData(prevData => ({
+            ...prevData,
+            priceToOutsourceMonthly: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+  }
+
+  useEffect(() => {
+    getOutsourceMonthlyPayment()
+  }, [selectedServiceType, selectedSupplier, selectedVehicleClass]);
+
 
   //   Vehicles list
 
