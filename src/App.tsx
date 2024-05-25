@@ -404,7 +404,7 @@ function App() {
   ) :
     <>
       {
-        !userToken ? privateRoutes() : publicRoutes()
+        userToken ? privateRoutes() : publicRoutes()
       }
     </>
     ;
