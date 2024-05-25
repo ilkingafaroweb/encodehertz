@@ -138,13 +138,13 @@ const Login: React.FC<LoginProps> = ({ setUserToken }) => {
       <div className="flex justify-center items-center w-full h-screen">
         <div className="w-4/5 lg:w-[520px] lg:p-16 lg:shadow-2xl lg:shadow-sky-200 lg:rounded-lg md:w-[400px] lg:bg-white ">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <div className="flex justify-center items-center lg:mr-10">
+            <div className="flex justify-center items-center">
               <img
-                className="mx-auto lg:h-20 w-auto h-12"
+                className="mx-auto w-auto lg:h-24 h-16"
                 src="https://encode-soft.com/images/encodeaboutimg.svg"
                 alt="ENCODE logo"
               />
-              <FontAwesomeIcon icon={faCodeBranch} className='text-4xl'/>
+              <FontAwesomeIcon icon={faCodeBranch} className='text-xl lg:text-3xl'/>
               <img
                 className="mx-auto lg:h-11 w-auto h-8 ml-8 mt-3"
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Hertz_Car_Rental_logo.svg/2560px-Hertz_Car_Rental_logo.svg.png"
