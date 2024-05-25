@@ -35,7 +35,7 @@ import EditRentLong from './pages/RentaCar/LongOrders/Actions/Edit';
 import PreviewRentLong from './pages/RentaCar/LongOrders/Actions/Preview';
 
 function App() {
-  const [userToken, setUserToken] = useState(localStorage.getItem("userId") || '')
+  const [userToken, setUserToken] = useState(localStorage.getItem("userId") || 'TEST')
   const [loading, setLoading] = useState<boolean>(true);
   const { pathname } = useLocation();
   const navigate = useNavigate()
