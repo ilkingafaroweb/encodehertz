@@ -178,6 +178,23 @@ const EditBusLong = () => {
     }));
   }, [selectedOutsourceVehicle]);
 
+  useEffect(() => {
+    if(!!priceToCustomer){
+      setSelectedData(prevData => ({
+        ...prevData,
+        priceToCustomer: 0
+      }));
+    } 
+  }, [priceToCustomer])
+
+  useEffect(() => {
+    if(!!priceToSupplier){
+      setSelectedData(prevData => ({
+        ...prevData,
+        priceToSupplier: 0
+      }));
+    } 
+  }, [priceToSupplier])
 
   const handleSave = async () => {
     const lastExtraCharge = selectedExtraCharges?.map((ec: any) => {

@@ -77,8 +77,8 @@ const initialSelectedData: SelectedData = {
   selectedSupplierPaymentMethod: "",
   selectedDriver: "",
 
-  priceToCustomer: '',
-  priceToSupplier: '',
+  priceToCustomer: 0,
+  priceToSupplier: 0,
 
   startDateTime: "",
   endDateTime: "",
@@ -122,7 +122,6 @@ const AddBusLong = () => {
     selectedExtraCharges
   } = selectedData
 
-
   useEffect(() => {
     const outsourceVehicleBoolean = !!selectedOutsourceVehicle;
     setSelectedData(prevData => ({
@@ -131,6 +130,23 @@ const AddBusLong = () => {
     }));
   }, [selectedOutsourceVehicle]);
 
+  useEffect(() => {
+    if(!!priceToCustomer){
+      setSelectedData(prevData => ({
+        ...prevData,
+        priceToCustomer: 0
+      }));
+    } 
+  }, [priceToCustomer])
+
+  useEffect(() => {
+    if(!!priceToSupplier){
+      setSelectedData(prevData => ({
+        ...prevData,
+        priceToSupplier: 0
+      }));
+    } 
+  }, [priceToSupplier])
 
   // Bus long order post 
 
