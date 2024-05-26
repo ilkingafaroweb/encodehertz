@@ -131,16 +131,16 @@ const AddBusLong = () => {
   }, [selectedOutsourceVehicle]);
 
   useEffect(() => {
-    if(!!priceToCustomer){
+    if(!priceToCustomer){
       setSelectedData(prevData => ({
         ...prevData,
         priceToCustomer: 0
       }));
-    } 
+    }
   }, [priceToCustomer])
 
   useEffect(() => {
-    if(!!priceToSupplier){
+    if(!priceToSupplier){
       setSelectedData(prevData => ({
         ...prevData,
         priceToSupplier: 0
@@ -189,10 +189,6 @@ const AddBusLong = () => {
     if (!!selectedServiceType && !!selectedCustomer) {
       let apiUrl = `https://encodehertz.xyz/api/Long/GetCustomerMonthlyPayment?selectedCustomer=${selectedCustomer}&selectedServiceType=${selectedServiceType}`;
 
-      setSelectedData(prevData => ({
-        ...prevData,
-        priceToCustomer: 0
-      }));
 
       if (!!selectedVehicleClass) {
         apiUrl = `https://encodehertz.xyz/api/Long/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}`;
@@ -233,10 +229,7 @@ const AddBusLong = () => {
     if (!!selectedServiceType && !!selectedSupplier) {
       let apiUrl = `https://encodehertz.xyz/api/Long/GetSupplierMonthlyPayment?selectedSupplier=${selectedSupplier}&selectedServiceType=${selectedServiceType}`;
 
-      setSelectedData(prevData => ({
-        ...prevData,
-        priceToSupplier: 0
-      }));
+   
 
       if (!!selectedVehicleClass) {
         apiUrl = `https://encodehertz.xyz/api/Long/GetSupplierMonthlyPaymentCWD?selectedSupplier=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}`;
@@ -500,18 +493,20 @@ const AddBusLong = () => {
                     <SelectGroupOne text="Customer Payment Method" options={formOptions.customerPaymentMethods || []} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
                     <div className="w-full xl:w-full">
                       <label className="mb-2.5 block text-black dark:text-white">
-                        Price To Costumer
+                        Price To Customer
                       </label>
                       <input
                         type='number'
                         disabled={false}
-                        value={priceToCustomer}
+                        value={priceToCustomer !== 0 ? priceToCustomer : 0}
                         placeholder='Empty'
                         onChange={(e) => {
-                          const newValue = parseFloat(e.target.value);
+                          let newValue = e.target.value;
+                          newValue = newValue.replace(/^0+(?=\d)/, '');
+                          const parsedValue = parseFloat(newValue);
                           setSelectedData(prevData => ({
                             ...prevData,
-                            priceToCustomer: !isNaN(newValue) && newValue
+                            priceToCustomer: !isNaN(parsedValue) ? parsedValue : ''
                           }));
                         }}
                         className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
