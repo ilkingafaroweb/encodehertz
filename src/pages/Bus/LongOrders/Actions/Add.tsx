@@ -505,7 +505,7 @@ const AddBusLong = () => {
                       <input
                         type='number'
                         disabled={false}
-                        value={priceToCustomer !== 0 ? priceToCustomer : ""}
+                        value={priceToCustomer}
                         placeholder='Empty'
                         onChange={(e) => {
                           const newValue = parseFloat(e.target.value);
@@ -535,7 +535,7 @@ const AddBusLong = () => {
                             type="number"
                             disabled={false}
                             placeholder="Empty"
-                            value={priceToSupplier !== 0 ? priceToSupplier : ""}
+                            value={priceToSupplier}
                             onChange={(e) => {
                               const newValue = parseFloat(e.target.value);
                               setSelectedData(prevData => ({
