@@ -316,7 +316,9 @@ const EditBusLong = () => {
   }
 
   useEffect(() => {
-    getCustomerMonthlyPayment()
+    if(priceToCustomerMonthly === 0){
+      getCustomerMonthlyPayment()
+    }
   }, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedOutsourceVehicle]);
 
 
@@ -355,7 +357,9 @@ const EditBusLong = () => {
   }
 
   useEffect(() => {
-    getOutsourceMonthlyPayment()
+    if(priceToOutsourceMonthly === 0){
+      getOutsourceMonthlyPayment()
+    }
   }, [selectedServiceType, selectedSupplier, selectedVehicleClass]);
 
 
@@ -435,7 +439,7 @@ const EditBusLong = () => {
     } else {
       console.error('FRONTDA PROBLEM VAR');
     }
-  }, [ selectedVehicleClass]);
+  }, [selectedVehicleClass]);
 
 
   // Special extra charge for the customer
