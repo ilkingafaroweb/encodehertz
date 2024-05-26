@@ -213,9 +213,14 @@ const AddBusLong = () => {
 
   // Outsource monthly payment default
 
-  const getOutsourceMonthlyPayment = async () => {
+  const getSupplierMonthlyPayment = async () => {
     if (!!selectedServiceType && !!selectedSupplier) {
       let apiUrl = `https://encodehertz.xyz/api/Long/GetSupplierMonthlyPayment?selectedSupplier=${selectedSupplier}&selectedServiceType=${selectedServiceType}`;
+
+      setSelectedData(prevData => ({
+        ...prevData,
+        priceToSupplier: 0
+      }));
 
       if (!!selectedVehicleClass) {
         apiUrl = `https://encodehertz.xyz/api/Long/GetSupplierMonthlyPaymentCWD?selectedSupplier=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}`;
@@ -246,7 +251,7 @@ const AddBusLong = () => {
   }
 
   useEffect(() => {
-    getOutsourceMonthlyPayment()
+    getSupplierMonthlyPayment()
   }, [selectedServiceType, selectedSupplier, selectedVehicleClass]);
 
   // Vehicles list
