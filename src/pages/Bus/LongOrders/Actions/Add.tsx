@@ -189,7 +189,6 @@ const AddBusLong = () => {
     if (!!selectedServiceType && !!selectedCustomer) {
       let apiUrl = `https://encodehertz.xyz/api/Long/GetCustomerMonthlyPayment?selectedCustomer=${selectedCustomer}&selectedServiceType=${selectedServiceType}`;
 
-
       if (!!selectedVehicleClass) {
         apiUrl = `https://encodehertz.xyz/api/Long/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}`;
       }
@@ -228,8 +227,6 @@ const AddBusLong = () => {
   const getSupplierMonthlyPayment = async () => {
     if (!!selectedServiceType && !!selectedSupplier) {
       let apiUrl = `https://encodehertz.xyz/api/Long/GetSupplierMonthlyPayment?selectedSupplier=${selectedSupplier}&selectedServiceType=${selectedServiceType}`;
-
-   
 
       if (!!selectedVehicleClass) {
         apiUrl = `https://encodehertz.xyz/api/Long/GetSupplierMonthlyPaymentCWD?selectedSupplier=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}`;

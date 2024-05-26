@@ -179,7 +179,7 @@ const EditBusLong = () => {
   }, [selectedOutsourceVehicle]);
 
   useEffect(() => {
-    if(!!priceToCustomer){
+    if(!priceToCustomer){
       setSelectedData(prevData => ({
         ...prevData,
         priceToCustomer: 0
@@ -188,7 +188,7 @@ const EditBusLong = () => {
   }, [priceToCustomer])
 
   useEffect(() => {
-    if(!!priceToSupplier){
+    if(!priceToSupplier){
       setSelectedData(prevData => ({
         ...prevData,
         priceToSupplier: 0
@@ -589,13 +589,15 @@ const EditBusLong = () => {
                       <input
                         type='number'
                         disabled={false}
-                        value={priceToCustomer}
+                        value={priceToCustomer !== 0 ? priceToCustomer : 0}
                         placeholder='Empty'
                         onChange={(e) => {
-                          const newValue = parseFloat(e.target.value);
+                          let newValue = e.target.value;
+                          newValue = newValue.replace(/^0+(?=\d)/, '');
+                          const parsedValue = parseFloat(newValue);
                           setSelectedData(prevData => ({
                             ...prevData,
-                            priceToCustomer: !isNaN(newValue) && newValue
+                            priceToCustomer: !isNaN(parsedValue) ? parsedValue : ''
                           }));
                         }}
                         className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
