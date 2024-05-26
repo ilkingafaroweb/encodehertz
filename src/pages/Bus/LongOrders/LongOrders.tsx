@@ -86,7 +86,7 @@ const LongOrders = () => {
       if (result.isConfirmed) {
         const url = `https://encodehertz.xyz/api/Long/Delete?bloId=${actionID}`;
         fetch(url, {
-          method: 'DELETE',
+          method: 'GET',
           headers: {
             'Accept': '*/*',
             'Authorization': `Bearer ${token}`,

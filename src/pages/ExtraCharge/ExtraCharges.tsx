@@ -9,6 +9,7 @@ const ExtraCharges = () => {
   const [extraCharges, setExtraCharges] = useState([]);
   const [update, setUpdate] = useState(false); 
 
+
   useEffect(() => {
     fetch('https://encodehertz.xyz/api/ECP/List', {
       headers: {
