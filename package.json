@@ -1,7 +1,7 @@
 {
-  "name": "tailadmin-react-free",
+  "name": "encode-hertz-cPanel",
   "private": true,
-  "version": "1.3.0",
+  "version": "1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,9 +9,9 @@
     "preview": "vite preview"
   },
   "author": {
-    "name": "TailAdmin",
-    "email": "hello@tailadmin.com",
-    "url": "https://tailadmin.com"
+    "name": "EncodeHertz",
+    "email": "",
+    "url": ""
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",

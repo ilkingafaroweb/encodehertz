@@ -125,18 +125,12 @@ const AddBusLong = () => {
 
   useEffect(() => {
     const outsourceVehicleBoolean = !!selectedOutsourceVehicle;
-    console.log("Outsource vehicle : ", outsourceVehicleBoolean);
     setSelectedData(prevData => ({
       ...prevData,
       selectedOutsourceVehicle: outsourceVehicleBoolean
     }));
   }, [selectedOutsourceVehicle]);
 
-
-  useEffect(() => {
-    console.clear()
-    console.log("BLO Add form values:", selectedData);
-  }, [selectedData])
 
   // Bus long order post 
 
@@ -156,7 +150,6 @@ const AddBusLong = () => {
         return response.text();
       })
       .then(data => {
-        console.log('Data sent successfully:', data);
         Swal.fire({
           icon: 'success',
           title: 'Success',
@@ -364,7 +357,6 @@ const AddBusLong = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         navigate("/bus/long-orders")
-        console.log('Changes discarded');
       }
     });
   };
@@ -386,7 +378,6 @@ const AddBusLong = () => {
           '',
           'success'
         );
-        console.log('Item added');
         navigate("/bus/long-orders")
       }
     });

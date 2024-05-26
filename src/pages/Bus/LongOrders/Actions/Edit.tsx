@@ -96,9 +96,7 @@ const EditBusLong = () => {
   const [formOptions, setFormOptions] = useState<FormData | null>(null);
   const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
-  useEffect(() => {
-    console.log("Customer", selectedData);
-  }, [selectedData])
+
 
   const fetchData = async () => {
     try {
@@ -113,7 +111,6 @@ const EditBusLong = () => {
       }
       const data = await response.json();
       setFormOptions(data as FormData);
-      console.log("FORM OPTIONS : ",formOptions);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -175,16 +172,11 @@ const EditBusLong = () => {
 
   useEffect(() => {
     const outsourceVehicleBoolean = Boolean(selectedOutsourceVehicle);
-    console.log("Outsource vehicle : ", outsourceVehicleBoolean);
     setSelectedData(prevData => ({
       ...prevData,
       selectedOutsourceVehicle: outsourceVehicleBoolean
     }));
   }, [selectedOutsourceVehicle]);
-
-  useEffect(() => {
-    console.log("SELECTED DATA --->", selectedData);
-  }, [selectedData])
 
 
   const handleSave = async () => {
@@ -193,17 +185,12 @@ const EditBusLong = () => {
       return ec;
     });
 
-    console.log("isleyir");
-
-
     const postData = {
       ...selectedData,
       extraChargePanel: lastExtraCharge
     };
 
     delete postData.selectedExtraCharges;
-
-    console.log("Edit Post Data : ", JSON.stringify(postData));
 
     try {
       const response = await fetch('https://encodehertz.xyz/api/Long/Edit', {
@@ -220,7 +207,6 @@ const EditBusLong = () => {
       }
 
       const data = await response.text();
-      console.log('Data sent successfully:', data);
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -241,9 +227,6 @@ const EditBusLong = () => {
   const handleSend = async () => {
     const bloId = localStorage.getItem('ActionID')
 
-    console.log(bloId);
-    
-
     try {
       const response = await fetch('https://encodehertz.xyz/api/Long/Send', {
         method: 'POST',
@@ -259,7 +242,6 @@ const EditBusLong = () => {
       }
 
       const text = await response.text();
-      console.log('Data sent successfully:', text);
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -405,7 +387,6 @@ const EditBusLong = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         navigate("/bus/long-orders")
-        console.log('Changes discarded');
       }
     });
   };

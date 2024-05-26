@@ -34,10 +34,6 @@ const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelecte
     }
   }, [defaultValue])
 
-  useEffect(() => {
-    console.log("Selected options :" , selectedOptions);
-    console.log("ECP options :" , ecpOptions);
-  }, [ecpOptions])
 
   useEffect(() => {
     setSelectedData(prevSelectedData => ({

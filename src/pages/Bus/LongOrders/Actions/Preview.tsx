@@ -169,10 +169,6 @@ const PreviewBusLong = () => {
     extraChargePanel
   } = selectedData
 
-  useEffect(() => {
-    console.log("BLO preview form valuessss:", extraChargePanel);
-  }, [selectedData])
-
   //   Vehicles list
 
   useEffect(() => {
@@ -201,67 +197,8 @@ const PreviewBusLong = () => {
     }
   }, [selectedVehicleClass]);
 
-
-  const handleCancel = () => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You have unsaved changes!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, discard changes!',
-      cancelButtonText: 'No, keep editing'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate("/bus/long-orders")
-        console.log('Changes discarded');
-      }
-    });
-  };
-
-  const handleAdd = () => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "Do you want to add this item?",
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, add it!',
-      cancelButtonText: 'Cancel'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire(
-          'Successfully added',
-          '',
-          'success'
-        );
-        console.log('Item added');
-        navigate("/bus/long-orders")
-      }
-    });
-  };
-
-  // Datepicker default values
-
-  const startDateDefault = () => {
-    const today = new Date();
-    const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const year = today.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
-
-  const endDateDefault = () => {
-    const today = new Date();
-    const nextDate = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
-
-    const day = String(nextDate.getDate()).padStart(2, '0');
-    const month = String(nextDate.getMonth() + 1).padStart(2, '0');
-    const year = nextDate.getFullYear();
-
-    return `${day}/${month}/${year}`;
+  const handleBack = () => {
+    navigate("/bus/long-orders")
   };
 
   useEffect(() => {
@@ -448,7 +385,7 @@ const PreviewBusLong = () => {
                   </div>
 
                   <div className='flex gap-3'>
-                    <button type='button' onClick={handleCancel} className="flex w-full justify-center rounded bg-danger p-3 font-medium text-gray hover:bg-opacity-90">
+                    <button type='button' onClick={handleBack} className="flex w-full justify-center rounded bg-danger p-3 font-medium text-gray hover:bg-opacity-90">
                       Back
                     </button>
                   </div>
