@@ -6,11 +6,9 @@ import Swal from 'sweetalert2';
 
 const LongOrders = () => {
   const [busLong, setBusLong] = useState([]);
-  const [update, setUpdate] = useState(false); 
+  const token = localStorage.getItem('token')
 
-  const getBusLongList = async () => {
-    const token = await localStorage.getItem("token");
-
+  const getBusLongList = () => {
     fetch('https://encodehertz.xyz/api/Long/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -32,48 +30,12 @@ const LongOrders = () => {
   }
 
   useEffect(() => {
-    getBusLongList() 
+    getBusLongList()
   }, [])
 
-  // useEffect(() => {
-  //   setUserId();
-  // }, [update]);
-  
-  // const setUserId = async () => {
-  //   try {
-  //     const userId = await localStorage.getItem('userId');
-  //     if (userId) {
-  //       const response = await fetch(`https://encodehertz.xyz/api/Long/SetUserId?userId=${userId}`);
-  //       if (!response.ok) {
-  //         throw new Error('ID didnt set');
-  //       }
-  //       fetchData();
-  //     }
-  //   } catch (error) {
-  //     console.error('userId set olanda error yarandı', error);
-  //   }
-  // };
-  
-  // const fetchData = () => {
-  //   fetch('https://encodehertz.xyz/api/Long/List')
-  //     .then(response => {
-  //       if (!response.ok) {
-  //         throw new Error('Response didnt success');
-  //       }
-  //       return response.json();
-  //     })
-  //     .then(data => {
-  //       setBusLong(data);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error', error);
-  //     });
-  // };
-  
 
   const handleDelete = async () => {
     const actionID = localStorage.getItem('ActionID');
-    const token = await localStorage.getItem("token");
 
     Swal.fire({
       title: 'Are you sure?',
@@ -88,40 +50,39 @@ const LongOrders = () => {
         fetch(url, {
           method: 'GET',
           headers: {
-            'Accept': '*/*',
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
         })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.text();
-        })
-        .then(data => {
-          Swal.fire({
-            title: 'Success',
-            text: data,
-            icon: 'success',
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.text();
+          })
+          .then(data => {
+            Swal.fire({
+              title: 'Success',
+              text: data,
+              icon: 'success',
+            });
+            getBusLongList();
+          })
+          .catch(error => {
+            Swal.fire({
+              title: 'Error',
+              text: error.message,
+              icon: 'error',
+            });
+            console.error('Error deleting data:', error);
           });
-          setUpdate(prev => !prev); 
-        })
-        .catch(error => {
-          Swal.fire({
-            title: 'Error',
-            text: error.message,
-            icon: 'error',
-          });
-          console.error('Error deleting data:', error);
-        });
       }
     });
   };
 
   return (
     <DefaultLayout>
-      <Breadcrumb pageName='Bus long orders' prevPageName='Dashboard' prevRoute='/'/>
+      <Breadcrumb pageName='Bus long orders' prevPageName='Dashboard' prevRoute='/' />
       {
         busLong.length > 0 && (<TableThree data={busLong} handleDelete={handleDelete} />)
       }

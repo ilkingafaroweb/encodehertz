@@ -7,10 +7,8 @@ import Swal from 'sweetalert2';
 const ExtraCharges = () => {
   const token = localStorage.getItem('token')
   const [extraCharges, setExtraCharges] = useState([]);
-  const [update, setUpdate] = useState(false); 
 
-
-  useEffect(() => {
+  const getExtraChargesList = () => {
     fetch('https://encodehertz.xyz/api/ECP/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -29,8 +27,11 @@ const ExtraCharges = () => {
       .catch(error => {
         console.error('Error', error);
       });
-}, [])
-  
+  }
+
+  useEffect(() => {
+    getExtraChargesList()
+  }, [])
 
   const handleDelete = async () => {
     const actionID = await parseInt(localStorage.getItem('ActionID'));
@@ -52,28 +53,28 @@ const ExtraCharges = () => {
             'Content-Type': 'application/json'
           }
         })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.text();
-        })
-        .then(data => {
-          Swal.fire({
-            title: 'Success',
-            text: data,
-            icon: 'success',
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.text();
+          })
+          .then(data => {
+            Swal.fire({
+              title: 'Success',
+              text: data,
+              icon: 'success',
+            });
+            getExtraChargesList();
+          })
+          .catch(error => {
+            Swal.fire({
+              title: 'Error',
+              text: error,
+              icon: 'error',
+            });
+            console.error('Error deleting data:', error);
           });
-          setUpdate(prev => !prev); 
-        })
-        .catch(error => {
-          Swal.fire({
-            title: 'Error',
-            text: error,
-            icon: 'error',
-          });
-          console.error('Error deleting data:', error);
-        });
       }
     });
   };
@@ -81,10 +82,8 @@ const ExtraCharges = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Extra Charges' prevPageName='Dashboard' prevRoute='/' />
-      {extraCharges.length > 0 ? (
+      {extraCharges.length > 0 && (
         <TableThree data={extraCharges} handleDelete={handleDelete} />
-      ) : (
-        <p>No extra charges found.</p>
       )}
     </DefaultLayout>
   );
