@@ -22,7 +22,7 @@ interface FormData {
   selectedServiceType: string | null;
   sources: { value: string; text: string }[];
   selectedSource: string | null;
-  priceToCustomerMonthly: number;
+  priceToCustomer: number;
   customerPaymentMethods: { value: string; text: string }[];
   selectedCustomerPaymentMethod: string | null;
   requestedPerson: string;
@@ -30,7 +30,7 @@ interface FormData {
   selectedVehicleClass: string | null;
   vehicles: [] | null;
   selectedVehicle: string | null;
-  priceToSupplierPaymentMonthly: number;
+  priceToSupplier: number;
   supplierPaymentMethods: { value: string; text: string }[];
   selectedSupplierPaymentMethod: string | null;
   extraChargePanel: any[];
@@ -51,8 +51,8 @@ interface SelectedData {
   selectedSupplierPaymentMethod: string;
   selectedDriver: string;
 
-  priceToCustomerMonthly: number | "";
-  priceToOutsourceMonthly: number | "";
+  priceToCustomer: number | "";
+  priceToSupplier: number | "";
 
   startDateTime: string;
   endDateTime: string;
@@ -77,8 +77,8 @@ const initialSelectedData: SelectedData = {
   selectedSupplierPaymentMethod: "",
   selectedDriver: "",
 
-  priceToCustomerMonthly: 0,
-  priceToOutsourceMonthly: 0,
+  priceToCustomer: 0,
+  priceToSupplier: 0,
 
   startDateTime: "",
   endDateTime: "",
@@ -160,8 +160,8 @@ const EditBusLong = () => {
     selectedDriver,
     selectedSupplierPaymentMethod,
 
-    priceToCustomerMonthly,
-    priceToOutsourceMonthly,
+    priceToCustomer,
+    priceToSupplier,
 
     startDateTime,
     endDateTime,
@@ -284,7 +284,7 @@ const EditBusLong = () => {
 
       setSelectedData(prevData => ({
         ...prevData,
-        priceToCustomerMonthly: 0
+        priceToCustomer: 0
       }));
 
       if (!!selectedVehicleClass) {
@@ -306,7 +306,7 @@ const EditBusLong = () => {
         .then(data => {
           setSelectedData(prevData => ({
             ...prevData,
-            priceToCustomerMonthly: data
+            priceToCustomer: data
           }));
         })
         .catch(error => {
@@ -316,7 +316,7 @@ const EditBusLong = () => {
   }
 
   useEffect(() => {
-    if(priceToCustomerMonthly === 0){
+    if(priceToCustomer === 0){
       getCustomerMonthlyPayment()
     }
   }, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedOutsourceVehicle]);
@@ -347,7 +347,7 @@ const EditBusLong = () => {
         .then(data => {
           setSelectedData(prevData => ({
             ...prevData,
-            priceToOutsourceMonthly: data
+            priceToSupplier: data
           }));
         })
         .catch(error => {
@@ -357,7 +357,7 @@ const EditBusLong = () => {
   }
 
   useEffect(() => {
-    if(priceToOutsourceMonthly === 0){
+    if(priceToSupplier === 0){
       getOutsourceMonthlyPayment()
     }
   }, [selectedServiceType, selectedSupplier, selectedVehicleClass]);
@@ -582,18 +582,18 @@ const EditBusLong = () => {
                     <SelectGroupOne text="Customer Payment Method" options={formOptions.customerPaymentMethods || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedCustomerPaymentMethod} />
                     <div className="w-full xl:w-full">
                       <label className="mb-2.5 block text-black dark:text-white">
-                        Price To Customer Monthly
+                        Price To Customer
                       </label>
                       <input
                         type='number'
                         disabled={false}
-                        value={priceToCustomerMonthly !== 0 ? priceToCustomerMonthly : ""}
+                        value={priceToCustomer !== 0 ? priceToCustomer : ""}
                         placeholder='Empty'
                         onChange={(e) => {
                           const newValue = parseFloat(e.target.value);
                           setSelectedData(prevData => ({
                             ...prevData,
-                            priceToCustomerMonthly: !isNaN(newValue) && newValue
+                            priceToCustomer: !isNaN(newValue) && newValue
                           }));
                         }}
                         className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
@@ -611,18 +611,18 @@ const EditBusLong = () => {
                         <SelectGroupOne text="Supplier Payment Method" options={formOptions.supplierPaymentMethods || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedSupplierPaymentMethod} />
                         <div className="w-full xl:w-full">
                           <label className="mb-2.5 block text-black dark:text-white">
-                            Price To Outsource Monthly
+                            Price To Supplier
                           </label>
                           <input
                             type="number"
                             disabled={false}
                             placeholder="Empty"
-                            value={priceToOutsourceMonthly !== 0 ? priceToOutsourceMonthly : ""}
+                            value={priceToSupplier !== 0 ? priceToSupplier : ""}
                             onChange={(e) => {
                               const newValue = parseFloat(e.target.value);
                               setSelectedData(prevData => ({
                                 ...prevData,
-                                priceToOutsourceMonthly: newValue
+                                priceToSupplier: newValue
                               }))
                             }}
                             className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"

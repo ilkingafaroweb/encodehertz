@@ -24,7 +24,7 @@ interface FormData {
   selectedServiceType: string | null;
   sources: { value: string; text: string }[];
   selectedSource: string | null;
-  priceToCustomerMonthly: number;
+  priceToCustomer: number;
   customerPaymentMethods: { value: string; text: string }[];
   selectedCustomerPaymentMethod: string | null;
   requestedPerson: string;
@@ -32,7 +32,7 @@ interface FormData {
   selectedVehicleClass: string | null;
   vehicles: [] | null;
   selectedVehicle: string | null;
-  priceToSupplierPaymentMonthly: number;
+  priceToSupplier: number;
   supplierPaymentMethods: { value: string; text: string }[];
   selectedSupplierPaymentMethod: string | null;
   extraChargePanel: any[];
@@ -53,8 +53,8 @@ interface SelectedData {
   selectedSupplierPaymentMethod: string;
   selectedDriver: string;
 
-  priceToCustomerMonthly: number | "";
-  priceToOutsourceMonthly: number | "";
+  priceToCustomer: number | "";
+  priceToSupplier: number | "";
 
   startDateTime: string;
   endDateTime: string;
@@ -78,8 +78,8 @@ const initialSelectedData: SelectedData = {
   selectedSupplierPaymentMethod: "",
   selectedDriver: "",
 
-  priceToCustomerMonthly: 0,
-  priceToOutsourceMonthly: 0,
+  priceToCustomer: 0,
+  priceToSupplier: 0,
 
   startDateTime: "",
   endDateTime: "",
@@ -157,8 +157,8 @@ const PreviewBusLong = () => {
     selectedDriver,
     selectedSupplierPaymentMethod,
 
-    priceToCustomerMonthly,
-    priceToOutsourceMonthly,
+    priceToCustomer,
+    priceToSupplier,
 
     startDateTime,
     endDateTime,
@@ -323,8 +323,6 @@ const PreviewBusLong = () => {
 
   }, [selectedSupplier]);
 
-
-
   return (
     <DefaultLayout>
       <Breadcrumb pageName="Preview" prevPageName='Bus long orders' prevRoute='/bus/long-orders' />
@@ -362,11 +360,11 @@ const PreviewBusLong = () => {
                     <SelectGroupOne text="Customer Payment Method" options={formOptions.customerPaymentMethods || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedCustomerPaymentMethod} />
                     <div className="w-full xl:w-full">
                       <label className="mb-2.5 block text-black dark:text-white">
-                        Price To Costumer Monthly
+                        Price To Customer
                       </label>
                       <input
                         disabled
-                        value={priceToCustomerMonthly}
+                        value={priceToCustomer}
                         placeholder='Empty'
                         className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                       />
@@ -383,12 +381,12 @@ const PreviewBusLong = () => {
                         <SelectGroupOne text="Supplier Payment Method" options={formOptions.supplierPaymentMethods || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedSupplierPaymentMethod} />
                         <div className="w-full xl:w-full">
                           <label className="mb-2.5 block text-black dark:text-white">
-                            Price To Outsource Monthly
+                            Price To Supplier
                           </label>
                           <input
                             type='text'
                             disabled={true}
-                            value={priceToOutsourceMonthly}
+                            value={priceToSupplier}
                             placeholder='Empty'
                             className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                           />
