@@ -16,9 +16,10 @@ interface DropdownProps {
   ecpOptions: Option[];
   disabled: boolean;
   defaultValue: any;
+  outsource: boolean | string;
 }
 
-const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelectedData, defaultValue }) => {
+const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelectedData, defaultValue, outsource }) => {
   const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [sumOutsource, setSumOutsource] = useState(0);
@@ -98,7 +99,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelecte
                       className="rounded w-full border-[1.5px] border-boxdark-2 bg-transparent py-1 px-2 text-black outline-none transition active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary focus:outline-none focus:border-primary hover:border-primary"
                     />
                   </div>
-                  <div className="flex flex-col mb-2 w-full lg:w-30">
+                  {outsource && <div className="flex flex-col mb-2 w-full lg:w-30">
                     <label className="mb-1 text-black dark:text-white">Outsource price</label>
                     <input
                       type="number"
@@ -112,7 +113,8 @@ const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelecte
                       }}
                       className="rounded w-full border-[1.5px] border-boxdark-2 bg-transparent py-1 px-2 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
-                  </div>
+                  </div>}
+                  
 
                   <div className="flex flex-col mb-2 w-full lg:w-30">
                     <label className="mb-1 text-black dark:text-white">Customer price</label>
@@ -129,15 +131,17 @@ const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelecte
                       className="rounded w-full border-[1.5px] border-boxdark-2 bg-transparent py-1 px-2 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
-                  <div className="flex flex-col mb-2 w-full lg:w-36">
-                    <label className="mb-1 text-black dark:text-white">Sum Outsource Price</label>
-                    <input
-                      type="text"
-                      disabled
-                      value={formattedPrice(option.outsourcePrice * option.quantity)}
-                      className="rounded w-full border-[1.5px] border-boxdark-2 bg-transparent py-1 px-2 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                    />
-                  </div>
+                  {
+                    outsource && <div className="flex flex-col mb-2 w-full lg:w-36">
+                      <label className="mb-1 text-black dark:text-white">Sum Outsource Price</label>
+                      <input
+                        type="text"
+                        disabled
+                        value={formattedPrice(option.outsourcePrice * option.quantity)}
+                        className="rounded w-full border-[1.5px] border-boxdark-2 bg-transparent py-1 px-2 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      />
+                    </div>
+                  }
                   <div className="flex flex-col mb-2 w-full lg:w-36">
                     <label className="mb-1 text-black dark:text-white">Sum Customer Price</label>
                     <input

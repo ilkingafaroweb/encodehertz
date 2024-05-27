@@ -169,16 +169,15 @@ const AddBusLong = () => {
         Swal.fire({
           icon: 'success',
           title: 'Success',
-          text: 'Data sent successfully!',
+          text: data,
         });
         navigate('/bus/long-orders')
       })
       .catch(error => {
-        console.error('Error sending data:', error);
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Error sending data: ' + error.message,
+          text: error.message,
         });
       });
   }
@@ -358,37 +357,15 @@ const AddBusLong = () => {
   const handleCancel = () => {
     Swal.fire({
       title: 'Are you sure?',
-      text: "You have unsaved changes!",
+      text: "You have unsaved insert!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, discard changes!',
-      cancelButtonText: 'No, keep editing'
+      confirmButtonText: 'Yes, discard insert!',
+      cancelButtonText: 'No, keep inserting'
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate("/bus/long-orders")
-      }
-    });
-  };
-
-  const handleAdd = () => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "Do you want to add this item?",
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, add it!',
-      cancelButtonText: 'Cancel'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire(
-          'Successfully added',
-          '',
-          'success'
-        );
         navigate("/bus/long-orders")
       }
     });
@@ -447,10 +424,7 @@ const AddBusLong = () => {
         .catch(error => {
           console.error('Error fetching data:', error);
         });
-    } else {
-      console.error('FRONTDA PROBLEM VAR');
-    }
-
+    } 
   }, [selectedSupplier]);
 
   return (
@@ -564,7 +538,7 @@ const AddBusLong = () => {
                       <label className="mt-3 block text-md font-medium text-black dark:text-white">
                         Extra Charge Panel
                       </label>
-                      <MultiSelect ecpOptions={formOptions.extraChargePanel || []} setSelectedData={setSelectedData} disabled={false} defaultValue={null} />
+                      <MultiSelect ecpOptions={formOptions.extraChargePanel || []} setSelectedData={setSelectedData} disabled={false} defaultValue={null} outsource={selectedOutsourceVehicle} />
                     </div>
                   }
                   <div className="mb-3 flex flex-col gap-6 xl:flex-row">

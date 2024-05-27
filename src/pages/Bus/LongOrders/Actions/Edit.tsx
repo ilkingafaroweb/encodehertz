@@ -39,6 +39,7 @@ interface FormData {
 }
 
 interface SelectedData {
+  cardNumber: string;
   selectedContract: string;
   selectedSupplier: string;
   selectedSupplierContract: string;
@@ -65,6 +66,7 @@ interface SelectedData {
 }
 
 const initialSelectedData: SelectedData = {
+  cardNumber: "",
   selectedContract: "",
   selectedSupplier: "",
   selectedSupplierContract: "",
@@ -145,6 +147,7 @@ const EditBusLong = () => {
   }, [])
 
   const {
+    cardNumber,
     selectedContract,
     selectedSupplier,
     selectedSupplierContract,
@@ -227,14 +230,13 @@ const EditBusLong = () => {
       Swal.fire({
         icon: 'success',
         title: 'Success',
-        text: 'Data sent successfully!',
+        text: data,
       });
     } catch (error) {
-      console.error('Error sending data:', error);
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Error sending data: ' + error.message,
+        text: error.message,
       });
     }
     navigate("/bus/long-orders")
@@ -546,7 +548,7 @@ const EditBusLong = () => {
 
   return (
     <DefaultLayout>
-      <Breadcrumb pageName="Edit" prevPageName='Bus long orders' prevRoute='/bus/long-orders' />
+      <Breadcrumb pageName={`Edit / ${cardNumber}`} prevPageName='Bus long orders' prevRoute='/bus/long-orders' />
       {formOptions ? (
         <div className="max-w-full mx-auto gap-9 sm:grid-cols-2">
           <div className="flex flex-col gap-9">
@@ -657,7 +659,7 @@ const EditBusLong = () => {
                       <label className="mt-3 block text-md font-medium text-black dark:text-white">
                         Extra Charge Panel
                       </label>
-                      <MultiSelect ecpOptions={formOptions.extraChargePanel || []} setSelectedData={setSelectedData} disabled={false} defaultValue={extraChargePanel} />
+                      <MultiSelect ecpOptions={formOptions.extraChargePanel || []} setSelectedData={setSelectedData} disabled={false} defaultValue={extraChargePanel} outsource={selectedOutsourceVehicle} />
                     </div>
                   }
                   <div className="mb-3 flex flex-col gap-6 xl:flex-row">

@@ -41,6 +41,7 @@ interface FormData {
 }
 
 interface SelectedData {
+  cardNumber: string;
   selectedContract: string;
   selectedSupplier: string;
   selectedSupplierContract: string;
@@ -66,6 +67,7 @@ interface SelectedData {
 }
 
 const initialSelectedData: SelectedData = {
+  cardNumber: '',
   selectedContract: "",
   selectedSupplier: "",
   selectedSupplierContract: "",
@@ -145,6 +147,7 @@ const PreviewBusLong = () => {
   }, [])
 
   const {
+    cardNumber,
     selectedContract,
     selectedSupplier,
     selectedSupplierContract,
@@ -262,12 +265,11 @@ const PreviewBusLong = () => {
 
   return (
     <DefaultLayout>
-      <Breadcrumb pageName="Preview" prevPageName='Bus long orders' prevRoute='/bus/long-orders' />
+      <Breadcrumb pageName={`Preview / ${cardNumber}`} prevPageName='Bus long orders' prevRoute='/bus/long-orders' />
       {formOptions ? (
         <div className="max-w-full mx-auto gap-9 sm:grid-cols-2">
           <div className="flex flex-col gap-9">
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-
               <form>
                 <div className="p-6.5">
                   <div className="mb-3 flex flex-col gap-6 xl:flex-row">
@@ -365,7 +367,7 @@ const PreviewBusLong = () => {
                       <label className="mt-3 block text-md font-medium text-black dark:text-white">
                         Extra Charge Panel
                       </label>
-                      <MultiSelect ecpOptions={formOptions.extraChargePanel || []} setSelectedData={setSelectedData} disabled={true} defaultValue={extraChargePanel} />
+                      <MultiSelect ecpOptions={formOptions.extraChargePanel || []} setSelectedData={setSelectedData} disabled={true} defaultValue={extraChargePanel} outsource={selectedOutsourceVehicle} />
                     </div>
                   }
 
