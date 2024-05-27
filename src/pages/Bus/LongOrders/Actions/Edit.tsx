@@ -242,11 +242,11 @@ const EditBusLong = () => {
 
 
   const handleSend = async () => {
-    const bloId = localStorage.getItem('ActionID')
+    const bloId = await localStorage.getItem('ActionID')
 
     try {
       const response = await fetch(`https://encodehertz.xyz/api/Long/Send?bloId=${bloId}`, {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
