@@ -313,8 +313,10 @@ const EditBusLong = () => {
   }
 
   useEffect(() => {
+    return () => {
       getCustomerMonthlyPayment()
-  }, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedOutsourceVehicle]);
+    }
+  }, [selectedServiceType, selectedCustomer, selectedVehicleClass]);
 
 
   // Outsource monthly payment default
@@ -357,7 +359,9 @@ const EditBusLong = () => {
   }
 
   useEffect(() => {
+    return () => {
       getOutsourceMonthlyPayment()
+    };
   }, [selectedServiceType, selectedSupplier, selectedVehicleClass]);
 
 
@@ -406,7 +410,6 @@ const EditBusLong = () => {
       }
     });
   };
-
 
   // Extra Charges 
 
