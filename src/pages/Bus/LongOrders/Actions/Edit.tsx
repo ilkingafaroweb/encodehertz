@@ -245,24 +245,22 @@ const EditBusLong = () => {
     const bloId = localStorage.getItem('ActionID')
 
     try {
-      const response = await fetch('https://encodehertz.xyz/api/Long/Send', {
-        method: 'POST',
+      const response = await fetch(`https://encodehertz.xyz/api/Long/Send?bloId=${bloId}`, {
+        method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(bloId),
+        }
       });
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-
       const text = await response.text();
       Swal.fire({
         icon: 'success',
         title: 'Success',
-        text: 'Data sent to desktop successfully!',
+        text: text,
       });
     } catch (error) {
       console.error('Error sending data:', error);
@@ -315,9 +313,7 @@ const EditBusLong = () => {
   }
 
   useEffect(() => {
-    if(priceToCustomer === 0){
       getCustomerMonthlyPayment()
-    }
   }, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedOutsourceVehicle]);
 
 
@@ -361,9 +357,7 @@ const EditBusLong = () => {
   }
 
   useEffect(() => {
-    if(priceToSupplier === 0){
       getOutsourceMonthlyPayment()
-    }
   }, [selectedServiceType, selectedSupplier, selectedVehicleClass]);
 
 
