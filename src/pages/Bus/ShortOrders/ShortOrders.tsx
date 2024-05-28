@@ -73,10 +73,9 @@ const ShortOrders = () => {
           .catch(error => {
             Swal.fire({
               title: 'Error',
-              text: error.message,
+              text: error,
               icon: 'error',
             });
-            console.error('Error deleting data:', error);
           });
       }
     });
