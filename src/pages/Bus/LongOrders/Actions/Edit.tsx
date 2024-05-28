@@ -98,8 +98,6 @@ const EditBusLong = () => {
   const [formOptions, setFormOptions] = useState<FormData | null>(null);
   const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
-
-
   const fetchData = async () => {
     try {
       const response = await fetch('https://encodehertz.xyz/api/Long/Create', {

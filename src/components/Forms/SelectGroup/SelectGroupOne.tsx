@@ -7,7 +7,7 @@ interface Option {
 
 interface SelectGroupOneProps {
   text: string;
-  options: Option[];
+  options: Option[] | null;
   setSelectedData: React.Dispatch<React.SetStateAction<any>>;
   disabled: boolean;
   defaultValue?: string;
@@ -47,7 +47,7 @@ const SelectGroupOne: React.FC<SelectGroupOneProps> = ({ text, options, setSelec
           <option value="" selected={defaultValue === ""} disabled className="text-body dark:text-bodydark hidden">
             Select {text}
           </option>
-          {options.map((option, index) => (
+          {options?.map((option, index) => (
             <option
               key={index}
               value={option.value}

@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import TableThree from '../../../components/Tables/TableThree'
-import DefaultLayout from '../../../layout/DefaultLayout'
-import Breadcrumb from '../../../components/Breadcrumbs/Breadcrumb'
-import BusShortData from '../../../data/Bus/ShortOrders'
-import Swal from 'sweetalert2'
+import React, { useEffect, useState } from 'react';
+import TableThree from '../../components/Tables/TableThree';
+import DefaultLayout from '../../layout/DefaultLayout';
+import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
+import Swal from 'sweetalert2';
 
-const ShortOrders = () => {
-
-  const [busShort, setBusShort] = useState([]);
+const Sources = () => {
   const token = localStorage.getItem('token')
+  const [sources, setSources] = useState([]);
 
-  const getBusShortList = () => {
-    fetch('https://encodehertz.xyz/api/Short/List', {
+  const getSourcesList = () => {
+    fetch('https://encodehertz.xyz/api/Source/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -24,7 +22,7 @@ const ShortOrders = () => {
         return response.json();
       })
       .then(data => {
-        setBusShort(data);
+        setSources(data);
       })
       .catch(error => {
         console.error('Error', error);
@@ -32,12 +30,11 @@ const ShortOrders = () => {
   }
 
   useEffect(() => {
-    getBusShortList()
+    getSourcesList()
   }, [])
 
-
   const handleDelete = async () => {
-    const actionID = localStorage.getItem('ActionID');
+    const actionID = await parseInt(localStorage.getItem('ActionID'));
 
     Swal.fire({
       title: 'Are you sure?',
@@ -48,13 +45,13 @@ const ShortOrders = () => {
       cancelButtonText: 'No, cancel!'
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/Short/Delete?bsoId=${actionID}`;
+        const url = `https://encodehertz.xyz/api/Source/Delete?id=${actionID}`;
         fetch(url, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
-          },
+          }
         })
           .then(response => {
             if (!response.ok) {
@@ -68,7 +65,7 @@ const ShortOrders = () => {
               text: data,
               icon: 'success',
             });
-            getBusShortList();
+            getSourcesList();
           })
           .catch(error => {
             Swal.fire({
@@ -76,7 +73,6 @@ const ShortOrders = () => {
               text: error.message,
               icon: 'error',
             });
-            console.error('Error deleting data:', error);
           });
       }
     });
@@ -84,13 +80,12 @@ const ShortOrders = () => {
 
   return (
     <DefaultLayout>
-      <Breadcrumb pageName='Bus Short Orders' prevPageName='Dashboard' prevRoute='/' />
-      {
-        busShort.length > 0 && <TableThree data={busShort} handleDelete={handleDelete} />
-      }
-      
+      <Breadcrumb pageName='Sources' prevPageName='Dashboard' prevRoute='/' />
+      {sources.length > 0 && (
+        <TableThree data={sources} handleDelete={handleDelete} />
+      )}
     </DefaultLayout>
-  )
-}
+  );
+};
 
-export default ShortOrders
+export default Sources;

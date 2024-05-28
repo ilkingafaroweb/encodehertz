@@ -60,7 +60,7 @@ interface SelectedData {
   requestedPerson: string;
   comment: string;
 
-  extraChargePanel: []
+  extraChargePanel: [];
   selectedExtraCharges: []
 }
 
@@ -218,7 +218,7 @@ const AddBusLong = () => {
 
   useEffect(() => {
     getCustomerMonthlyPayment()
-  }, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedOutsourceVehicle]);
+  }, [selectedServiceType, selectedCustomer, selectedVehicleClass]);
 
 
   // Outsource monthly payment default

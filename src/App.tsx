@@ -33,6 +33,10 @@ import RentLongOrders from './pages/RentaCar/LongOrders/LongOrders';
 import AddRentLong from './pages/RentaCar/LongOrders/Actions/Add';
 import EditRentLong from './pages/RentaCar/LongOrders/Actions/Edit';
 import PreviewRentLong from './pages/RentaCar/LongOrders/Actions/Preview';
+import Sources from './pages/Sources/Sources';
+import AddSources from './pages/Sources/Actions/Add';
+import EditSources from './pages/Sources/Actions/Edit';
+import PreviewSources from './pages/Sources/Actions/Preview';
 
 function App() {
   const [userToken, setUserToken] = useState(localStorage.getItem("userId") || '')
@@ -291,6 +295,47 @@ function App() {
           </>
         }
       />
+
+      {/* Sources */}
+
+      <Route
+        path="/sources"
+        element={
+          <>
+            <PageTitle title="Sources | ENCODE" />
+            <Sources />
+          </>
+        }
+      />
+      <Route
+        path="/sources/add"
+        element={
+          <>
+            <PageTitle title="Add Sources | ENCODE" />
+            <AddSources />
+          </>
+        }
+      />
+      <Route
+        path="/sources/edit"
+        element={
+          <>
+            <PageTitle title="Edit Sources | ENCODE" />
+            <EditSources />
+          </>
+        }
+      />
+      <Route
+        path="/sources/preview"
+        element={
+          <>
+            <PageTitle title="Preview Sources | ENCODE" />
+            <PreviewSources />
+          </>
+        }
+      />
+
+
       {/* <Route
       path="/tables"
       element={
