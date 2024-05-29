@@ -440,7 +440,7 @@ const AddBusShort = () => {
             extraChargePanel: []
         }));
         if (selectedCustomer && selectedVehicleClass) {
-            await fetch(`https://encodehertz.xyz/api/Long/GetExtraCharges?customerCode=${selectedCustomer}&vehicleClass=${selectedVehicleClass}`, {
+            await fetch(`https://encodehertz.xyz/api/Short/GetExtraCharges?customerCode=${selectedCustomer}&vehicleClass=${selectedVehicleClass}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
