@@ -269,8 +269,8 @@ const EditBusShort = () => {
     const bsoId = localStorage.getItem('ActionID')
 
     try {
-      const response = await fetch(`https://encodehertz.xyz/api/Short/Send?bsoId=${bsoId}`, {
-        method: 'POST',
+      const response = await fetch(`https://encodehertz.xyz/api/Short/Send?id=${bsoId}`, {
+        method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
