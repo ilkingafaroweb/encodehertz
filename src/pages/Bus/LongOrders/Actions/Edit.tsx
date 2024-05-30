@@ -263,11 +263,10 @@ const EditBusLong = () => {
         text: text,
       });
     } catch (error) {
-      console.error('Error sending data:', error);
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Error sending data: ' + error.message,
+        text: error.message,
       });
     }
     navigate("/bus/long-orders")
