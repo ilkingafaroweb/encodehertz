@@ -343,66 +343,87 @@ const EditBusShort = () => {
     });
   };
 
+ // Customer monthly payment default
 
-  // Customer monthly payment 
-
-  useEffect(() => {
-    if (selectedServiceType && selectedCustomer && selectedServiceTypeDetail && selectedVehicleClass) {
+ const getCustomerMonthlyPayment = async () => {
+  if (selectedServiceType && selectedCustomer && selectedServiceTypeDetail && selectedVehicleClass) {
       let apiUrl = `https://encodehertz.xyz/api/Short/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
 
-      fetch(apiUrl, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
+      setSelectedData(prevData => ({
+          ...prevData,
+          priceToCustomer: 0
+      }));
+
+      await fetch(apiUrl, {
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+          },
       })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              return response.json();
+          })
+          .then(data => {
+              setSelectedData(prevData => ({
+                  ...prevData,
+                  priceToCustomer: data
+              }));
+          })
+          .catch(error => {
+              console.error('Error fetching data:', error);
+          });
+  }
+}
+
+useEffect(() => {
+  return () => {
+      getCustomerMonthlyPayment()
+  }
+}, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedServiceTypeDetail]);
+
+// Outsource monthly payment default
+
+const getSupplierMonthlyPayment = async () => {
+  if (selectedServiceType && selectedSupplier && selectedServiceTypeDetail && selectedVehicleClass) {
+      let apiUrl = `https://encodehertz.xyz/api/Short/GetSupplierMonthlyPaymentCWD?selectedSupplier=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
+
+      setSelectedData(prevData => ({
+          ...prevData,
+          priceToSupplier: 0
+      }));
+
+      await fetch(apiUrl, {
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
           }
-          return response.json();
-        })
-        .then(data => {
-          setSelectedData(prevData => ({
-            ...prevData,
-            priceToCustomer: data
-          }));
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
-    }
-  }, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedServiceTypeDetail]);
-
-  // Supplier monthly payment
-
-  useEffect(() => {
-    if (selectedServiceType && selectedSupplier && selectedServiceTypeDetail && selectedVehicleClass) {
-      let apiUrl = `https://encodehertz.xyz/api/Short/GetSupplierMonthlyPaymentCWD?selectedCustomer=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
-
-      fetch(apiUrl, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
       })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setSelectedData(prevData => ({
-            ...prevData,
-            priceToSupplier: data
-          }));
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
-    }
-  }, [selectedServiceType, selectedServiceTypeDetail, selectedSupplier, selectedVehicleClass]);
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              return response.json();
+          })
+          .then(data => {
+              setSelectedData(prevData => ({
+                  ...prevData,
+                  priceToSupplier: data
+              }));
+          })
+          .catch(error => {
+              console.error('Error fetching data:', error);
+          });
+  }
+}
+
+useEffect(() => {
+ return () => {
+  getSupplierMonthlyPayment()
+ }
+}, [selectedServiceType, selectedServiceTypeDetail, selectedSupplier, selectedVehicleClass]);
 
 
   // Extra Charges 
