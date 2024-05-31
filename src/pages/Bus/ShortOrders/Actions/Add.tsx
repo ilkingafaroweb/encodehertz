@@ -208,12 +208,8 @@ const AddBusShort = () => {
     // Customer monthly payment default
 
     useEffect(() => {
-        if (!!selectedServiceType && !!selectedCustomer) {
-            let apiUrl = `https://encodehertz.xyz/api/Short/GetCustomerMonthlyPayment?selectedCustomer=${selectedCustomer}&selectedServiceType=${selectedServiceType}`;
-
-            if (selectedVehicleClass) {
-                apiUrl = `https://encodehertz.xyz/api/Short/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}`;
-            }
+        if (selectedServiceType && selectedCustomer && selectedServiceTypeDetail && selectedVehicleClass) {
+            let apiUrl = `https://encodehertz.xyz/api/Short/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
 
             fetch(apiUrl, {
                 headers: {
@@ -237,18 +233,13 @@ const AddBusShort = () => {
                     console.error('Error fetching data:', error);
                 });
         }
-    }, [selectedServiceType, selectedCustomer, selectedVehicleClass]);
-
+    }, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedServiceTypeDetail]);
 
     // Outsource monthly payment default
 
     useEffect(() => {
-        if (!!selectedServiceType && !!selectedSupplier) {
-            let apiUrl = `https://encodehertz.xyz/api/Short/GetSupplierMonthlyPayment?selectedSupplier=${selectedSupplier}&selectedServiceType=${selectedServiceType}`;
-
-            if (selectedVehicleClass) {
-                apiUrl = `https://encodehertz.xyz/api/Short/GetSupplierMonthlyPaymentCWD?selectedSupplier=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}`;
-            }
+        if (selectedServiceType && selectedSupplier && selectedServiceTypeDetail && selectedVehicleClass) {
+            let apiUrl = `https://encodehertz.xyz/api/Short/GetSupplierMonthlyPaymentCWD?selectedSupplier=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
 
             fetch(apiUrl, {
                 headers: {
@@ -272,7 +263,7 @@ const AddBusShort = () => {
                     console.error('Error fetching data:', error);
                 });
         }
-    }, [selectedServiceType, selectedSupplier, selectedVehicleClass]);
+    }, [selectedServiceType, selectedServiceTypeDetail, selectedSupplier, selectedVehicleClass]);
 
     // Vehicles list
 

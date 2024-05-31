@@ -203,7 +203,7 @@ const EditBusShort = () => {
   useEffect(() => {
     const outsourceVehicleBoolean = Boolean(selectedOutsourceVehicle);
     console.log("Outsource vehicle : ", outsourceVehicleBoolean);
-    
+
     setSelectedData(prevData => {
       if (prevData.selectedOutsourceVehicle === outsourceVehicleBoolean) {
         return prevData;
@@ -344,6 +344,67 @@ const EditBusShort = () => {
   };
 
 
+  // Customer monthly payment 
+
+  useEffect(() => {
+    if (selectedServiceType && selectedCustomer && selectedServiceTypeDetail && selectedVehicleClass) {
+      let apiUrl = `https://encodehertz.xyz/api/Short/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
+
+      fetch(apiUrl, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setSelectedData(prevData => ({
+            ...prevData,
+            priceToCustomer: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+  }, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedServiceTypeDetail]);
+
+  // Supplier monthly payment
+
+  useEffect(() => {
+    if (selectedServiceType && selectedSupplier && selectedServiceTypeDetail && selectedVehicleClass) {
+      let apiUrl = `https://encodehertz.xyz/api/Short/GetSupplierMonthlyPaymentCWD?selectedCustomer=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
+
+      fetch(apiUrl, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setSelectedData(prevData => ({
+            ...prevData,
+            priceToSupplier: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+  }, [selectedServiceType, selectedServiceTypeDetail, selectedSupplier, selectedVehicleClass]);
+
+
   // Extra Charges 
 
   useEffect(() => {
@@ -408,29 +469,29 @@ const EditBusShort = () => {
 
   useEffect(() => {
     if (selectedServiceType) {
-        fetch(`https://encodehertz.xyz/api/Short/GetServiceTypeDetails?selectedServiceType=${selectedServiceType}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
+      fetch(`https://encodehertz.xyz/api/Short/GetServiceTypeDetails?selectedServiceType=${selectedServiceType}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                setFormOptions(prevData => ({
-                    ...prevData,
-                    serviceTypeDetails: data
-                }));
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
+        .then(data => {
+          setFormOptions(prevData => ({
+            ...prevData,
+            serviceTypeDetails: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
     }
-}, [selectedServiceType]);
+  }, [selectedServiceType]);
 
 
   useEffect(() => {
