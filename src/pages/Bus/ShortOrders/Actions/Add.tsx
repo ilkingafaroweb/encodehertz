@@ -207,11 +207,11 @@ const AddBusShort = () => {
 
     // Customer monthly payment default
 
-    useEffect(() => {
+    const getCustomerMonthlyPayment = async () => {
         if (selectedServiceType && selectedCustomer && selectedServiceTypeDetail && selectedVehicleClass) {
             let apiUrl = `https://encodehertz.xyz/api/Short/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
 
-            fetch(apiUrl, {
+            await fetch(apiUrl, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -233,15 +233,21 @@ const AddBusShort = () => {
                     console.error('Error fetching data:', error);
                 });
         }
+    }
+
+    useEffect(() => {
+        return () => {
+            getCustomerMonthlyPayment()
+        }
     }, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedServiceTypeDetail]);
 
     // Outsource monthly payment default
 
-    useEffect(() => {
+    const getSupplierMonthlyPayment = async () => {
         if (selectedServiceType && selectedSupplier && selectedServiceTypeDetail && selectedVehicleClass) {
             let apiUrl = `https://encodehertz.xyz/api/Short/GetSupplierMonthlyPaymentCWD?selectedSupplier=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
 
-            fetch(apiUrl, {
+            await fetch(apiUrl, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -263,6 +269,12 @@ const AddBusShort = () => {
                     console.error('Error fetching data:', error);
                 });
         }
+    }
+
+    useEffect(() => {
+       return () => {
+        getSupplierMonthlyPayment()
+       }
     }, [selectedServiceType, selectedServiceTypeDetail, selectedSupplier, selectedVehicleClass]);
 
     // Vehicles list
