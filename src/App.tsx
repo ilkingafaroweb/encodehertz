@@ -37,6 +37,10 @@ import Sources from './pages/Sources/Sources';
 import AddSources from './pages/Sources/Actions/Add';
 import EditSources from './pages/Sources/Actions/Edit';
 import PreviewSources from './pages/Sources/Actions/Preview';
+import RentShortOrders from './pages/RentaCar/ShortOrders/ShortOrders';
+import AddRentShort from './pages/RentaCar/ShortOrders/Actions/Add';
+import EditRentShort from './pages/RentaCar/ShortOrders/Actions/Edit';
+import PreviewRentShort from './pages/RentaCar/ShortOrders/Actions/Preview';
 
 function App() {
   const [userToken, setUserToken] = useState(localStorage.getItem("userId") || '')
@@ -224,7 +228,34 @@ function App() {
         element={
           <>
             <PageTitle title="Rentacar Short Orders | ENCODE" />
-            <FormElements />
+            <RentShortOrders />
+          </>
+        }
+      />
+      <Route
+        path="/car/short-orders/add"
+        element={
+          <>
+            <PageTitle title="Add Rentacar Short Orders | ENCODE" />
+            <AddRentShort />
+          </>
+        }
+      />
+      <Route
+        path="/car/short-orders/edit"
+        element={
+          <>
+            <PageTitle title="Edit Rentacar Short Orders | ENCODE" />
+            <EditRentShort />
+          </>
+        }
+      />
+      <Route
+        path="/car/short-orders/preview"
+        element={
+          <>
+            <PageTitle title="Preview Rentacar Short Orders | ENCODE" />
+            <PreviewRentShort />
           </>
         }
       />

@@ -94,7 +94,7 @@ const initialSelectedData: SelectedData = {
     selectedExtraCharges: []
 };
 
-const AddRentLong = () => {
+const AddRentShort = () => {
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
@@ -141,13 +141,13 @@ const AddRentLong = () => {
 
     useEffect(() => {
         console.clear()
-        console.log("Rentacar long orders add form values:", selectedData);
+        console.log("Rentacar Short orders add form values:", selectedData);
     }, [selectedData])
 
-    // Rentacar long order post 
+    // Rentacar Short order post 
 
-    const addCarLong = async () => {
-        await fetch('https://encodehertz.xyz/api/RentCar/Long/Create', {
+    const addCarShort = async () => {
+        await fetch('https://encodehertz.xyz/api/RentCar/Short/Create', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -167,7 +167,7 @@ const AddRentLong = () => {
                     title: 'Success',
                     text: data,
                 });
-                navigate('/car/long-orders')
+                navigate('/car/short-orders')
             })
             .catch(error => {
                 console.error('Error sending data:', error);
@@ -183,7 +183,7 @@ const AddRentLong = () => {
 
     const getVehicleList = async () => {
         if (!!selectedVehicleGroup) {
-            await fetch(`https://encodehertz.xyz/api/RentCar/Long/GetVehicles?vehicleClass=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}`, {
+            await fetch(`https://encodehertz.xyz/api/RentCar/Short/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -220,7 +220,7 @@ const AddRentLong = () => {
             extraChargePanel: []
         }));
         if (selectedCustomer && selectedVehicleGroup) {
-            await fetch(`https://encodehertz.xyz/api/RentCar/Long/GetExtraCharges?customerCode=${selectedCustomer}&vehicleGroup=${selectedVehicleGroup}`, {
+            await fetch(`https://encodehertz.xyz/api/RentCar/Short/GetExtraCharges?customerCode=${selectedCustomer}&vehicleGroup=${selectedVehicleGroup}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -254,7 +254,7 @@ const AddRentLong = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://encodehertz.xyz/api/RentCar/Long/Create', {
+                const response = await fetch('https://encodehertz.xyz/api/RentCar/Short/Create', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -286,7 +286,7 @@ const AddRentLong = () => {
             cancelButtonText: 'No, keep editing'
         }).then((result) => {
             if (result.isConfirmed) {
-                navigate("/car/long-orders")
+                navigate("/car/short-orders")
                 console.log('Changes discarded');
             }
         });
@@ -294,7 +294,7 @@ const AddRentLong = () => {
 
     useEffect(() => {
         if (selectedCustomer) {
-            fetch(`https://encodehertz.xyz/api/RentCar/Long/GetContracts?customerCode=${selectedCustomer}`, {
+            fetch(`https://encodehertz.xyz/api/RentCar/Short/GetContracts?customerCode=${selectedCustomer}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -324,7 +324,7 @@ const AddRentLong = () => {
 
     useEffect(() => {
         if (selectedSupplier) {
-            fetch(`https://encodehertz.xyz/api/RentCar/Long/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
+            fetch(`https://encodehertz.xyz/api/RentCar/Short/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -353,7 +353,7 @@ const AddRentLong = () => {
 
     return (
         <DefaultLayout>
-            <Breadcrumb pageName="Insert" prevPageName='Rentacar long orders' prevRoute='/car/long-orders' />
+            <Breadcrumb pageName="Insert" prevPageName='Rentacar Short orders' prevRoute='/car/short-orders' />
             {formOptions ? (
                 <div className="max-w-full mx-auto gap-9 sm:grid-cols-2">
                     <div className="flex flex-col gap-9">
@@ -380,7 +380,7 @@ const AddRentLong = () => {
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                        <SelectGroupOne text="Service Type" options={[{value: "M-000089", text: "Rent a Car Long" }]} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
+                                        <SelectGroupOne text="Service Type" options={[{value: "M-000089", text: "Rent a Car Short" }]} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
                                         <div className="w-full xl:w-full">
                                             <label className="mb-2.5 block text-black dark:text-white">
                                                 Driver
@@ -509,7 +509,7 @@ const AddRentLong = () => {
                                         <button type='button' onClick={handleCancel} className="flex w-full justify-center rounded bg-danger dark:bg-danger p-3 font-medium text-gray hover:bg-opacity-90">
                                             Cancel
                                         </button>
-                                        <button type='button' onClick={addCarLong} className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
+                                        <button type='button' onClick={addCarShort} className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
                                             Insert
                                         </button>
                                     </div>
@@ -527,4 +527,4 @@ const AddRentLong = () => {
     );
 };
 
-export default AddRentLong;
+export default AddRentShort;

@@ -3,16 +3,15 @@ import TableThree from '../../../components/Tables/TableThree';
 import DefaultLayout from '../../../layout/DefaultLayout';
 import Breadcrumb from '../../../components/Breadcrumbs/Breadcrumb';
 import Swal from 'sweetalert2';
-import RentLongData from '../../../data/Rentacar/LongOrders'
 
-const RentLongOrders = () => {
-  const [carLong, setCarLong] = useState([]);
+const RentShortOrders = () => {
+  const [carShort, setCarShort] = useState([]);
   const [update, setUpdate] = useState(false); 
 
-  const getCarLongList = async () => {
+  const getCarShortList = async () => {
     const token = await localStorage.getItem("token");
 
-    fetch('https://encodehertz.xyz/api/RentCar/Long/List', {
+    fetch('https://encodehertz.xyz/api/RentCar/Short/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -25,7 +24,7 @@ const RentLongOrders = () => {
         return response.json();
       })
       .then(data => {
-        setCarLong(data);
+        setCarShort(data);
       })
       .catch(error => {
         console.error('Error', error);
@@ -33,7 +32,7 @@ const RentLongOrders = () => {
   }
 
   useEffect(() => {
-    getCarLongList() 
+    getCarShortList() 
   }, [])
 
   
@@ -51,7 +50,7 @@ const RentLongOrders = () => {
       cancelButtonText: 'No, cancel!'
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/RentCar/Long/Delete?id=${actionID}`;
+        const url = `https://encodehertz.xyz/api/RentCar/Short/Delete?id=${actionID}`;
         fetch(url, {
           method: 'GET',
           headers: {
@@ -71,7 +70,7 @@ const RentLongOrders = () => {
             text: data,
             icon: 'success',
           });
-          getCarLongList()
+          getCarShortList()
         })
         .catch(error => {
           Swal.fire({
@@ -86,12 +85,12 @@ const RentLongOrders = () => {
 
   return (
     <DefaultLayout>
-      <Breadcrumb pageName='Rent a car long orders' prevPageName='Dashboard' prevRoute='/'/>
+      <Breadcrumb pageName='Rent a car short orders' prevPageName='Dashboard' prevRoute='/'/>
       {
-        carLong.length > 0 && (<TableThree data={carLong} handleDelete={handleDelete} />)
+        carShort.length > 0 && (<TableThree data={carShort} handleDelete={handleDelete} />)
       }
     </DefaultLayout>
   );
 }
 
-export default RentLongOrders;
+export default RentShortOrders;
