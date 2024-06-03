@@ -52,7 +52,7 @@ interface SelectedData {
 
     selectedVehicleGroup: string;
     // selectedVehicleClass: string;
-    
+
     selectedVehicle: string;
     driver: string;
     selectedSupplierPaymentMethod: string;
@@ -110,51 +110,51 @@ const EditRentShort = () => {
 
     const fetchData = async () => {
         try {
-          const response = await fetch('https://encodehertz.xyz/api/RentCar/Short/Create', {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
+            const response = await fetch('https://encodehertz.xyz/api/RentCar/Short/Create', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-          });
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const data = await response.json();
-          setFormOptions(data as FormData);
+            const data = await response.json();
+            setFormOptions(data as FormData);
         } catch (error) {
-          console.error('Error fetching data:', error);
+            console.error('Error fetching data:', error);
         }
-      };
-    
-      const getPreview = async () => {
+    };
+
+    const getPreview = async () => {
         try {
-          const ActionID = await localStorage.getItem("ActionID")
-          const response = await fetch(`https://encodehertz.xyz/api/RentCar/Short/Edit?id=${ActionID}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
+            const ActionID = await localStorage.getItem("ActionID")
+            const response = await fetch(`https://encodehertz.xyz/api/RentCar/Short/Edit?id=${ActionID}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-          });
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const data = await response.json();
-          setSelectedData(data as SelectedData);
-          console.log("Edit form data : ", selectedData);
+            const data = await response.json();
+            setSelectedData(data as SelectedData);
+            console.log("Edit form data : ", selectedData);
         } catch (error) {
-          console.error('Error fetching data:', error);
+            console.error('Error fetching data:', error);
         }
-      };
-    
-      const getData = async () => {
+    };
+
+    const getData = async () => {
         await fetchData();
         getPreview();
-      };
-    
-      useEffect(() => {
+    };
+
+    useEffect(() => {
         getData();
-      }, [])
-    
+    }, [])
+
 
     const {
         cardNumber,
@@ -208,48 +208,48 @@ const EditRentShort = () => {
 
     const handleSave = async () => {
         const lastExtraCharge = selectedExtraCharges?.map((ec: any) => {
-          ec.isSelected = true;
-          return ec;
+            ec.isSelected = true;
+            return ec;
         });
-    
+
         const postData = {
-          ...selectedData,
-          extraChargePanel: lastExtraCharge
+            ...selectedData,
+            extraChargePanel: lastExtraCharge
         };
-    
+
         delete postData.selectedExtraCharges;
-    
+
         console.log("Edit Post Data : ", JSON.stringify(postData));
-    
+
         try {
-          const response = await fetch('https://encodehertz.xyz/api/RentCar/Short/Edit', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(postData),
-          });
-    
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-    
-          const data = await response.text();
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: data,
-          });
-          navigate("/car/short-orders")
+            const response = await fetch('https://encodehertz.xyz/api/RentCar/Short/Edit', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.text();
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: data,
+            });
+            navigate("/car/short-orders")
         } catch (error) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.message,
-          });
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message,
+            });
         }
-      };
+    };
 
     // Vehicles list
 
@@ -364,95 +364,36 @@ const EditRentShort = () => {
         });
     };
 
-    useEffect(() => {
-        if (selectedCustomer) {
-            fetch(`https://encodehertz.xyz/api/RentCar/Short/GetContracts?customerCode=${selectedCustomer}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setFormOptions(prevData => ({
-                        ...prevData,
-                        contracts: data
-                    }));
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        } else {
-            console.error('FRONTDA PROBLEM VAR');
-        }
-
-    }, [selectedCustomer]);
-
-
-    useEffect(() => {
-        if (selectedSupplier) {
-            fetch(`https://encodehertz.xyz/api/RentCar/Short/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setFormOptions(prevData => ({
-                        ...prevData,
-                        supplierContracts: data
-                    }));
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        } else {
-            console.error('FRONTDA PROBLEM VAR');
-        }
-
-    }, [selectedSupplier]);
-
     const handleSend = async () => {
         const id = await localStorage.getItem('ActionID')
-    
+
         try {
-          const response = await fetch(`https://encodehertz.xyz/api/RentCar/Short/Send?id=${id}`, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
+            const response = await fetch(`https://encodehertz.xyz/api/RentCar/Short/Send?id=${id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-          });
-    
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const text = await response.text();
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: text,
-          });
+            const text = await response.text();
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: text,
+            });
         } catch (error) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.message,
-          });
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message,
+            });
         }
         navigate("/car/short-orders")
-      }
+    }
 
     return (
         <DefaultLayout>
@@ -483,7 +424,7 @@ const EditRentShort = () => {
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                        <SelectGroupOne text="Service Type" options={[{value: "M-000089", text: "Rent a Car Short" }]} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedServiceType} />
+                                        <SelectGroupOne text="Service Type" options={[{ value: "M-000089", text: "Rent a Car Short" }]} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedServiceType} />
                                         <div className="w-full xl:w-full">
                                             <label className="mb-2.5 block text-black dark:text-white">
                                                 Driver

@@ -128,6 +128,31 @@ const AddRentShort = () => {
         selectedExtraCharges
     } = selectedData
 
+    
+    // Form options 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('https://encodehertz.xyz/api/RentCar/Short/Create', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setFormOptions(data as FormData);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
 
     useEffect(() => {
         const outsourceVehicleBoolean = !!selectedOutsourceVehicle;
@@ -215,10 +240,6 @@ const AddRentShort = () => {
     // Extra charges
 
     const getExtraCharges = async () => {
-        // setFormOptions(prevData => ({
-        //     ...prevData,
-        //     extraChargePanel: []
-        // }));
         if (selectedCustomer && selectedVehicleGroup) {
             await fetch(`https://encodehertz.xyz/api/RentCar/Short/GetExtraCharges?customerCode=${selectedCustomer}&vehicleGroup=${selectedVehicleGroup}`, {
                 headers: {
@@ -249,31 +270,6 @@ const AddRentShort = () => {
     }, [selectedCustomer, selectedVehicleGroup])
 
 
-    // Form options 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('https://encodehertz.xyz/api/RentCar/Short/Create', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setFormOptions(data as FormData);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-
     const handleCancel = () => {
         Swal.fire({
             title: 'Are you sure?',
@@ -291,65 +287,6 @@ const AddRentShort = () => {
             }
         });
     };
-
-    useEffect(() => {
-        if (selectedCustomer) {
-            fetch(`https://encodehertz.xyz/api/RentCar/Short/GetContracts?customerCode=${selectedCustomer}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setFormOptions(prevData => ({
-                        ...prevData,
-                        contracts: data
-                    }));
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        } else {
-            console.error('FRONTDA PROBLEM VAR');
-        }
-
-    }, [selectedCustomer]);
-
-
-    useEffect(() => {
-        if (selectedSupplier) {
-            fetch(`https://encodehertz.xyz/api/RentCar/Short/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setFormOptions(prevData => ({
-                        ...prevData,
-                        supplierContracts: data
-                    }));
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        } else {
-            console.error('FRONTDA PROBLEM VAR');
-        }
-
-    }, [selectedSupplier]);
 
     return (
         <DefaultLayout>

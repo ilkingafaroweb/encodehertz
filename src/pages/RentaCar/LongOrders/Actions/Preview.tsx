@@ -52,7 +52,7 @@ interface SelectedData {
 
     selectedVehicleGroup: string;
     // selectedVehicleClass: string;
-    
+
     selectedVehicle: string;
     driver: string;
     selectedSupplierPaymentMethod: string;
@@ -110,51 +110,51 @@ const PreviewRentLong = () => {
 
     const fetchData = async () => {
         try {
-          const response = await fetch('https://encodehertz.xyz/api/RentCar/Long/Create', {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
+            const response = await fetch('https://encodehertz.xyz/api/RentCar/Long/Create', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-          });
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const data = await response.json();
-          setFormOptions(data as FormData);
+            const data = await response.json();
+            setFormOptions(data as FormData);
         } catch (error) {
-          console.error('Error fetching data:', error);
+            console.error('Error fetching data:', error);
         }
-      };
-    
-      const getPreview = async () => {
+    };
+
+    const getPreview = async () => {
         try {
-          const ActionID = await localStorage.getItem("ActionID")
-          const response = await fetch(`https://encodehertz.xyz/api/RentCar/Long/Edit?id=${ActionID}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
+            const ActionID = await localStorage.getItem("ActionID")
+            const response = await fetch(`https://encodehertz.xyz/api/RentCar/Long/Edit?id=${ActionID}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-          });
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const data = await response.json();
-          setSelectedData(data as SelectedData);
-          console.log("Edit form data : ", selectedData);
+            const data = await response.json();
+            setSelectedData(data as SelectedData);
+            console.log("Edit form data : ", selectedData);
         } catch (error) {
-          console.error('Error fetching data:', error);
+            console.error('Error fetching data:', error);
         }
-      };
-    
-      const getData = async () => {
+    };
+
+    const getData = async () => {
         await fetchData();
         getPreview();
-      };
-    
-      useEffect(() => {
+    };
+
+    useEffect(() => {
         getData();
-      }, [])
-    
+    }, [])
+
 
     const {
         cardNumber,
@@ -188,6 +188,30 @@ const PreviewRentLong = () => {
         selectedExtraCharges
     } = selectedData
 
+    // Form options 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('https://encodehertz.xyz/api/RentCar/Long/Create', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setFormOptions(data as FormData);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
 
     useEffect(() => {
         const outsourceVehicleBoolean = !!selectedOutsourceVehicle;
@@ -203,53 +227,6 @@ const PreviewRentLong = () => {
         console.clear()
         console.log("Rentacar long orders add form values:", selectedData);
     }, [selectedData])
-
-    // Rentacar long order post 
-
-    const handleSave = async () => {
-        const lastExtraCharge = selectedExtraCharges?.map((ec: any) => {
-          ec.isSelected = true;
-          return ec;
-        });
-    
-        const postData = {
-          ...selectedData,
-          extraChargePanel: lastExtraCharge
-        };
-    
-        delete postData.selectedExtraCharges;
-    
-        console.log("Edit Post Data : ", JSON.stringify(postData));
-    
-        try {
-          const response = await fetch('https://encodehertz.xyz/api/RentCar/Long/Edit', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(postData),
-          });
-    
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-    
-          const data = await response.text();
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: data,
-          });
-          navigate("/car/long-orders")
-        } catch (error) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.message,
-          });
-        }
-      };
 
     // Vehicles list
 
@@ -287,10 +264,6 @@ const PreviewRentLong = () => {
     // Extra charges
 
     const getExtraCharges = async () => {
-        setFormOptions(prevData => ({
-            ...prevData,
-            extraChargePanel: []
-        }));
         if (!!selectedCustomer && !!selectedVehicleGroup) {
             await fetch(`https://encodehertz.xyz/api/RentCar/Long/GetExtraCharges?customerCode=${selectedCustomer}&vehicleGroup=${selectedVehicleGroup}`, {
                 headers: {
@@ -321,93 +294,9 @@ const PreviewRentLong = () => {
     }, [selectedCustomer, selectedVehicleGroup])
 
 
-    // Form options 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('https://encodehertz.xyz/api/RentCar/Long/Create', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setFormOptions(data as FormData);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-
     const handleBack = () => {
         navigate("/car/long-orders")
     };
-
-    useEffect(() => {
-        if (selectedCustomer) {
-            fetch(`https://encodehertz.xyz/api/RentCar/Long/GetContracts?customerCode=${selectedCustomer}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setFormOptions(prevData => ({
-                        ...prevData,
-                        contracts: data
-                    }));
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        } else {
-            console.error('FRONTDA PROBLEM VAR');
-        }
-
-    }, [selectedCustomer]);
-
-
-    useEffect(() => {
-        if (selectedSupplier) {
-            fetch(`https://encodehertz.xyz/api/RentCar/Long/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setFormOptions(prevData => ({
-                        ...prevData,
-                        supplierContracts: data
-                    }));
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        } else {
-            console.error('FRONTDA PROBLEM VAR');
-        }
-
-    }, [selectedSupplier]);
 
     return (
         <DefaultLayout>
@@ -439,7 +328,7 @@ const PreviewRentLong = () => {
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                        <SelectGroupOne text="Service Type" options={[{value: "M-000089", text: "Rent a Car Long" }]} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedServiceType} />
+                                        <SelectGroupOne text="Service Type" options={[{ value: "M-000089", text: "Rent a Car Long" }]} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedServiceType} />
                                         <div className="w-full xl:w-full">
                                             <label className="mb-2.5 block text-black dark:text-white">
                                                 Driver
@@ -491,35 +380,6 @@ const PreviewRentLong = () => {
                                             />
                                         </div>
                                     </div>
-                                    {/* {
-                                        selectedData.selectedOutsourceVehicle == true && <> <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                            <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={!formOptions.suppliers} defaultValue={selectedSupplier} />
-                                            <SelectGroupOne text="Supplier Contract" options={formOptions.supplierContracts || []} setSelectedData={setSelectedData} disabled={!formOptions.supplierContracts} defaultValue={selectedContract} />
-                                        </div>
-
-                                            <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                                <SelectGroupOne text="Supplier Payment Method" options={formOptions.supplierPaymentMethods || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedSupplierPaymentMethod} />
-                                                <div className="w-full xl:w-full">
-                                                    <label className="mb-2.5 block text-black dark:text-white">
-                                                        Price To Supplier Monthly
-                                                    </label>
-                                                    <input
-                                                        type="number"
-                                                        disabled={true}
-                                                        placeholder="Empty"
-                                                        value={priceToSupplier !== 0 ? priceToSupplier : ""}
-                                                        onChange={(e) => {
-                                                            const newValue = parseFloat(e.target.value);
-                                                            setSelectedData(prevData => ({
-                                                                ...prevData,
-                                                                priceToSupplier: newValue
-                                                            }))
-                                                        }}
-                                                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    />
-                                                </div>
-                                            </div></>
-                                    } */}
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <div className="w-full xl:w-full">
                                             <label className="mb-2.5 block text-black dark:text-white">

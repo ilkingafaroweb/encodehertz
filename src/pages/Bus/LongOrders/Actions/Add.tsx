@@ -353,7 +353,6 @@ const AddBusLong = () => {
     fetchData();
   }, []);
 
-
   const handleCancel = () => {
     Swal.fire({
       title: 'Are you sure?',

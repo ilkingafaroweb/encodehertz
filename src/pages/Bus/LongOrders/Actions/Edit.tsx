@@ -240,7 +240,6 @@ const EditBusLong = () => {
     navigate("/bus/long-orders")
   };
 
-
   const handleSend = async () => {
     const bloId = await localStorage.getItem('ActionID')
 
