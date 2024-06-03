@@ -215,10 +215,10 @@ const AddRentShort = () => {
     // Extra charges
 
     const getExtraCharges = async () => {
-        setFormOptions(prevData => ({
-            ...prevData,
-            extraChargePanel: []
-        }));
+        // setFormOptions(prevData => ({
+        //     ...prevData,
+        //     extraChargePanel: []
+        // }));
         if (selectedCustomer && selectedVehicleGroup) {
             await fetch(`https://encodehertz.xyz/api/RentCar/Short/GetExtraCharges?customerCode=${selectedCustomer}&vehicleGroup=${selectedVehicleGroup}`, {
                 headers: {

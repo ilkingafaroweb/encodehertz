@@ -140,7 +140,7 @@ const AddRentLong = () => {
 
 
     useEffect(() => {
-        console.clear()
+        // console.clear()
         console.log("Rentacar long orders add form values:", selectedData);
     }, [selectedData])
 
@@ -183,7 +183,7 @@ const AddRentLong = () => {
 
     const getVehicleList = async () => {
         if (!!selectedVehicleGroup) {
-            await fetch(`https://encodehertz.xyz/api/RentCar/Long/GetVehicles?vehicleClass=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}`, {
+            await fetch(`https://encodehertz.xyz/api/RentCar/Long/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -215,10 +215,10 @@ const AddRentLong = () => {
     // Extra charges
 
     const getExtraCharges = async () => {
-        setFormOptions(prevData => ({
-            ...prevData,
-            extraChargePanel: []
-        }));
+        // setFormOptions(prevData => ({
+        //     ...prevData,
+        //     extraChargePanel: []
+        // }));
         if (selectedCustomer && selectedVehicleGroup) {
             await fetch(`https://encodehertz.xyz/api/RentCar/Long/GetExtraCharges?customerCode=${selectedCustomer}&vehicleGroup=${selectedVehicleGroup}`, {
                 headers: {
