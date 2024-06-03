@@ -49,6 +49,7 @@ interface SelectedData {
     selectedServiceType: string;
     selectedCustomerPaymentMethod: string;
     selectedOutsourceVehicle: string | boolean;
+    selectedSource: string;
 
     selectedVehicleGroup: string;
     // selectedVehicleClass: string;
@@ -81,6 +82,7 @@ const initialSelectedData: SelectedData = {
     selectedCustomerPaymentMethod: "",
     selectedOutsourceVehicle: "",
     selectedVehicleGroup: "",
+    selectedSource: "",
 
     // selectedVehicleClass: "",
 
@@ -166,6 +168,7 @@ const EditRentShort = () => {
         selectedServiceType,
         selectedCustomerPaymentMethod,
         selectedOutsourceVehicle,
+        selectedSource,
 
         selectedVehicleGroup,
         // selectedVehicleClass,
@@ -475,35 +478,32 @@ const EditRentShort = () => {
                                             />
                                         </div>
                                     </div>
-                                    {/* {
-                                        selectedData.selectedOutsourceVehicle == true && <> <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
+                                    {
+                                        selectedData.selectedOutsourceVehicle == true &&
+                                        <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                             <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={!formOptions.suppliers} defaultValue={selectedSupplier} />
-                                            <SelectGroupOne text="Supplier Contract" options={formOptions.supplierContracts || []} setSelectedData={setSelectedData} disabled={!formOptions.supplierContracts} defaultValue={selectedContract} />
+                                            <SelectGroupOne text="Supplier Payment Method" options={formOptions.supplierPaymentMethods || []} setSelectedData={setSelectedData} disabled={!formOptions.supplierPaymentMethods} defaultValue={selectedSupplierPaymentMethod} />
+                                            <div className="w-full xl:w-full">
+                                                <label className="mb-2.5 block text-black dark:text-white">
+                                                    Price To Supplier
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    disabled={false}
+                                                    placeholder="Empty"
+                                                    value={priceToSupplier}
+                                                    onChange={(e) => {
+                                                        const newValue = parseFloat(e.target.value);
+                                                        setSelectedData(prevData => ({
+                                                            ...prevData,
+                                                            priceToSupplier: newValue
+                                                        }))
+                                                    }}
+                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                />
+                                            </div>
                                         </div>
-
-                                            <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                                <SelectGroupOne text="Supplier Payment Method" options={formOptions.supplierPaymentMethods || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedSupplierPaymentMethod} />
-                                                <div className="w-full xl:w-full">
-                                                    <label className="mb-2.5 block text-black dark:text-white">
-                                                        Price To Supplier Monthly
-                                                    </label>
-                                                    <input
-                                                        type="number"
-                                                        disabled={false}
-                                                        placeholder="Empty"
-                                                        value={priceToSupplier !== 0 ? priceToSupplier : ""}
-                                                        onChange={(e) => {
-                                                            const newValue = parseFloat(e.target.value);
-                                                            setSelectedData(prevData => ({
-                                                                ...prevData,
-                                                                priceToSupplier: newValue
-                                                            }))
-                                                        }}
-                                                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                    />
-                                                </div>
-                                            </div></>
-                                    } */}
+                                    }
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <div className="w-full xl:w-full">
                                             <label className="mb-2.5 block text-black dark:text-white">
@@ -520,10 +520,7 @@ const EditRentShort = () => {
                                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                             />
                                         </div>
-                                        <div className="w-full hidden xl:w-full xl:block">
-
-                                        </div>
-                                        {/* <SelectGroupOne text="Source" options={formOptions.sources} setSelectedData={setSelectedData} disabled={false} defaultValue='' /> */}
+                                        <SelectGroupOne text="Source" options={formOptions.sources} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedSource} />
                                     </div>
                                     {
                                         formOptions.extraChargePanel?.length !== 0 && <div className='mb-6 flex flex-col gap-3'>

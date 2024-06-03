@@ -475,6 +475,32 @@ const EditRentLong = () => {
                                             />
                                         </div>
                                     </div>
+                                    {
+                                        selectedData.selectedOutsourceVehicle == true &&
+                                        <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
+                                            <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={!formOptions.suppliers} defaultValue='' />
+                                            <SelectGroupOne text="Supplier Payment Method" options={formOptions.supplierPaymentMethods || []} setSelectedData={setSelectedData} disabled={!formOptions.supplierPaymentMethods} defaultValue='' />
+                                            <div className="w-full xl:w-full">
+                                                <label className="mb-2.5 block text-black dark:text-white">
+                                                    Price To Supplier
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    disabled={false}
+                                                    placeholder="Empty"
+                                                    value={priceToSupplier}
+                                                    onChange={(e) => {
+                                                        const newValue = parseFloat(e.target.value);
+                                                        setSelectedData(prevData => ({
+                                                            ...prevData,
+                                                            priceToSupplier: newValue
+                                                        }))
+                                                    }}
+                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                />
+                                            </div>
+                                        </div>
+                                    }
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <div className="w-full xl:w-full">
                                             <label className="mb-2.5 block text-black dark:text-white">
