@@ -462,7 +462,7 @@ const EditRentLong = () => {
                                             <input
                                                 type='number'
                                                 disabled={false}
-                                                value={priceToCustomer !== 0 ? priceToCustomer : ""}
+                                                value={priceToCustomer}
                                                 placeholder='Empty'
                                                 onChange={(e) => {
                                                     const newValue = parseFloat(e.target.value);

@@ -367,7 +367,7 @@ const PreviewRentLong = () => {
                                             <input
                                                 type='number'
                                                 disabled={true}
-                                                value={priceToCustomer !== 0 ? priceToCustomer : ""}
+                                                value={priceToCustomer}
                                                 placeholder='Empty'
                                                 onChange={(e) => {
                                                     const newValue = parseFloat(e.target.value);
