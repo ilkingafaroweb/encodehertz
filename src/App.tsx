@@ -41,6 +41,9 @@ import RentShortOrders from './pages/RentaCar/ShortOrders/ShortOrders';
 import AddRentShort from './pages/RentaCar/ShortOrders/Actions/Add';
 import EditRentShort from './pages/RentaCar/ShortOrders/Actions/Edit';
 import PreviewRentShort from './pages/RentaCar/ShortOrders/Actions/Preview';
+import AddTaxi from './pages/Taxi/Actions/Add';
+import EditTaxi from './pages/Taxi/Actions/Edit';
+import PreviewTaxi from './pages/Taxi/Actions/Preview';
 
 function App() {
   const [userToken, setUserToken] = useState(localStorage.getItem("userId") || '')
@@ -269,12 +272,42 @@ function App() {
           </>
         }
       />
+
+      {/* Taxi */}
+
       <Route
         path="/taxi"
         element={
           <>
             <PageTitle title="Taxi | ENCODE" />
             <Taxi />
+          </>
+        }
+      />
+      <Route
+        path="/taxi/add"
+        element={
+          <>
+            <PageTitle title="Add Taxi | ENCODE" />
+            <AddTaxi />
+          </>
+        }
+      />
+      <Route
+        path="/taxi/edit"
+        element={
+          <>
+            <PageTitle title="Edit Taxi | ENCODE" />
+            <EditTaxi />
+          </>
+        }
+      />
+      <Route
+        path="/taxi/preview"
+        element={
+          <>
+            <PageTitle title="Preview Taxi | ENCODE" />
+            <PreviewTaxi />
           </>
         }
       />
