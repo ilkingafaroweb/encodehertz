@@ -64,7 +64,7 @@ const EditTaxi = () => {
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
-    const { transactionPeriod, otherComment, otherPrice, selectedCustomer, selectedPaymentMethod, extraChargePanel, comment } = selectedData
+    const {cardNumber, transactionPeriod, otherComment, otherPrice, selectedCustomer, selectedPaymentMethod, extraChargePanel, comment } = selectedData
 
     // Form options 
 
@@ -114,7 +114,6 @@ const EditTaxi = () => {
         console.clear()
         console.log("Taxi add datas ----> ", selectedData);
     }, [selectedData])
-
 
     const handleSave = async () => {
         await fetch('https://encodehertz.xyz/api/Taxi/Taxi/Edit', {
@@ -174,6 +173,36 @@ const EditTaxi = () => {
     };
 
 
+    const handleSend = async () => {
+        const id = await localStorage.getItem('ActionID')
+
+        try {
+            const response = await fetch(`https://encodehertz.xyz/api/Taxi/Taxi/Send?toId=${id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const text = await response.text();
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: text,
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message,
+            });
+        }
+        navigate("/taxi")
+    }
 
     const handleCancel = () => {
         Swal.fire({
@@ -194,7 +223,7 @@ const EditTaxi = () => {
 
     return (
         <DefaultLayout>
-            <Breadcrumb pageName="Insert" prevPageName='Taxi orders' prevRoute='/taxi' />
+            <Breadcrumb pageName={`Edit / ${cardNumber}`} prevPageName='Taxi' prevRoute='/taxi' />
             {formOptions ? (
                 <div className="max-w-full mx-auto gap-9 sm:grid-cols-2">
                     <div className="flex flex-col gap-9">
@@ -446,7 +475,7 @@ const EditTaxi = () => {
                                         <button type='button' onClick={handleCancel} className="flex w-full justify-center rounded bg-meta-1 p-3 font-medium text-gray hover:bg-opacity-90">
                                             Cancel
                                         </button>
-                                        <button type='button' onClick={handleCancel} className="flex w-full justify-center rounded bg-meta-5 p-3 font-medium text-gray hover:bg-opacity-90">
+                                        <button type='button' onClick={handleSend} className="flex w-full justify-center rounded bg-meta-5 p-3 font-medium text-gray hover:bg-opacity-90">
                                             Send to desktop
                                         </button>
                                         <button type='button' onClick={handleSave} className="flex w-full justify-center rounded bg-meta-3 p-3 font-medium text-gray hover:bg-opacity-90">

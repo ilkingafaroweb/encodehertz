@@ -64,7 +64,7 @@ const PreviewTaxi = () => {
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
-    const { transactionPeriod, otherComment, otherPrice, selectedCustomer, selectedPaymentMethod, extraChargePanel, comment } = selectedData
+    const {cardNumber, transactionPeriod, otherComment, otherPrice, selectedCustomer, selectedPaymentMethod, extraChargePanel, comment } = selectedData
 
     // Form options 
 
@@ -116,7 +116,7 @@ const PreviewTaxi = () => {
 
     return (
         <DefaultLayout>
-            <Breadcrumb pageName="Insert" prevPageName='Taxi orders' prevRoute='/taxi' />
+            <Breadcrumb pageName={`Preview / ${cardNumber}`} prevPageName='Taxi' prevRoute='/taxi' />
             {formOptions ? (
                 <div className="max-w-full mx-auto gap-9 sm:grid-cols-2">
                     <div className="flex flex-col gap-9">

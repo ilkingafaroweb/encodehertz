@@ -175,7 +175,7 @@ const AddTaxi = () => {
 
     return (
         <DefaultLayout>
-            <Breadcrumb pageName="Insert" prevPageName='Taxi orders' prevRoute='/taxi' />
+            <Breadcrumb pageName="Insert" prevPageName='Taxi' prevRoute='/taxi' />
             {formOptions ? (
                 <div className="max-w-full mx-auto gap-9 sm:grid-cols-2">
                     <div className="flex flex-col gap-9">
