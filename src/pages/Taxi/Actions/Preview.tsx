@@ -144,16 +144,6 @@ const PreviewTaxi = () => {
                                                 ></input>
                                             </div><div className='w-full'>
                                                 <label className="mb-2.5 block text-black dark:text-white">
-                                                    Unit Price
-                                                </label>
-                                                <input
-                                                    disabled
-                                                    value={selectedData.km?.unitPrice}
-                                                    placeholder="Type your comment"
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                ></input>
-                                            </div><div className='w-full'>
-                                                <label className="mb-2.5 block text-black dark:text-white">
                                                     Total Price
                                                 </label>
                                                 <input
@@ -174,16 +164,6 @@ const PreviewTaxi = () => {
                                                 <input
                                                     disabled
                                                     value={selectedData.airportTransfer?.quantity}
-                                                    placeholder="Type your comment"
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                ></input>
-                                            </div><div className='w-full'>
-                                                <label className="mb-2.5 block text-black dark:text-white">
-                                                    Unit Price
-                                                </label>
-                                                <input
-                                                    disabled
-                                                    value={selectedData.airportTransfer?.unitPrice}
                                                     placeholder="Type your comment"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
@@ -214,16 +194,6 @@ const PreviewTaxi = () => {
                                                 ></input>
                                             </div><div className='w-full'>
                                                 <label className="mb-2.5 block text-black dark:text-white">
-                                                    Unit Price
-                                                </label>
-                                                <input
-                                                    disabled
-                                                    value={selectedData.region?.unitPrice}
-                                                    placeholder="Type your comment"
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                ></input>
-                                            </div><div className='w-full'>
-                                                <label className="mb-2.5 block text-black dark:text-white">
                                                     Total Price
                                                 </label>
                                                 <input
@@ -244,16 +214,6 @@ const PreviewTaxi = () => {
                                                 <input
                                                     disabled
                                                     value={selectedData.waitingTime?.quantity}
-                                                    placeholder="Type your comment"
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                ></input>
-                                            </div><div className='w-full'>
-                                                <label className="mb-2.5 block text-black dark:text-white">
-                                                    Unit Price
-                                                </label>
-                                                <input
-                                                    disabled
-                                                    value={selectedData.waitingTime?.unitPrice}
                                                     placeholder="Type your comment"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
@@ -284,16 +244,6 @@ const PreviewTaxi = () => {
                                                 ></input>
                                             </div><div className='w-full'>
                                                 <label className="mb-2.5 block text-black dark:text-white">
-                                                    Unit Price
-                                                </label>
-                                                <input
-                                                    disabled
-                                                    value={selectedData.cancelledTrip?.unitPrice}
-                                                    placeholder="Type your comment"
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                ></input>
-                                            </div><div className='w-full'>
-                                                <label className="mb-2.5 block text-black dark:text-white">
                                                     Total Price
                                                 </label>
                                                 <input
@@ -302,45 +252,34 @@ const PreviewTaxi = () => {
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
                                             </div>
+                                        </div>
+                                        <div className="mb-2 flex flex-col items-center gap-3">
+                                            <p className='text-red-700 dark:text-yellow-500 text-2xl lg:mt-3'>Other Service</p>
+                                            <div className='w-full'>
+                                                <label className="mb-2.5 block text-black dark:text-white">
+                                                    Service Name
+                                                </label>
+                                                <input
+                                                    value={otherComment}
+                                                    disabled
+                                                    placeholder="Type service name"
+                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                ></input>
+                                            </div><div className='w-full'>
+                                                <label className="mb-2.5 block text-black dark:text-white">
+                                                    Service Price
+                                                </label>
+                                                <input
+                                                    value={otherPrice}
+                                                    disabled
+                                                    placeholder="Enter total price"
+                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                ></input>
+                                            </div>
 
                                         </div>
                                     </div>
 
-                                    <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                                        <div className='w-full'>
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                                Other Comment
-                                            </label>
-                                            <input
-                                                disabled
-                                                value={otherComment}
-                                                onChange={(e) => setSelectedData(prevData => ({
-                                                    ...prevData,
-                                                    otherComment: e.target.value
-                                                }))}
-                                                placeholder="Type your comment"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                            ></input>
-                                        </div>
-                                        <div className='w-full'>
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                                Other Price
-                                            </label>
-                                            <input
-                                                disabled
-                                                value={otherPrice}
-                                                onChange={(e) => {
-                                                    const newValue = parseFloat(e.target.value);
-                                                    setSelectedData(prevData => ({
-                                                        ...prevData,
-                                                        otherPrice: isNaN(newValue) ? 0 : newValue
-                                                    }));
-                                                }}
-                                                placeholder="Enter Price"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                            ></input>
-                                        </div>
-                                    </div>
                                     {
                                         formOptions?.extraChargePanel?.length !== 0 && <div className='mb-6 flex flex-col gap-3'>
                                             <label className="mt-3 block text-md font-medium text-black dark:text-white">

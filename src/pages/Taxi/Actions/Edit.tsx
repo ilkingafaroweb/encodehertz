@@ -204,6 +204,19 @@ const EditTaxi = () => {
         navigate("/taxi")
     }
 
+    const handleChangeOtherPrice = (e) => {
+        const inputValue = e.target.value;
+        const isValidNumber = /^[0-9]*\.?[0-9]*$/.test(inputValue);
+    
+        if (isValidNumber) {
+            const newValue = inputValue;
+            setSelectedData(prevData => ({
+                ...prevData,
+                otherPrice: newValue
+            }));
+        }
+    };
+
     const handleCancel = () => {
         Swal.fire({
             title: 'Are you sure?',
@@ -244,18 +257,8 @@ const EditTaxi = () => {
                                                     Quantity
                                                 </label>
                                                 <input
-                                                    value={selectedData.km?.quantity}
+                                                    value={selectedData.km.quantity}
                                                     onChange={(e) => handleChange(e, 'km', 'quantity')}
-                                                    placeholder="Type your comment"
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                ></input>
-                                            </div><div className='w-full'>
-                                                <label className="mb-2.5 block text-black dark:text-white">
-                                                    Unit Price
-                                                </label>
-                                                <input
-                                                    value={selectedData.km?.unitPrice}
-                                                    onChange={(e) => handleChange(e, 'km', 'unitPrice')}
                                                     placeholder="Type your comment"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
@@ -264,8 +267,8 @@ const EditTaxi = () => {
                                                     Total Price
                                                 </label>
                                                 <input
-                                                    value={selectedData.km?.totalPrice}
-                                                    disabled
+                                                    value={selectedData.km.totalPrice}
+                                                    onChange={(e) => handleChange(e, 'km', 'totalPrice')}
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
                                             </div>
@@ -279,18 +282,8 @@ const EditTaxi = () => {
                                                     Quantity
                                                 </label>
                                                 <input
-                                                    value={selectedData.airportTransfer?.quantity}
+                                                    value={selectedData.airportTransfer.quantity}
                                                     onChange={(e) => handleChange(e, 'airportTransfer', 'quantity')}
-                                                    placeholder="Type your comment"
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                ></input>
-                                            </div><div className='w-full'>
-                                                <label className="mb-2.5 block text-black dark:text-white">
-                                                    Unit Price
-                                                </label>
-                                                <input
-                                                    value={selectedData.airportTransfer?.unitPrice}
-                                                    onChange={(e) => handleChange(e, 'airportTransfer', 'unitPrice')}
                                                     placeholder="Type your comment"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
@@ -299,8 +292,8 @@ const EditTaxi = () => {
                                                     Total Price
                                                 </label>
                                                 <input
-                                                    value={selectedData.airportTransfer?.totalPrice}
-                                                    disabled
+                                                    value={selectedData.airportTransfer.totalPrice}
+                                                    onChange={(e) => handleChange(e, 'airportTransfer', 'totalPrice')}
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
                                             </div>
@@ -314,18 +307,8 @@ const EditTaxi = () => {
                                                     Quantity
                                                 </label>
                                                 <input
-                                                    value={selectedData.region?.quantity}
+                                                    value={selectedData.region.quantity}
                                                     onChange={(e) => handleChange(e, 'region', 'quantity')}
-                                                    placeholder="Type your comment"
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                ></input>
-                                            </div><div className='w-full'>
-                                                <label className="mb-2.5 block text-black dark:text-white">
-                                                    Unit Price
-                                                </label>
-                                                <input
-                                                    value={selectedData.region?.unitPrice}
-                                                    onChange={(e) => handleChange(e, 'region', 'unitPrice')}
                                                     placeholder="Type your comment"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
@@ -334,8 +317,8 @@ const EditTaxi = () => {
                                                     Total Price
                                                 </label>
                                                 <input
-                                                    value={selectedData.region?.totalPrice}
-                                                    disabled
+                                                    value={selectedData.region.totalPrice}
+                                                    onChange={(e) => handleChange(e, 'region', 'totalPrice')}
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
                                             </div>
@@ -349,18 +332,8 @@ const EditTaxi = () => {
                                                     Quantity
                                                 </label>
                                                 <input
-                                                    value={selectedData.waitingTime?.quantity}
+                                                    value={selectedData.waitingTime.quantity}
                                                     onChange={(e) => handleChange(e, 'waitingTime', 'quantity')}
-                                                    placeholder="Type your comment"
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                ></input>
-                                            </div><div className='w-full'>
-                                                <label className="mb-2.5 block text-black dark:text-white">
-                                                    Unit Price
-                                                </label>
-                                                <input
-                                                    value={selectedData.waitingTime?.unitPrice}
-                                                    onChange={(e) => handleChange(e, 'waitingTime', 'unitPrice')}
                                                     placeholder="Type your comment"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
@@ -369,8 +342,8 @@ const EditTaxi = () => {
                                                     Total Price
                                                 </label>
                                                 <input
-                                                    value={selectedData.waitingTime?.totalPrice}
-                                                    disabled
+                                                    value={selectedData.waitingTime.totalPrice}
+                                                    onChange={(e) => handleChange(e, 'waitingTime', 'totalPrice')}
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
                                             </div>
@@ -384,18 +357,8 @@ const EditTaxi = () => {
                                                     Quantity
                                                 </label>
                                                 <input
-                                                    value={selectedData.cancelledTrip?.quantity}
+                                                    value={selectedData.cancelledTrip.quantity}
                                                     onChange={(e) => handleChange(e, 'cancelledTrip', 'quantity')}
-                                                    placeholder="Type your comment"
-                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                ></input>
-                                            </div><div className='w-full'>
-                                                <label className="mb-2.5 block text-black dark:text-white">
-                                                    Unit Price
-                                                </label>
-                                                <input
-                                                    value={selectedData.cancelledTrip?.unitPrice}
-                                                    onChange={(e) => handleChange(e, 'cancelledTrip', 'unitPrice')}
                                                     placeholder="Type your comment"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
@@ -404,46 +367,40 @@ const EditTaxi = () => {
                                                     Total Price
                                                 </label>
                                                 <input
-                                                    value={selectedData.cancelledTrip?.totalPrice}
-                                                    disabled
+                                                    value={selectedData.cancelledTrip.totalPrice}
+                                                    onChange={(e) => handleChange(e, 'cancelledTrip', 'totalPrice')}
+                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                ></input>
+                                            </div>
+                                        </div>
+
+                                        <div className="mb-2 flex flex-col items-center gap-3">
+                                            <p className='text-red-700 dark:text-yellow-500 text-2xl lg:mt-3'>Other Service</p>
+                                            <div className='w-full'>
+                                                <label className="mb-2.5 block text-black dark:text-white">
+                                                    Service Name
+                                                </label>
+                                                <input
+                                                    value={otherComment}
+                                                    onChange={(e) => setSelectedData(prevData => ({
+                                                        ...prevData,
+                                                        otherComment: e.target.value
+                                                    }))}
+                                                    placeholder="Type service name"
+                                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                ></input>
+                                            </div><div className='w-full'>
+                                                <label className="mb-2.5 block text-black dark:text-white">
+                                                    Service Price
+                                                </label>
+                                                <input
+                                                    value={otherPrice}
+                                                    onChange={(e) => handleChangeOtherPrice(e)}
+                                                    placeholder="Enter total price"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
                                             </div>
 
-                                        </div>
-                                    </div>
-
-                                    <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                                        <div className='w-full'>
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                                Other Comment
-                                            </label>
-                                            <input
-                                                value={otherComment}
-                                                onChange={(e) => setSelectedData(prevData => ({
-                                                    ...prevData,
-                                                    otherComment: e.target.value
-                                                }))}
-                                                placeholder="Type your comment"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                            ></input>
-                                        </div>
-                                        <div className='w-full'>
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                                Other Price
-                                            </label>
-                                            <input
-                                                value={otherPrice}
-                                                onChange={(e) => {
-                                                    const newValue = parseFloat(e.target.value);
-                                                    setSelectedData(prevData => ({
-                                                        ...prevData,
-                                                        otherPrice: isNaN(newValue) ? 0 : newValue
-                                                    }));
-                                                }}
-                                                placeholder="Enter Price"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                            ></input>
                                         </div>
                                     </div>
                                     {
