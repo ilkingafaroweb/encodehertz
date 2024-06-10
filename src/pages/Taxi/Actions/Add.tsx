@@ -16,11 +16,11 @@ interface FormData {
     paymentMethods: { value: string; text: string }[];
     selectedPaymentMethod: string | null;
     comment: string | null;
-    km: { quantity: number, unitPrice: number, totalPrice: number };
-    airportTransfer: { quantity: number, unitPrice: number, totalPrice: number };
-    region: { quantity: number, unitPrice: number, totalPrice: number };
-    waitingTime: { quantity: number, unitPrice: number, totalPrice: number };
-    cancelledTrip: { quantity: number, unitPrice: number, totalPrice: number };
+    km: { quantity: number, totalPrice: number };
+    airportTransfer: { quantity: number, totalPrice: number };
+    region: { quantity: number, totalPrice: number };
+    waitingTime: { quantity: number, totalPrice: number };
+    cancelledTrip: { quantity: number, totalPrice: number };
     otherComment: string;
     otherPrice: number;
     extraChargePanel: any[];
@@ -32,11 +32,11 @@ interface SelectedData {
     transactionPeriod: string;
     selectedPaymentMethod: string | null;
     comment: string | null;
-    km: { quantity: number, unitPrice: number, totalPrice: number };
-    airportTransfer: { quantity: number, unitPrice: number, totalPrice: number };
-    region: { quantity: number, unitPrice: number, totalPrice: number };
-    waitingTime: { quantity: number, unitPrice: number, totalPrice: number };
-    cancelledTrip: { quantity: number, unitPrice: number, totalPrice: number };
+    km: { quantity: number, totalPrice: number };
+    airportTransfer: { quantity: number, totalPrice: number };
+    region: { quantity: number, totalPrice: number };
+    waitingTime: { quantity: number, totalPrice: number };
+    cancelledTrip: { quantity: number, totalPrice: number };
     otherComment: string;
     otherPrice: number;
     extraChargePanel: any[];
@@ -48,11 +48,11 @@ const initialSelectedData: SelectedData = {
     transactionPeriod: "",
     selectedPaymentMethod: "",
     comment: "",
-    km: { quantity: 0, unitPrice: 0, totalPrice: 0 },
-    airportTransfer: { quantity: 0, unitPrice: 0, totalPrice: 0 },
-    region: { quantity: 0, unitPrice: 0, totalPrice: 0 },
-    waitingTime: { quantity: 0, unitPrice: 0, totalPrice: 0 },
-    cancelledTrip: { quantity: 0, unitPrice: 0, totalPrice: 0 },
+    km: { quantity: 0, totalPrice: 0 },
+    airportTransfer: { quantity: 0, totalPrice: 0 },
+    region: { quantity: 0, totalPrice: 0 },
+    waitingTime: { quantity: 0, totalPrice: 0 },
+    cancelledTrip: { quantity: 0, totalPrice: 0 },
     otherComment: "",
     otherPrice: 0,
     extraChargePanel: [],
