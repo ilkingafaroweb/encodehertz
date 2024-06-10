@@ -159,15 +159,7 @@ const EditTaxi = () => {
                     }
                 };
 
-                const totalPrice = updatedData[objectName].quantity * updatedData[objectName].unitPrice;
-
-                return {
-                    ...updatedData,
-                    [objectName]: {
-                        ...updatedData[objectName],
-                        totalPrice: totalPrice.toFixed(2)
-                    }
-                };
+                return updatedData
             });
         }
     };
@@ -259,7 +251,6 @@ const EditTaxi = () => {
                                                 <input
                                                     value={selectedData.km.quantity}
                                                     onChange={(e) => handleChange(e, 'km', 'quantity')}
-                                                    placeholder="Type your comment"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
                                             </div><div className='w-full'>
@@ -284,7 +275,6 @@ const EditTaxi = () => {
                                                 <input
                                                     value={selectedData.airportTransfer.quantity}
                                                     onChange={(e) => handleChange(e, 'airportTransfer', 'quantity')}
-                                                    placeholder="Type your comment"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
                                             </div><div className='w-full'>
@@ -309,7 +299,6 @@ const EditTaxi = () => {
                                                 <input
                                                     value={selectedData.region.quantity}
                                                     onChange={(e) => handleChange(e, 'region', 'quantity')}
-                                                    placeholder="Type your comment"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
                                             </div><div className='w-full'>
@@ -334,7 +323,6 @@ const EditTaxi = () => {
                                                 <input
                                                     value={selectedData.waitingTime.quantity}
                                                     onChange={(e) => handleChange(e, 'waitingTime', 'quantity')}
-                                                    placeholder="Type your comment"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
                                             </div><div className='w-full'>
@@ -359,7 +347,6 @@ const EditTaxi = () => {
                                                 <input
                                                     value={selectedData.cancelledTrip.quantity}
                                                     onChange={(e) => handleChange(e, 'cancelledTrip', 'quantity')}
-                                                    placeholder="Type your comment"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
                                             </div><div className='w-full'>
@@ -386,7 +373,6 @@ const EditTaxi = () => {
                                                         ...prevData,
                                                         otherComment: e.target.value
                                                     }))}
-                                                    placeholder="Type service name"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
                                             </div><div className='w-full'>
@@ -396,7 +382,6 @@ const EditTaxi = () => {
                                                 <input
                                                     value={otherPrice}
                                                     onChange={(e) => handleChangeOtherPrice(e)}
-                                                    placeholder="Enter total price"
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 ></input>
                                             </div>
