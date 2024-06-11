@@ -130,20 +130,38 @@ const AddTaxi = () => {
     }
 
     const handleChange = (e, objectName, keyName) => {
-        const inputValue = e.target.value;
-        if (/^[0-9]*\.?[0-9]*$/.test(inputValue)) {
-            setSelectedData(prevData => {
-                const updatedData = {
-                    ...prevData,
-                    [objectName]: {
-                        ...prevData[objectName],
-                        [keyName]: inputValue
-                    }
-                };
-                return updatedData;
-            });
+        let inputValue = e.target.value;
+    
+        if (inputValue === '') {
+            inputValue = '0';
+        } else {
+            if (/^[0-9]*\.?[0-9]*$/.test(inputValue)) {
+                // Başta gelen sıfırları sadece tamsayı kısımlarından kaldır
+                if (inputValue.includes('.')) {
+                    // Ondalıklı sayılar için: baştaki sıfırları kaldır ama ondalık noktayı koru
+                    inputValue = inputValue.replace(/^0+(?=\d)/, '');
+                } else {
+                    // Tam sayılar için: baştaki sıfırları tamamen kaldır
+                    inputValue = parseFloat(inputValue).toString();
+                }
+            } else {
+                return; // Eğer sayı değilse, fonksiyondan çık
+            }
         }
+    
+        setSelectedData(prevData => {
+            const updatedData = {
+                ...prevData,
+                [objectName]: {
+                    ...prevData[objectName],
+                    [keyName]: inputValue
+                }
+            };
+            return updatedData;
+        });
     };
+    
+    
 
     const handleChangeOtherPrice = (e) => {
         const inputValue = e.target.value;
