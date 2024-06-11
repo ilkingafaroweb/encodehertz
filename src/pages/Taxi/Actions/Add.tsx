@@ -136,16 +136,13 @@ const AddTaxi = () => {
             inputValue = '0';
         } else {
             if (/^[0-9]*\.?[0-9]*$/.test(inputValue)) {
-                // Başta gelen sıfırları sadece tamsayı kısımlarından kaldır
                 if (inputValue.includes('.')) {
-                    // Ondalıklı sayılar için: baştaki sıfırları kaldır ama ondalık noktayı koru
                     inputValue = inputValue.replace(/^0+(?=\d)/, '');
                 } else {
-                    // Tam sayılar için: baştaki sıfırları tamamen kaldır
                     inputValue = parseFloat(inputValue).toString();
                 }
             } else {
-                return; // Eğer sayı değilse, fonksiyondan çık
+                return;
             }
         }
     
@@ -160,21 +157,32 @@ const AddTaxi = () => {
             return updatedData;
         });
     };
-    
-    
 
     const handleChangeOtherPrice = (e) => {
-        const inputValue = e.target.value;
-        const isValidNumber = /^[0-9]*\.?[0-9]*$/.test(inputValue);
+        let inputValue = e.target.value;
     
-        if (isValidNumber) {
-            const newValue = inputValue;
-            setSelectedData(prevData => ({
-                ...prevData,
-                otherPrice: newValue
-            }));
+        if (inputValue === '') {
+            inputValue = '0';
+        } else {
+            const isValidNumber = /^[0-9]*\.?[0-9]*$/.test(inputValue);
+            
+            if (isValidNumber) {
+                if (inputValue.includes('.')) {
+                    inputValue = inputValue.replace(/^0+(?=\d)/, '');
+                } else {
+                    inputValue = parseFloat(inputValue).toString();
+                }
+            } else {
+                return; 
+            }
         }
+    
+        setSelectedData(prevData => ({
+            ...prevData,
+            otherPrice: inputValue
+        }));
     };
+    
 
     const handleCancel = () => {
         Swal.fire({
