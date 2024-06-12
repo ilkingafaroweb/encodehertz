@@ -42,7 +42,7 @@ const PreviewSources: React.FC = () => {
 
 
     const handleBack = () => {
-        navigate("/extraCharges");
+        navigate("/sources");
     };
 
     return (

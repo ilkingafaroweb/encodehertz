@@ -4,19 +4,19 @@ import Breadcrumb from '../../../components/Breadcrumbs/Breadcrumb';
 import DefaultLayout from '../../../layout/DefaultLayout';
 import Swal from 'sweetalert2';
 
-interface SourcesForm {
+interface RepairTypesForm {
     name: string;
     description: string;
 }
 
-const initialFormValues: SourcesForm = {
+const initialFormValues: RepairTypesForm = {
     name: '',
     description: '',
 };
 
-const EditSources: React.FC = () => {
+const EditRepairTypes: React.FC = () => {
     const token = localStorage.getItem('token')
-    const [selectedData, setSelectedData] = useState<SourcesForm>(initialFormValues);
+    const [selectedData, setSelectedData] = useState<RepairTypesForm>(initialFormValues);
     const navigate = useNavigate();
 
     const postData = {
@@ -26,14 +26,10 @@ const EditSources: React.FC = () => {
     };
 
     useEffect(() => {
-        console.log("Selected data", postData);
-    }, [selectedData])
-
-    useEffect(() => {
         const fetchData = async () => {
             try {
                 const ActionID = localStorage.getItem("ActionID")
-                const response = await fetch(`https://encodehertz.xyz/api/Source/Edit?id=${ActionID}`, {
+                const response = await fetch(`https://encodehertz.xyz/api/RepairTypes/RepairTypes/Edit?id=${ActionID}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -43,7 +39,7 @@ const EditSources: React.FC = () => {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                setSelectedData(data as SourcesForm);
+                setSelectedData(data as RepairTypesForm);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -64,13 +60,13 @@ const EditSources: React.FC = () => {
             cancelButtonText: 'No, keep editing'
         }).then((result) => {
             if (result.isConfirmed) {
-                navigate("/sources");
+                navigate("/repairTypes");
             }
         });
     };
 
     const handleSave = () => {
-        fetch('https://encodehertz.xyz/api/Source/Edit', {
+        fetch('https://encodehertz.xyz/api/RepairTypes/RepairTypes/Edit', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -90,7 +86,7 @@ const EditSources: React.FC = () => {
                     title: 'Success',
                     text: data,
                 });
-                navigate("/sources")
+                navigate("/repairTypes")
             })
             .catch(error => {
                 Swal.fire({
@@ -103,7 +99,7 @@ const EditSources: React.FC = () => {
 
     return (
         <DefaultLayout>
-            <Breadcrumb pageName="Edit" prevPageName='Sources' prevRoute='/sources' />
+            <Breadcrumb pageName="Edit" prevPageName='Repair Types' prevRoute='/repairTypes' />
             <div className="max-w-full mx-auto gap-9 sm:grid-cols-2">
                 <div className="flex flex-col gap-9">
                     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -156,4 +152,4 @@ const EditSources: React.FC = () => {
     );
 };
 
-export default EditSources;
+export default EditRepairTypes;

@@ -3,7 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import EncodeLogo from '../../images/logo/encode.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileInvoiceDollar, faTag } from '@fortawesome/free-solid-svg-icons';
+import { faFileInvoiceDollar, faTag, faToolbox } from '@fortawesome/free-solid-svg-icons';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -574,6 +574,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     0 80zm112 32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/>
                   </svg>
                   Sources
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/repairTypes"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 
+                              font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark
+                            dark:hover:bg-meta-4 ${pathname.includes('tables') && 'bg-graydark dark:bg-meta-4'
+                  }`}
+                >
+                  <FontAwesomeIcon icon={faToolbox} />
+                  Repair Types
                 </NavLink>
               </li>
 

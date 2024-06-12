@@ -4,12 +4,12 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import Swal from 'sweetalert2';
 
-const Maintenance = () => {
+const RepairTypes = () => {
   const token = localStorage.getItem('token')
-  const [maintenance, setMaintenance] = useState([]);
+  const [repairTypes, setRepairTypes] = useState([]);
 
-  const getMaintenanceList = () => {
-    fetch('https://encodehertz.xyz/api/MaintenanceMaintenance/List', {
+  const getRepairTypesList = () => {
+    fetch('https://encodehertz.xyz/api/RepairTypes/RepairTypes/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ const Maintenance = () => {
         return response.json();
       })
       .then(data => {
-        setMaintenance(data);
+        setRepairTypes(data);
       })
       .catch(error => {
         console.error('Error', error);
@@ -30,7 +30,7 @@ const Maintenance = () => {
   }
 
   useEffect(() => {
-    getMaintenanceList()
+    getRepairTypesList()
   }, [])
 
   const handleDelete = async () => {
@@ -45,7 +45,7 @@ const Maintenance = () => {
       cancelButtonText: 'No, cancel!'
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/MaintenanceMaintenance/Delete?id=${actionID}`;
+        const url = `https://encodehertz.xyz/api/RepairTypes/RepairTypes/Delete?id=${actionID}`;
         fetch(url, {
           method: 'GET',
           headers: {
@@ -65,7 +65,7 @@ const Maintenance = () => {
               text: data,
               icon: 'success',
             });
-            getMaintenanceList();
+            getRepairTypesList();
           })
           .catch(error => {
             Swal.fire({
@@ -80,12 +80,12 @@ const Maintenance = () => {
 
   return (
     <DefaultLayout>
-      <Breadcrumb pageName='Maintenance' prevPageName='Dashboard' prevRoute='/' />
-      {maintenance.length > 0 && (
-        <TableThree data={maintenance} handleDelete={handleDelete} />
+      <Breadcrumb pageName='Repair Types' prevPageName='Dashboard' prevRoute='/' />
+      {repairTypes.length > 0 && (
+        <TableThree data={repairTypes} handleDelete={handleDelete} />
       )}
     </DefaultLayout>
   );
 };
 
-export default Maintenance;
+export default RepairTypes;

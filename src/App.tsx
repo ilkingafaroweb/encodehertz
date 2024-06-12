@@ -44,6 +44,13 @@ import PreviewRentShort from './pages/RentaCar/ShortOrders/Actions/Preview';
 import AddTaxi from './pages/Taxi/Actions/Add';
 import EditTaxi from './pages/Taxi/Actions/Edit';
 import PreviewTaxi from './pages/Taxi/Actions/Preview';
+import RepairTypes from './pages/RepairTypes/RepairTypes';
+import AddRepairTypes from './pages/RepairTypes/Actions/Add';
+import EditRepairTypes from './pages/RepairTypes/Actions/Edit';
+import PreviewRepairTypes from './pages/RepairTypes/Actions/Preview';
+import AddMaintenance from './pages/Maintenance/Actions/Add';
+import EditMaintenance from './pages/Maintenance/Actions/Edit';
+import PreviewMaintenance from './pages/Maintenance/Actions/Preview';
 
 function App() {
   const [userToken, setUserToken] = useState(localStorage.getItem("userId") || '')
@@ -272,6 +279,33 @@ function App() {
           </>
         }
       />
+      <Route
+        path="/maintenance/add"
+        element={
+          <>
+            <PageTitle title="Add Maintenance | ENCODE" />
+            <AddMaintenance />
+          </>
+        }
+      />
+      <Route
+        path="/maintenance/edit"
+        element={
+          <>
+            <PageTitle title="Edit Maintenance | ENCODE" />
+            <EditMaintenance />
+          </>
+        }
+      />
+      <Route
+        path="/maintenance/preview"
+        element={
+          <>
+            <PageTitle title="Preview Maintenance | ENCODE" />
+            <PreviewMaintenance />
+          </>
+        }
+      />
 
       {/* Taxi */}
 
@@ -395,6 +429,45 @@ function App() {
           <>
             <PageTitle title="Preview Sources | ENCODE" />
             <PreviewSources />
+          </>
+        }
+      />
+
+      {/* Repair Types */}
+
+      <Route
+        path="/repairTypes"
+        element={
+          <>
+            <PageTitle title="Repair Types | ENCODE" />
+            <RepairTypes />
+          </>
+        }
+      />
+      <Route
+        path="/repairTypes/add"
+        element={
+          <>
+            <PageTitle title="Add Repair Types | ENCODE" />
+            <AddRepairTypes />
+          </>
+        }
+      />
+      <Route
+        path="/repairTypes/edit"
+        element={
+          <>
+            <PageTitle title="Edit Repair Types | ENCODE" />
+            <EditRepairTypes />
+          </>
+        }
+      />
+      <Route
+        path="/repairTypes/preview"
+        element={
+          <>
+            <PageTitle title="Preview Repair Types | ENCODE" />
+            <PreviewRepairTypes />
           </>
         }
       />

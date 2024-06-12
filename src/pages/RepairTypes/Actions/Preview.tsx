@@ -2,38 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Breadcrumb from '../../../components/Breadcrumbs/Breadcrumb';
 import DefaultLayout from '../../../layout/DefaultLayout';
-import Swal from 'sweetalert2';
 
-interface SourcesForm {
+interface RepairTypesForm {
     name: string;
     description: string;
 }
 
-const initialFormValues: SourcesForm = {
+const initialFormValues: RepairTypesForm = {
     name: '',
     description: '',
 };
 
-const EditSources: React.FC = () => {
+const PreviewRepairTypes: React.FC = () => {
     const token = localStorage.getItem('token')
-    const [selectedData, setSelectedData] = useState<SourcesForm>(initialFormValues);
+    const [selectedData, setSelectedData] = useState<RepairTypesForm>(initialFormValues);
     const navigate = useNavigate();
-
-    const postData = {
-        id: localStorage.getItem("ActionID"),
-        name: selectedData.name,
-        description: selectedData.description,
-    };
-
-    useEffect(() => {
-        console.log("Selected data", postData);
-    }, [selectedData])
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const ActionID = localStorage.getItem("ActionID")
-                const response = await fetch(`https://encodehertz.xyz/api/Source/Edit?id=${ActionID}`, {
+                const response = await fetch(`https://encodehertz.xyz/api/RepairTypes/RepairTypes/Preview?id=${ActionID}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -43,7 +32,7 @@ const EditSources: React.FC = () => {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                setSelectedData(data as SourcesForm);
+                setSelectedData(data as RepairTypesForm);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -52,58 +41,13 @@ const EditSources: React.FC = () => {
     }, []);
 
 
-    const handleCancel = () => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You have unsaved changes!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, discard changes!',
-            cancelButtonText: 'No, keep editing'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                navigate("/sources");
-            }
-        });
-    };
-
-    const handleSave = () => {
-        fetch('https://encodehertz.xyz/api/Source/Edit', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(postData),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            })
-            .then(data => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: data,
-                });
-                navigate("/sources")
-            })
-            .catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: error,
-                });
-            });
+    const handleBack = () => {
+        navigate("/repairTypes");
     };
 
     return (
         <DefaultLayout>
-            <Breadcrumb pageName="Edit" prevPageName='Sources' prevRoute='/sources' />
+            <Breadcrumb pageName="Preview" prevPageName='Repair Types' prevRoute='/repairTypes' />
             <div className="max-w-full mx-auto gap-9 sm:grid-cols-2">
                 <div className="flex flex-col gap-9">
                     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -116,6 +60,7 @@ const EditSources: React.FC = () => {
                                         </label>
                                         <input
                                             required
+                                            disabled
                                             value={selectedData.name || ''}
                                             onChange={(e) => setSelectedData(prevData => ({ ...prevData, name: e.target.value }))}
                                             type="text"
@@ -131,6 +76,7 @@ const EditSources: React.FC = () => {
                                         </label>
                                         <textarea
                                             required
+                                            disabled
                                             value={selectedData.description || ''}
                                             onChange={(e) => setSelectedData(prevData => ({ ...prevData, description: e.target.value }))}
                                             rows={4}
@@ -140,11 +86,8 @@ const EditSources: React.FC = () => {
                                     </div>
                                 </div>
                                 <div className='flex gap-3'>
-                                    <button type='button' onClick={handleCancel} className="flex w-full justify-center rounded bg-danger dark:bg-danger p-3 font-medium text-gray hover:bg-opacity-90">
-                                        Cancel
-                                    </button>
-                                    <button type='button' onClick={handleSave} className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                                        Save
+                                    <button type='button' onClick={handleBack} className="flex w-full justify-center rounded bg-meta-1 p-3 font-medium text-gray hover:bg-opacity-90">
+                                        Back
                                     </button>
                                 </div>
                             </div>
@@ -156,4 +99,4 @@ const EditSources: React.FC = () => {
     );
 };
 
-export default EditSources;
+export default PreviewRepairTypes;
