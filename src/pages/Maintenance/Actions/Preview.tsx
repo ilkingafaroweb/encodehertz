@@ -176,7 +176,7 @@ const PreviewMaintenance = () => {
         });
     };
 
-    const hancleBack = () => {
+    const handleBack = () => {
         navigate("/maintenance")
     };
 
@@ -254,7 +254,7 @@ const PreviewMaintenance = () => {
                                         </div>
                                     </div>
                                     <div className='flex gap-3'>
-                                        <button type='button' onClick={hancleBack} className="flex w-full justify-center rounded bg-danger dark:bg-danger p-3 font-medium text-gray hover:bg-opacity-90">
+                                        <button type='button' onClick={handleBack} className="flex w-full justify-center rounded bg-danger dark:bg-danger p-3 font-medium text-gray hover:bg-opacity-90">
                                             Back
                                         </button>
                                     </div>

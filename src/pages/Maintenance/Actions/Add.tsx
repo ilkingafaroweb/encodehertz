@@ -22,7 +22,7 @@ interface FormData {
 
 interface SelectedData {
     selectedSupplier: string;
-    selectedRepairTypes: { id: number, name: string, price: number }[];
+    repairTypes: { id: number, name: string, price: number }[];
     selectedVehicle: string;
 
     startDateTime: string;
@@ -35,7 +35,7 @@ interface SelectedData {
 
 const initialSelectedData: SelectedData = {
     selectedSupplier: '',
-    selectedRepairTypes: [],
+    repairTypes: [],
     selectedVehicle: '',
 
     startDateTime: '',
@@ -53,7 +53,7 @@ const AddMaintenance = () => {
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
     const {
-        selectedSupplier, selectedVehicle, selectedRepairTypes, startDateTime, endDateTime, comment, totalAmount, km
+        selectedSupplier, selectedVehicle, repairTypes, startDateTime, endDateTime, comment, totalAmount, km
     } = selectedData
 
     // Form options 
@@ -169,7 +169,7 @@ const AddMaintenance = () => {
             cancelButtonText: 'No, keep editing'
         }).then((result) => {
             if (result.isConfirmed) {
-                navigate("/car/short-orders")
+                navigate("/maintenance")
                 console.log('Changes discarded');
             }
         });

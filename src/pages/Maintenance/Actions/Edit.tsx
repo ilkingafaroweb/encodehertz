@@ -104,7 +104,7 @@ const EditMaintenance = () => {
 
     useEffect(() => {
         console.clear()
-        console.log("Maint edit form values:", selectedData);
+        console.log("Maint edit form values:", JSON.stringify(selectedData));
     }, [selectedData])
 
     // Rentacar Short order post 
@@ -188,8 +188,7 @@ const EditMaintenance = () => {
             cancelButtonText: 'No, keep editing'
         }).then((result) => {
             if (result.isConfirmed) {
-                navigate("/car/short-orders")
-                console.log('Changes discarded');
+                navigate("/maintenance")
             }
         });
     };
