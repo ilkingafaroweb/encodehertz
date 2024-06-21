@@ -51,6 +51,14 @@ import PreviewRepairTypes from './pages/RepairTypes/Actions/Preview';
 import AddMaintenance from './pages/Maintenance/Actions/Add';
 import EditMaintenance from './pages/Maintenance/Actions/Edit';
 import PreviewMaintenance from './pages/Maintenance/Actions/Preview';
+import ExpenceTypes from './pages/ExpenceTypes/ExpenceTypes';
+import AddExpenceTypes from './pages/ExpenceTypes/Actions/Add';
+import EditExpenceTypes from './pages/ExpenceTypes/Actions/Edit';
+import PreviewExpenceTypes from './pages/ExpenceTypes/Actions/Preview';
+import Expences from './pages/Expences/Expences';
+import AddExpences from './pages/Expences/Actions/Add';
+import EditExpences from './pages/Expences/Actions/Edit';
+import PreviewExpences from './pages/Maintenance/Actions/Preview';
 
 function App() {
   const [userToken, setUserToken] = useState(localStorage.getItem("userId") || '')
@@ -230,9 +238,6 @@ function App() {
       {/* Rent a car long orders end */}
 
 
-
-
-      {/*  */}
       <Route
         path="/car/short-orders"
         element={
@@ -303,6 +308,45 @@ function App() {
           <>
             <PageTitle title="Preview Maintenance | ENCODE" />
             <PreviewMaintenance />
+          </>
+        }
+      />
+
+      {/* Expences */}
+
+      <Route
+        path="/expences"
+        element={
+          <>
+            <PageTitle title="Expences | ENCODE" />
+            <Expences />
+          </>
+        }
+      />
+      <Route
+        path="/expences/add"
+        element={
+          <>
+            <PageTitle title="Add Expences | ENCODE" />
+            <AddExpences />
+          </>
+        }
+      />
+      <Route
+        path="/expences/edit"
+        element={
+          <>
+            <PageTitle title="Edit Expences | ENCODE" />
+            <EditExpences />
+          </>
+        }
+      />
+      <Route
+        path="/expences/preview"
+        element={
+          <>
+            <PageTitle title="Preview Expences | ENCODE" />
+            <PreviewExpences />
           </>
         }
       />
@@ -468,6 +512,45 @@ function App() {
           <>
             <PageTitle title="Preview Repair Types | ENCODE" />
             <PreviewRepairTypes />
+          </>
+        }
+      />
+
+      {/* Expence Types */}
+
+      <Route
+        path="/expenceTypes"
+        element={
+          <>
+            <PageTitle title="Expence Types | ENCODE" />
+            <ExpenceTypes />
+          </>
+        }
+      />
+      <Route
+        path="/expenceTypes/add"
+        element={
+          <>
+            <PageTitle title="Add Expence Types | ENCODE" />
+            <AddExpenceTypes />
+          </>
+        }
+      />
+      <Route
+        path="/expenceTypes/edit"
+        element={
+          <>
+            <PageTitle title="Edit Repair Types | ENCODE" />
+            <EditExpenceTypes />
+          </>
+        }
+      />
+      <Route
+        path="/expenceTypes/preview"
+        element={
+          <>
+            <PageTitle title="Preview Expence Types | ENCODE" />
+            <PreviewExpenceTypes />
           </>
         }
       />

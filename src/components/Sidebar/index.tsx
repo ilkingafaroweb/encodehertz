@@ -3,7 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import EncodeLogo from '../../images/logo/encode.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileInvoiceDollar, faTag, faToolbox } from '@fortawesome/free-solid-svg-icons';
+import { faArrowTrendDown, faFileInvoiceDollar, faMoneyBill, faTag, faToolbox } from '@fortawesome/free-solid-svg-icons';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -522,6 +522,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               <li>
                 <NavLink
+                  to="/expences"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('tables') && 'bg-graydark dark:bg-meta-4'
+                    }`}
+                >
+                  <FontAwesomeIcon icon={faArrowTrendDown} />
+                  Expences
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
                   to="/extraCharges"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('tables') && 'bg-graydark dark:bg-meta-4'
                     }`}
@@ -586,6 +596,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 >
                   <FontAwesomeIcon icon={faToolbox} />
                   Repair Types
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/expenceTypes"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 
+                              font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark
+                            dark:hover:bg-meta-4 ${pathname.includes('tables') && 'bg-graydark dark:bg-meta-4'
+                  }`}
+                >
+                  <FontAwesomeIcon icon={faMoneyBill} />
+                  Expence Types
                 </NavLink>
               </li>
 

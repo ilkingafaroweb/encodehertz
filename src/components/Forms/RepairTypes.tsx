@@ -14,9 +14,10 @@ interface DropdownProps {
   repairOptions: Option[];
   disabled: boolean;
   defaultValue: any;
+  stateName: string;
 }
 
-const RepairTypesInput: React.FC<DropdownProps> = ({ repairOptions, disabled, setSelectedData, defaultValue }) => {
+const RepairTypesInput: React.FC<DropdownProps> = ({ repairOptions, disabled, setSelectedData, defaultValue, stateName }) => {
   const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [sumOutsource, setSumOutsource] = useState(0);
@@ -31,7 +32,7 @@ const RepairTypesInput: React.FC<DropdownProps> = ({ repairOptions, disabled, se
   useEffect(() => {
     setSelectedData(prevSelectedData => ({
       ...prevSelectedData,
-      selectedRepairTypes: selectedOptions
+      [stateName]: selectedOptions
     }));
   }, [selectedOptions]);
 

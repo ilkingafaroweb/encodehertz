@@ -215,7 +215,7 @@ const AddMaintenance = () => {
                                                 onChange={(e) => {handleChange(e, "totalAmount")}}
                                                 type="text"
                                                 value={totalAmount}
-                                                placeholder="Enter km"
+                                                placeholder="Enter total amount"
                                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                             />
                                         </div>
@@ -225,7 +225,7 @@ const AddMaintenance = () => {
                                         <label className="mt-3 block text-md font-medium text-black dark:text-white">
                                             Repair Types
                                         </label>
-                                        <RepairTypesInput repairOptions={formOptions.repairTypes || []} disabled={false} setSelectedData={setSelectedData} defaultValue='' />
+                                        <RepairTypesInput repairOptions={formOptions.repairTypes || []} disabled={false} setSelectedData={setSelectedData} defaultValue='' stateName='selectedRepairTypes' />
                                     </div>
 
 
