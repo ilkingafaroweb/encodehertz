@@ -175,6 +175,37 @@ const EditExpences = () => {
         });
     };
 
+    const handleSend = async () => {
+        const expID = localStorage.getItem('ActionID')
+    
+        try {
+          const response = await fetch(`https://encodehertz.xyz/api/Expences/Expence/Send?id=${expID}`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+    
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const text = await response.text();
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: text,
+          });
+        } catch (error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message,
+          });
+        }
+        navigate("/expences")
+      }
+
     const handleCancel = () => {
         Swal.fire({
             title: 'Are you sure?',
@@ -261,6 +292,9 @@ const EditExpences = () => {
                                     <div className='flex gap-3'>
                                         <button type='button' onClick={handleCancel} className="flex w-full justify-center rounded bg-danger dark:bg-danger p-3 font-medium text-gray hover:bg-opacity-90">
                                             Cancel
+                                        </button>
+                                        <button type='button' onClick={handleSend} className="flex w-full justify-center rounded bg-meta-5 p-3 font-medium text-gray hover:bg-opacity-90">
+                                            Send to desktop
                                         </button>
                                         <button type='button' onClick={handleSave} className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
                                             Save
