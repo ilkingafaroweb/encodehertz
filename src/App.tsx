@@ -59,6 +59,7 @@ import Expences from './pages/Expences/Expences';
 import AddExpences from './pages/Expences/Actions/Add';
 import EditExpences from './pages/Expences/Actions/Edit';
 import PreviewExpences from './pages/Maintenance/Actions/Preview';
+import AllTransactions from './pages/AllTransactions/AllTransactions';
 
 function App() {
   const [userToken, setUserToken] = useState(localStorage.getItem("userId") || '')
@@ -386,6 +387,18 @@ function App() {
           <>
             <PageTitle title="Preview Taxi | ENCODE" />
             <PreviewTaxi />
+          </>
+        }
+      />
+
+      {/* All Transactions */}
+
+      <Route
+        path="/allTransactions"
+        element={
+          <>
+            <PageTitle title="All Transactions | ENCODE" />
+            <AllTransactions />
           </>
         }
       />

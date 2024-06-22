@@ -3,7 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import EncodeLogo from '../../images/logo/encode.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowTrendDown, faFileInvoiceDollar, faMoneyBill, faTag, faToolbox } from '@fortawesome/free-solid-svg-icons';
+import { faArrowTrendDown, faFileInvoiceDollar, faMoneyBill, faMoneyBillTransfer, faTag, faToolbox } from '@fortawesome/free-solid-svg-icons';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -528,6 +528,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 >
                   <FontAwesomeIcon icon={faArrowTrendDown} />
                   Expences
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/allTransactions"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname.includes('tables') && 'bg-graydark dark:bg-meta-4'
+                    }`}
+                >
+                  <FontAwesomeIcon icon={faMoneyBillTransfer} />
+                  All Transactions
                 </NavLink>
               </li>
               <li>
