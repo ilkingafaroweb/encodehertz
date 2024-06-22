@@ -22,7 +22,7 @@ interface FormData {
 
 interface SelectedData {
     cardNumber: string | null;
-    selectedExpenceTypes: { id: number, name: string, price: number }[];
+    expenceTypes: { id: number, name: string, price: number }[];
 
     selectedVehicle: string;
     selectedEmployee: string;
@@ -36,7 +36,7 @@ interface SelectedData {
 
 const initialSelectedData: SelectedData = {
     cardNumber: '',
-    selectedExpenceTypes: [],
+    expenceTypes: [],
 
     selectedVehicle: '',
     selectedEmployee: '',    
@@ -55,7 +55,7 @@ const PreviewExpences = () => {
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
     const {
-        cardNumber, selectedEmployee, selectedVehicle, selectedExpenceTypes, date, comment, amount, totalAmount
+        cardNumber, selectedEmployee, selectedVehicle, expenceTypes, date, comment, amount, totalAmount
     } = selectedData
 
     // Form options 
@@ -153,7 +153,7 @@ const PreviewExpences = () => {
                                         <label className="mt-3 block text-md font-medium text-black dark:text-white">
                                             Expence Types
                                         </label>
-                                        <RepairTypesInput repairOptions={formOptions.expenceTypes || []} disabled={true} setSelectedData={setSelectedData} defaultValue={selectedExpenceTypes} stateName='selectedExpenceTypes' />
+                                        <RepairTypesInput repairOptions={formOptions.expenceTypes || []} disabled={true} setSelectedData={setSelectedData} defaultValue={expenceTypes} stateName='selectedExpenceTypes' />
                                     </div>
 
                                     <div className="mb-3 flex flex-col gap-6 xl:flex-row">
