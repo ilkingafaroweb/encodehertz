@@ -62,7 +62,7 @@ const PreviewExpences = () => {
 
     const getFormOptions = async () => {
         try {
-            const response = await fetch('https://encodehertz.xyz/api/ExpencesExpence/Create', {
+            const response = await fetch('https://encodehertz.xyz/api/Expences/Expence/Create', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -81,7 +81,7 @@ const PreviewExpences = () => {
     const getEdit = async () => {
         try {
             const ActionID = await localStorage.getItem("ActionID")
-            const response = await fetch(`https://encodehertz.xyz/api/ExpencesExpence/Edit?id=${ActionID}`, {
+            const response = await fetch(`https://encodehertz.xyz/api/Expences/Expence/Edit?id=${ActionID}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -151,7 +151,7 @@ const PreviewExpences = () => {
 
                                     <div className='mb-6 flex flex-col gap-3'>
                                         <label className="mt-3 block text-md font-medium text-black dark:text-white">
-                                            Repair Types
+                                            Expence Types
                                         </label>
                                         <RepairTypesInput repairOptions={formOptions.expenceTypes || []} disabled={true} setSelectedData={setSelectedData} defaultValue={selectedExpenceTypes} stateName='selectedExpenceTypes' />
                                     </div>

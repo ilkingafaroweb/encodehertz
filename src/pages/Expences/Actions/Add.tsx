@@ -62,7 +62,7 @@ const AddExpences = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://encodehertz.xyz/api/ExpencesExpence/Create', {
+                const response = await fetch('https://encodehertz.xyz/api/Expences/Expence/Create', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -90,7 +90,7 @@ const AddExpences = () => {
     // Rentacar Short order post 
 
     const handleSubmit = async () => {
-        await fetch('https://encodehertz.xyz/api/ExpencesExpence/Create', {
+        await fetch('https://encodehertz.xyz/api/Expences/Expence/Create', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

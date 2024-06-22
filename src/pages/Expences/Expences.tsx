@@ -9,7 +9,7 @@ const Expences = () => {
   const [expences, setExpences] = useState([]);
 
   const getExpencesList = () => {
-    fetch('https://encodehertz.xyz/api/ExpencesExpence/List', {
+    fetch('https://encodehertz.xyz/api/Expences/Expence/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -45,7 +45,7 @@ const Expences = () => {
       cancelButtonText: 'No, cancel!'
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/Expences/Delete?id=${actionID}`;
+        const url = `https://encodehertz.xyz/api/Expences/Expence/Delete?id=${actionID}`;
         fetch(url, {
           method: 'GET',
           headers: {

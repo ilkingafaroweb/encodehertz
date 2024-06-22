@@ -22,7 +22,7 @@ interface FormData {
 
 interface SelectedData {
     cardNumber: string | null;
-    selectedExpenceTypes: { id: number, name: string, price: number }[];
+    expenceTypes: { id: number, name: string, price: number, isSelected: boolean }[];
 
     selectedVehicle: string;
     selectedEmployee: string;
@@ -36,7 +36,7 @@ interface SelectedData {
 
 const initialSelectedData: SelectedData = {
     cardNumber: '',
-    selectedExpenceTypes: [],
+    expenceTypes: [],
 
     selectedVehicle: '',
     selectedEmployee: '',    
@@ -55,14 +55,14 @@ const EditExpences = () => {
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
     const {
-        cardNumber, selectedEmployee, selectedVehicle, selectedExpenceTypes, date, comment, amount, totalAmount
+        cardNumber, selectedEmployee, selectedVehicle, expenceTypes, date, comment, amount, totalAmount
     } = selectedData
 
     // Form options 
 
     const getFormOptions = async () => {
         try {
-            const response = await fetch('https://encodehertz.xyz/api/ExpencesExpence/Create', {
+            const response = await fetch('https://encodehertz.xyz/api/Expences/Expence/Create', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -81,7 +81,7 @@ const EditExpences = () => {
     const getEdit = async () => {
         try {
             const ActionID = await localStorage.getItem("ActionID")
-            const response = await fetch(`https://encodehertz.xyz/api/ExpencesExpence/Edit?id=${ActionID}`, {
+            const response = await fetch(`https://encodehertz.xyz/api/Expences/Expence/Edit?id=${ActionID}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -104,14 +104,12 @@ const EditExpences = () => {
 
 
     useEffect(() => {
-        console.clear()
-        console.log("Maint edit form values:", JSON.stringify(selectedData));
+        // console.clear()
+        console.log("EXPENCE edit form values:", JSON.stringify(selectedData));
     }, [selectedData])
 
-    // Rentacar Short order post 
-
     const handleSave = async () => {
-        await fetch('https://encodehertz.xyz/api/ExpencesExpence/Edit', {
+        await fetch('https://encodehertz.xyz/api/Expences/Expence/Edit', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -131,7 +129,7 @@ const EditExpences = () => {
                     title: 'Success',
                     text: data,
                 });
-                navigate('/Expences')
+                navigate('/expences')
             })
             .catch(error => {
                 console.error('Error sending data:', error);
@@ -189,7 +187,7 @@ const EditExpences = () => {
             cancelButtonText: 'No, keep editing'
         }).then((result) => {
             if (result.isConfirmed) {
-                navigate("/Expences")
+                navigate("/expences")
             }
         });
     };
@@ -238,9 +236,9 @@ const EditExpences = () => {
 
                                     <div className='mb-6 flex flex-col gap-3'>
                                         <label className="mt-3 block text-md font-medium text-black dark:text-white">
-                                            Repair Types
+                                            Expence Types
                                         </label>
-                                        <RepairTypesInput repairOptions={formOptions.expenceTypes || []} disabled={false} setSelectedData={setSelectedData} defaultValue={selectedExpenceTypes} stateName='selectedExpenceTypes' />
+                                        <RepairTypesInput repairOptions={formOptions.expenceTypes || []} disabled={false} setSelectedData={setSelectedData} defaultValue={expenceTypes} stateName='selectedExpenceTypes' />
                                     </div>
 
                                     <div className="mb-3 flex flex-col gap-6 xl:flex-row">
