@@ -81,9 +81,7 @@ const Taxi = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Taxi' prevPageName='Dashboard' prevRoute='/' />
-      {taxi.length > 0 && (
         <TableThree data={taxi} handleDelete={handleDelete} />
-      )}
     </DefaultLayout>
   );
 }

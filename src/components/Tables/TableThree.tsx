@@ -7,21 +7,26 @@ import { Tooltip } from "antd";
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 
-const TableThree = ({ data, handleDelete } : {data: any[], handleDelete: any}) => {
+const TableThree = ({ data, handleDelete }: { data: any, handleDelete: any }) => {
 
   /* Initial table data */
-  const [tableData, setTableData] = useState(data);
-  const [columnOrder, setColumnOrder] = useState(Object.keys(tableData[0]));
+  const [tableData, setTableData] = useState(data || []);
+  const [columnOrder, setColumnOrder] = useState(Object.keys(data[0] || {}));
 
-  useEffect(()=>{
-    setTableData(data)
-  },[data])
+  useEffect(() => {
+    setTableData(data);
+    setColumnOrder(Object.keys(data[0] || {}));
+  }, [data]);
+
+  useEffect(() => {
+    setVisibleColumns(columnOrder)
+  }, [columnOrder])
 
   /* Column show/hide */
-  const [visibleColumns, setVisibleColumns] = useState<string[]>(columnOrder)
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(columnOrder);
   const columnDropRef = useRef<HTMLDivElement>(null);
 
-  const [columnDropOpen, setColumnDropOpen] = useState(false)
+  const [columnDropOpen, setColumnDropOpen] = useState(false);
 
   /* Pagination props */
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,7 +75,7 @@ const TableThree = ({ data, handleDelete } : {data: any[], handleDelete: any}) =
       });
     }
     setTableData(sortableData);
-  }, [sortConfig]);
+  }, [sortConfig, data]);
 
   /* Column reordering */
   const handleDrop = (e: any, targetColumnIndex: number) => {
@@ -82,7 +87,6 @@ const TableThree = ({ data, handleDelete } : {data: any[], handleDelete: any}) =
   };
 
   /* Column show/hide func */
-
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (columnDropRef.current && !columnDropRef.current.contains(event.target as Node)) {
@@ -109,7 +113,6 @@ const TableThree = ({ data, handleDelete } : {data: any[], handleDelete: any}) =
     localStorage.setItem("ActionID", id.toString());
   }
 
-
   /* Excel Actions */
   const handleExcelDownload = () => {
     const ws = XLSX.utils.json_to_sheet(tableData);
@@ -117,7 +120,6 @@ const TableThree = ({ data, handleDelete } : {data: any[], handleDelete: any}) =
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'table_data.xlsx');
   };
-
 
   return (
     <div className="relative rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -128,119 +130,121 @@ const TableThree = ({ data, handleDelete } : {data: any[], handleDelete: any}) =
         >
           Add <FontAwesomeIcon icon={faPlus} />
         </Link>
-        <button
-          onClick={handleExcelDownload}
-          className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium lg:px-6 xl:px-4"
-        >
-          Excel <FontAwesomeIcon icon={faDownload} />
-        </button>
-        <div ref={columnDropRef}>
-          <button
-            onClick={() => setColumnDropOpen(!columnDropOpen)}
+        {
+          !!tableData.length && <><button
+            onClick={handleExcelDownload}
             className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium lg:px-6 xl:px-4"
           >
-            Columns {columnDropOpen ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
+            Excel <FontAwesomeIcon icon={faDownload} />
           </button>
-          {columnDropOpen && (
-            <div className="origin-top-right absolute p-2 right-7 mt-2 w-max min-w-36 max-h-56 overflow-y-scroll text-lg rounded-lg shadow-lg shadow-boxdark-2 bg-white ring-1 ring-black ring-opacity-5 dark:bg-boxdark-2 dark:text-white">
-              <div className="flex flex-col gap-1 overflow-hidden" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                {columnOrder.map((column, index) => (
-                  <label key={index} className="inline-flex items-center px-2 py-.5 hover:bg-boxdark rounded-md">
-                    <input
-                      type="checkbox"
-                      className="form-checkbox w-4 h-4 mr-1"
-                      checked={visibleColumns.includes(column)}
-                      onChange={() => handleColumnToggle(column)}
-                    />
-                    <span className="ml-2">{column.slice(0,1).toLocaleUpperCase() + column.slice(1).toLocaleLowerCase()}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+            <div ref={columnDropRef}>
+              <button
+                onClick={() => setColumnDropOpen(!columnDropOpen)}
+                className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium lg:px-6 xl:px-4"
+              >
+                Columns {columnDropOpen ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
+              </button>
+              {columnDropOpen && (
+                <div className="origin-top-right absolute p-2 right-7 mt-2 w-max min-w-36 max-h-56 overflow-y-scroll text-lg rounded-lg shadow-lg shadow-boxdark-2 bg-white ring-1 ring-black ring-opacity-5 dark:bg-boxdark-2 dark:text-white">
+                  <div className="flex flex-col gap-1 overflow-hidden" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                    {columnOrder.map((column, index) => (
+                      <label key={index} className="inline-flex items-center px-2 py-.5 hover:bg-boxdark rounded-md">
+                        <input
+                          type="checkbox"
+                          className="form-checkbox w-4 h-4 mr-1"
+                          checked={visibleColumns.includes(column)}
+                          onChange={() => handleColumnToggle(column)}
+                        />
+                        <span className="ml-2">{column.slice(0, 1).toLocaleUpperCase() + column.slice(1).toLocaleLowerCase()}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div></>
+        }
       </div>
       <div className="max-w-full overflow-x-scroll">
-        <table className="w-max min-w-full table-auto">
-          <thead>
-            <tr className="w-max bg-gray-2 text-left dark:bg-meta-4">
-              {columnOrder.length > 0 ? columnOrder.map((header, index) => (
-                visibleColumns.includes(header) && (
-                  <th
-                    key={index}
-                    className="w-max py-4 px-4 font-medium text-black text-center dark:text-white"
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, index)}
-                    onDrop={(e) => handleDrop(e, index)}
-                    onDragOver={(e) => e.preventDefault()}
-                  >
-                    <div className='flex gap-2'>
-                      <div onClick={() => handleSort(header)} className='mx-auto'>
-                        {header.toUpperCase()}
-                      </div>
-                      {sortConfig.key === header && (
-                        <span>
-                          {sortConfig.direction === 'ascending' ?
-                            <FontAwesomeIcon icon={faArrowDownAZ} /> :
-                            (sortConfig.direction === 'descending' ?
-                              <FontAwesomeIcon icon={faArrowDownZA} /> :
-                              null
-                            )
-                          }
-                        </span>
-                      )}
-                    </div>
-                  </th>
-                )
-              )) : <th className='className="w-max py-4 px-4 font-medium text-black text-center dark:text-white"'>
-                  <td>Bosdurrrr</td>
-                </th>}
-              <th className='w-max py-4 px-4 font-medium text-black dark:text-white text-center'>ACTIONS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItems.map((rowData: any, rowIndex: number) => (
-              <tr key={rowIndex}>
-                {columnOrder.map((header, colIndex) => (
+        {tableData.length === 0 ? (
+          <div className='flex justify-center items-center border border-dashed border-primary w-full h-[calc(100vh-360px)]'>
+            <p className='font-medium text-xl text-black dark:text-white text-center'>No data available</p>
+          </div>
+        ) : (
+          <table className="w-max min-w-full table-auto">
+            <thead>
+              <tr className="w-max bg-gray-2 text-left dark:bg-meta-4">
+                {columnOrder.length > 0 && columnOrder.map((header, index) => (
                   visibleColumns.includes(header) && (
-                    <td
-                      key={colIndex}
-                      className="border-b border-[#eee] py-4 px-4 text-center dark:border-strokedark"
+                    <th
+                      key={index}
+                      className="w-max py-4 px-4 font-medium text-black text-center dark:text-white"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, index)}
+                      onDrop={(e) => handleDrop(e, index)}
+                      onDragOver={(e) => e.preventDefault()}
                     >
-                      <h5 className="font-medium text-center text-black dark:text-white">
-                        {rowData[header]}
-                      </h5>
-                    </td>
+                      <div className='flex gap-2'>
+                        <div onClick={() => handleSort(header)} className='mx-auto'>
+                          {header.toUpperCase()}
+                        </div>
+                        {sortConfig.key === header && (
+                          <span>
+                            {sortConfig.direction === 'ascending' ?
+                              <FontAwesomeIcon icon={faArrowDownAZ} /> :
+                              (sortConfig.direction === 'descending' ?
+                                <FontAwesomeIcon icon={faArrowDownZA} /> :
+                                null
+                              )
+                            }
+                          </span>
+                        )}
+                      </div>
+                    </th>
                   )
                 ))}
-                <td className='flex justify-center items-center max-w-max min-w-full gap-2 border-b text-boxdark-2 border-[#eee] py-5 px-4 dark:border-strokedark dark:text-white'>
-                  <Tooltip placement="top" title="Preview">
-                    <Link to="./preview" onClick={() => addLocalActionId(rowData.id)} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
-                      <FontAwesomeIcon icon={faEye} />
-                    </Link>
-                  </Tooltip>
-                  <Tooltip placement="top" title="Edit">
-                    <Link to="./edit" onClick={() => addLocalActionId(rowData.id)} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
-                      <FontAwesomeIcon icon={faPenToSquare} />
-                    </Link>
-                  </Tooltip>
-                  {/* <Tooltip placement="top" title="Duplicate">
-                    <Link to="./duplicate" onClick={() => addLocalActionId(rowData.id)} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
-                      <FontAwesomeIcon icon={faCopy} />
-                    </Link>
-                  </Tooltip> */}
-                  <Tooltip placement='top' title="Delete">
-                    <button onClick={() => {addLocalActionId(rowData.id), handleDelete()}} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </Tooltip>
-                </td>
+                <th className='w-max py-4 px-4 font-medium text-black dark:text-white text-center'>ACTIONS</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {currentItems.map((rowData: any, rowIndex: number) => (
+                <tr key={rowIndex}>
+                  {columnOrder.map((header, colIndex) => (
+                    visibleColumns.includes(header) && (
+                      <td
+                        key={colIndex}
+                        className="border-b border-[#eee] py-4 px-4 text-center dark:border-strokedark"
+                      >
+                        <h5 className="font-medium text-center text-black dark:text-white">
+                          {rowData[header]}
+                        </h5>
+                      </td>
+                    )
+                  ))}
+                  <td className='flex justify-center items-center max-w-max min-w-full gap-2 border-b text-boxdark-2 border-[#eee] py-5 px-4 dark:border-strokedark dark:text-white'>
+                    <Tooltip placement="top" title="Preview">
+                      <Link to="./preview" onClick={() => addLocalActionId(rowData.id)} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
+                        <FontAwesomeIcon icon={faEye} />
+                      </Link>
+                    </Tooltip>
+                    <Tooltip placement="top" title="Edit">
+                      <Link to="./edit" onClick={() => addLocalActionId(rowData.id)} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                      </Link>
+                    </Tooltip>
+                    <Tooltip placement='top' title="Delete">
+                      <button onClick={() => { addLocalActionId(rowData.id), handleDelete() }} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </Tooltip>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
-      <Pagination
+      {
+        tableData.length !== 0 && <Pagination
         itemsPerPage={itemsPerPage}
         setItemsPerPage={setItemsPerPage}
         itemsPerPageOptions={itemsPerPageOptions}
@@ -249,6 +253,8 @@ const TableThree = ({ data, handleDelete } : {data: any[], handleDelete: any}) =
         setCurrentPage={setCurrentPage}
         onPageChange={handlePageChange}
       />
+      }
+      
     </div>
   );
 };
