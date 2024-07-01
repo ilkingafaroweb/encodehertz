@@ -7,61 +7,62 @@ import MultiSelect from '../../../components/Forms/MultiSelect';
 import Swal from 'sweetalert2';
 import DatePickerTwo from '../../../components/Forms/DatePicker/DatePickerTwo';
 import RepairTypesInput from '../../../components/Forms/RepairTypes';
+import DatePickerOne from '../../../components/Forms/DatePicker/DatePickerOne';
 
 interface FormData {
+    manager: string;
     cardNumber: string | null;
-    suppliers: { value: string; text: string }[];
+    employees: [] | null;
     vehicles: [] | null;
-    startDateTime: string;
-    endDateTime: string;
+    date: string
     comment: string;
     totalAmount: number;
-    repairTypes: { id: number, name: string, price: number, isSelected: boolean }[];
+    expenceTypes: { id: number, name: string, price: number, isSelected: boolean }[];
 }
 
 interface SelectedData {
-    cardNumber: string;
-    selectedSupplier: string;
-    repairTypes: { id: number, name: string, price: number, isSelected: boolean }[];
+    cardNumber: string | null;
+    expenceTypes: { id: number, name: string, price: number }[];
+
     selectedVehicle: string;
+    selectedEmployee: string;
 
-    startDateTime: string;
-    endDateTime: string;
-
-    comment: string;
+    amount: number;
     totalAmount: number;
-    km: number;
+
+    date: string;
+    comment: string;
 }
 
 const initialSelectedData: SelectedData = {
     cardNumber: '',
-    selectedSupplier: '',
-    repairTypes: [],
+    expenceTypes: [],
+
     selectedVehicle: '',
+    selectedEmployee: '',    
 
-    startDateTime: '',
-    endDateTime: '',
-
-    comment: '',
+    amount: 0,
     totalAmount: 0,
-    km: 0,
+
+    date: '',
+    comment: '',
 };
 
-const PreviewMaintenance = () => {
+const PreviewExpences = () => {
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
     const {
-       cardNumber, selectedSupplier, selectedVehicle, repairTypes, startDateTime, endDateTime, comment, totalAmount, km
+        cardNumber, selectedEmployee, selectedVehicle, expenceTypes, date, comment, amount, totalAmount
     } = selectedData
 
     // Form options 
 
     const getFormOptions = async () => {
         try {
-            const response = await fetch('https://encodehertz.xyz/api/MaintenanceMaintenance/Create', {
+            const response = await fetch('https://encodehertz.xyz/api/Expences/Expence/Create', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -80,7 +81,7 @@ const PreviewMaintenance = () => {
     const getEdit = async () => {
         try {
             const ActionID = await localStorage.getItem("ActionID")
-            const response = await fetch(`https://encodehertz.xyz/api/MaintenanceMaintenance/Edit?id=${ActionID}`, {
+            const response = await fetch(`https://encodehertz.xyz/api/Expences/Expence/Edit?id=${ActionID}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -100,81 +101,7 @@ const PreviewMaintenance = () => {
         getFormOptions();
         getEdit();
     }, []);
-
-
-    useEffect(() => {
-        console.clear()
-        console.log("Rentacar Short orders add form values:", selectedData);
-    }, [selectedData])
-
-    // Rentacar Short order post 
-
-    const handleSave = async () => {
-        await fetch('https://encodehertz.xyz/api/MaintenanceMaintenance/Edit', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(selectedData),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            })
-            .then(data => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: data,
-                });
-                navigate('/maintenance')
-            })
-            .catch(error => {
-                console.error('Error sending data:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: error,
-                });
-            });
-    }
-
-    const handleChange = (e, inputName) => {
-        let inputValue = e.target.value;
-    
-        if (inputName === "km") {
-            if (/^\d*$/.test(inputValue)) {
-                inputValue = inputValue === '' ? '0' : parseInt(inputValue, 10).toString();
-            } else {
-                return;
-            }
-        } else {
-            if (inputValue === '') {
-                inputValue = '0';
-            } else {
-                if (/^[0-9]*\.?[0-9]*$/.test(inputValue)) {
-                    if (inputValue.includes('.')) {
-                        inputValue = inputValue.replace(/^0+(?=\d)/, '');
-                    } else {
-                        inputValue = parseFloat(inputValue).toString();
-                    }
-                } else {
-                    return;
-                }
-            }
-        }
-    
-        setSelectedData(prevData => {
-            const updatedData = {
-                ...prevData,
-                [inputName]: inputValue
-            };
-            return updatedData;
-        });
-    };
+   
 
     const handleBack = () => {
         navigate("/maintenance")
@@ -182,34 +109,29 @@ const PreviewMaintenance = () => {
 
     return (
         <DefaultLayout>
-            <Breadcrumb pageName={`Preview / ${cardNumber}`} prevPageName='Maintenance' prevRoute='/maintenance' />
+            <Breadcrumb pageName={`Preview / ${cardNumber}`} prevPageName='Expences' prevRoute='/expences' />
             {formOptions ? (
                 <div className="max-w-full mx-auto gap-9 sm:grid-cols-2">
                     <div className="flex flex-col gap-9">
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <form>
                                 <div className="p-6.5">
-                                    <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                                        <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedSupplier} />
+                                <div className="mb-3 flex flex-col gap-6 xl:flex-row">
+                                        <SelectGroupOne text="Employee" options={formOptions.employees || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedEmployee} />
                                         <SelectGroupOne text='Vehicle' options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedVehicle} />
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                        <DatePickerTwo labelName="Start Date Time" disabled={true} setSelectedData={setSelectedData} value={startDateTime} />
-                                        <DatePickerTwo labelName="End Date Time" disabled={true} setSelectedData={setSelectedData} value={endDateTime} />
-                                    </div>
-
-                                    <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
+                                        <DatePickerOne labelName="Date" disabled={true} setSelectedData={setSelectedData} value={date} />
                                         <div className="w-full xl:w-full">
                                             <label className="mb-2.5 block text-black dark:text-white">
-                                                Kilometer
+                                                Amount
                                             </label>
                                             <input
                                                 disabled
-                                                onChange={(e) => {handleChange(e, "km")}}
                                                 type="text"
-                                                value={km}
-                                                placeholder="Enter km"
+                                                value={amount}
+                                                placeholder="Amount"
                                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                             />
                                         </div>
@@ -219,10 +141,9 @@ const PreviewMaintenance = () => {
                                             </label>
                                             <input
                                                 disabled
-                                                onChange={(e) => {handleChange(e, "totalAmount")}}
                                                 type="text"
                                                 value={totalAmount}
-                                                placeholder="Enter km"
+                                                placeholder="Enter total amount"
                                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                             />
                                         </div>
@@ -230,9 +151,9 @@ const PreviewMaintenance = () => {
 
                                     <div className='mb-6 flex flex-col gap-3'>
                                         <label className="mt-3 block text-md font-medium text-black dark:text-white">
-                                            Repair Types
+                                            Expence Types
                                         </label>
-                                        <RepairTypesInput repairOptions={formOptions.repairTypes || []} disabled={true} setSelectedData={setSelectedData} defaultValue={repairTypes} />
+                                        <RepairTypesInput repairOptions={formOptions.expenceTypes || []} disabled={true} setSelectedData={setSelectedData} defaultValue={expenceTypes} stateName='selectedExpenceTypes' />
                                     </div>
 
                                     <div className="mb-3 flex flex-col gap-6 xl:flex-row">
@@ -272,4 +193,4 @@ const PreviewMaintenance = () => {
     );
 };
 
-export default PreviewMaintenance;
+export default PreviewExpences;

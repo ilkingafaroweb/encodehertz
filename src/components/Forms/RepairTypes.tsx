@@ -6,7 +6,7 @@ interface Option {
   id: number;
   name: string;
   price: number;
-  isSelected: boolean;
+  isSelected: boolean | null;
 }
 
 interface DropdownProps {
