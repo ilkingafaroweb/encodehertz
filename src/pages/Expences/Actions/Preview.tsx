@@ -104,7 +104,7 @@ const PreviewExpences = () => {
    
 
     const handleBack = () => {
-        navigate("/maintenance")
+        navigate("/expences")
     };
 
     return (
