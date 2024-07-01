@@ -58,7 +58,7 @@ import PreviewExpenceTypes from './pages/ExpenceTypes/Actions/Preview';
 import Expences from './pages/Expences/Expences';
 import AddExpences from './pages/Expences/Actions/Add';
 import EditExpences from './pages/Expences/Actions/Edit';
-import PreviewExpences from './pages/Maintenance/Actions/Preview';
+import PreviewExpences from './pages/Expences/Actions/Preview';
 import AllTransactions from './pages/AllTransactions/AllTransactions';
 
 function App() {
