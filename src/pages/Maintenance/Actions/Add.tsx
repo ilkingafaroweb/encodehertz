@@ -23,6 +23,7 @@ interface FormData {
 interface SelectedData {
     selectedSupplier: string;
     repairTypes: { id: number, name: string, price: number }[];
+    selectedRepairTypes: { id: number, name: string, price: number }[];
     selectedVehicle: string;
 
     startDateTime: string;
@@ -36,6 +37,7 @@ interface SelectedData {
 const initialSelectedData: SelectedData = {
     selectedSupplier: '',
     repairTypes: [],
+    selectedRepairTypes: [],
     selectedVehicle: '',
 
     startDateTime: '',
@@ -52,9 +54,21 @@ const AddMaintenance = () => {
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
-    const {
-        selectedSupplier, selectedVehicle, repairTypes, startDateTime, endDateTime, comment, totalAmount, km
+    let {
+        selectedSupplier, selectedVehicle, repairTypes, selectedRepairTypes, startDateTime, endDateTime, comment, totalAmount, km
     } = selectedData
+
+    useEffect(() => {
+        let newTotalAmount = 0;
+        selectedRepairTypes.forEach((item) => {
+            newTotalAmount += item.price;
+        });
+        setSelectedData(prevState => ({
+            ...prevState,
+            totalAmount: newTotalAmount
+        }));
+    }, [selectedRepairTypes]);
+    
 
     // Form options 
 
@@ -82,7 +96,6 @@ const AddMaintenance = () => {
 
 
     useEffect(() => {
-        console.clear()
         console.log("Rentacar Short orders add form values:", selectedData);
     }, [selectedData])
 
@@ -208,20 +221,23 @@ const AddMaintenance = () => {
                                             />
                                         </div>
                                         <div className="w-full xl:w-full">
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                                Total Amount
-                                            </label>
-                                            <input
-                                                onChange={(e) => {handleChange(e, "totalAmount")}}
-                                                type="text"
-                                                value={totalAmount}
-                                                placeholder="Enter total amount"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                            />
+
                                         </div>
                                     </div>
 
                                     <div className='mb-6 flex flex-col gap-3'>
+                                    <div className="w-full xl:w-max">
+                                            <label className="mb-2.5 block text-black text-xl font-semibold dark:text-white">
+                                                Total Amount
+                                            </label>
+                                            <input
+                                                disabled
+                                                type="text"
+                                                value={totalAmount}
+                                                placeholder="Enter total amount"
+                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black font-semibold outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                            />
+                                        </div>
                                         <label className="mt-3 block text-md font-medium text-black dark:text-white">
                                             Repair Types
                                         </label>

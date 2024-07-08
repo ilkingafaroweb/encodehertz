@@ -6,6 +6,8 @@ import DefaultLayout from '../../../../layout/DefaultLayout';
 import MultiSelect from '../../../../components/Forms/MultiSelect';
 import Swal from 'sweetalert2';
 import DatePickerTwo from '../../../../components/Forms/DatePicker/DatePickerTwo';
+import CustomCheckbox from '../../../../components/Forms/Checkbox/CustomCheckbox';
+import FormCheckbox from '../../../../components/Forms/Checkbox/FormCheckbox';
 
 interface FormData {
     cardNumber: string | null;
@@ -342,6 +344,7 @@ const AddRentShort = () => {
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue="" />
                                         <SelectGroupOne text="Vehicle Group" options={formOptions.vehicleGroups || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicleGroups} defaultValue='' />
+                                        <FormCheckbox label="Show all vehicles"/>
                                         <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue='' />
                                     </div>
 
