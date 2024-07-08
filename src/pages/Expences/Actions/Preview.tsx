@@ -39,7 +39,7 @@ const initialSelectedData: SelectedData = {
     expenceTypes: [],
 
     selectedVehicle: '',
-    selectedEmployee: '',    
+    selectedEmployee: '',
 
     amount: 0,
     totalAmount: 0,
@@ -101,7 +101,7 @@ const PreviewExpences = () => {
         getFormOptions();
         getEdit();
     }, []);
-   
+
 
     const handleBack = () => {
         navigate("/expences")
@@ -116,27 +116,21 @@ const PreviewExpences = () => {
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <form>
                                 <div className="p-6.5">
-                                <div className="mb-3 flex flex-col gap-6 xl:flex-row">
+                                    <div className="mb-3 flex flex-col gap-6 xl:flex-row">
                                         <SelectGroupOne text="Employee" options={formOptions.employees || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedEmployee} />
                                         <SelectGroupOne text='Vehicle' options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedVehicle} />
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <DatePickerOne labelName="Date" disabled={true} setSelectedData={setSelectedData} value={date} />
-                                        <div className="w-full xl:w-full">
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                                Amount
-                                            </label>
-                                            <input
-                                                disabled
-                                                type="text"
-                                                value={amount}
-                                                placeholder="Amount"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                            />
+                                        <div className='w-full'>
+
                                         </div>
-                                        <div className="w-full xl:w-full">
-                                            <label className="mb-2.5 block text-black dark:text-white">
+                                    </div>
+
+                                    <div className='mb-6 flex flex-col gap-3'>
+                                        <div className="w-full xl:w-max">
+                                            <label className="mb-2.5 block text-black text-xl font-semibold dark:text-white">
                                                 Total Amount
                                             </label>
                                             <input
@@ -144,12 +138,9 @@ const PreviewExpences = () => {
                                                 type="text"
                                                 value={totalAmount}
                                                 placeholder="Enter total amount"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black font-semibold outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                             />
                                         </div>
-                                    </div>
-
-                                    <div className='mb-6 flex flex-col gap-3'>
                                         <label className="mt-3 block text-md font-medium text-black dark:text-white">
                                             Expence Types
                                         </label>

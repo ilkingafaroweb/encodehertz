@@ -226,7 +226,7 @@ const AddMaintenance = () => {
                                     </div>
 
                                     <div className='mb-6 flex flex-col gap-3'>
-                                    <div className="w-full xl:w-max">
+                                        <div className="w-full xl:w-max">
                                             <label className="mb-2.5 block text-black text-xl font-semibold dark:text-white">
                                                 Total Amount
                                             </label>

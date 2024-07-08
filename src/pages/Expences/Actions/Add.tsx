@@ -204,33 +204,9 @@ const AddExpences = () => {
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <DatePickerOne labelName="Date" disabled={false} setSelectedData={setSelectedData} value={date} />
-                                        <div className="w-full xl:w-full">
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                                Amount
-                                            </label>
-                                            <input
-                                                onChange={(e) => {handleChange(e, "amount")}}
-                                                type="text"
-                                                value={amount}
-                                                placeholder="Enter amount"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                            />
-                                            <div className='w-full xl:w-full'>
+                                        <div className='w-full'>
 
-                                            </div>
                                         </div>
-                                        {/* <div className="w-full xl:w-full">
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                                Total Amount
-                                            </label>
-                                            <input
-                                                onChange={(e) => {handleChange(e, "totalAmount")}}
-                                                type="text"
-                                                value={totalAmount}
-                                                placeholder="Enter total amount"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                            />
-                                        </div> */}
                                     </div>
 
                                     <div className='mb-6 flex flex-col gap-3'>
