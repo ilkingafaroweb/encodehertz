@@ -113,8 +113,6 @@ const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelecte
                       className="rounded w-full border-[1.5px] border-boxdark-2 bg-transparent py-1 px-2 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>}
-                  
-
                   <div className="flex flex-col mb-2 w-full lg:w-30">
                     <label className="mb-1 text-black dark:text-white">Customer price</label>
                     <input

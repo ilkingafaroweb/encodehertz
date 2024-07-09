@@ -87,6 +87,7 @@ const RepairTypesInput: React.FC<DropdownProps> = ({ repairOptions, disabled, se
             {!selectedOptions.length && (
               <div className="flex-1">
                 <input
+                  readOnly
                   disabled={disabled}
                   placeholder="Select an option"
                   className="h-full w-full appearance-none bg-transparent p-1 px-2 outline-none"
