@@ -14,12 +14,14 @@ import ExpenceTypesInput from '../../../components/Forms/ExpenceTypes';
 interface Option {
     id: number;
     name: string;
+
     quantity: number;
     unitPrice: number;
-    totalPrice: number;
+    totalAmount: number;
+
     description: string;
     isSelected: boolean | null;
-  }
+}
 
 interface FormData {
     manager: string;
@@ -29,7 +31,7 @@ interface FormData {
     date: string
     comment: string;
     totalAmount: number;
-    expenceTypes: Option[];
+    expenceTypes: Option[] | [];
 }
 
 interface SelectedData {
@@ -38,8 +40,7 @@ interface SelectedData {
     selectedVehicle: string;
     selectedEmployee: string;
 
-    amount: number;
-    totalAmount: number;
+    totalPrice: number;
 
     date: string;
     comment: string;
@@ -51,8 +52,7 @@ const initialSelectedData: SelectedData = {
     selectedVehicle: '',
     selectedEmployee: '',    
 
-    amount: 0,
-    totalAmount: 0,
+    totalPrice: 0,
 
     date: '',
     comment: '',
@@ -65,18 +65,18 @@ const AddExpences = () => {
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
     let {
-        selectedEmployee, selectedVehicle, selectedExpenceTypes, date, comment, amount, totalAmount
+        selectedEmployee, selectedVehicle, selectedExpenceTypes, date, comment, totalPrice
     } = selectedData
 
 
     useEffect(() => {
         let newTotalAmount = 0;
-        selectedExpenceTypes.forEach((item) => {
-            newTotalAmount += item.totalPrice;
+        selectedExpenceTypes?.forEach((item) => {
+            newTotalAmount += item.totalAmount;
         });
         setSelectedData(prevState => ({
             ...prevState,
-            totalAmount: newTotalAmount
+            totalPrice: newTotalAmount
         }));
     }, [selectedExpenceTypes]);
 
@@ -118,11 +118,9 @@ const AddExpences = () => {
     useEffect(() => {
         console.clear()
         console.log("Expences add form values :", selectedData);
-        // console.log("Form options :", formOptions.expenceTypes);
     }, [selectedData])
 
-    // Rentacar Short order post 
-
+    
     const handleSubmit = async () => {
         await fetch('https://encodehertz.xyz/api/Expences/Expence/Create', {
             method: 'POST',
@@ -232,13 +230,12 @@ const AddExpences = () => {
                                     <div className='mb-6 flex flex-col gap-3'>
                                         <div className="w-full xl:w-max">
                                             <label className="mb-2.5 block text-black text-xl font-semibold dark:text-white">
-                                                Total Amount
+                                                Total Price
                                             </label>
                                             <input
                                                 disabled
                                                 type="text"
-                                                value={totalAmount}
-                                                placeholder="Enter total amount"
+                                                value={totalPrice}
                                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black font-semibold outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                             />
                                         </div>

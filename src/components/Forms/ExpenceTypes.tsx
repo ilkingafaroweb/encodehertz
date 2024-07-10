@@ -5,9 +5,11 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 interface Option {
     id: number;
     name: string;
+
     quantity: number;
     unitPrice: number;
-    totalPrice: number;
+    totalAmount: number;
+
     description: string;
     isSelected: boolean | null;
 }
@@ -51,14 +53,14 @@ const ExpenceTypesInput: React.FC<DropdownProps> = ({ expenceOptions, disabled, 
     const handleQuantityChange = (index: number, value: number) => {
         const updatedOptions = [...selectedOptions];
         updatedOptions[index].quantity = value;
-        updatedOptions[index].totalPrice = updatedOptions[index].quantity * updatedOptions[index].unitPrice;
+        updatedOptions[index].totalAmount = updatedOptions[index].quantity * updatedOptions[index].unitPrice;
         setSelectedOptions(updatedOptions);
     };
 
     const handleUnitPriceChange = (index: number, value: number) => {
         const updatedOptions = [...selectedOptions];
         updatedOptions[index].unitPrice = value;
-        updatedOptions[index].totalPrice = updatedOptions[index].quantity * updatedOptions[index].unitPrice;
+        updatedOptions[index].totalAmount = updatedOptions[index].quantity * updatedOptions[index].unitPrice;
         setSelectedOptions(updatedOptions);
     };
 
@@ -107,7 +109,7 @@ const ExpenceTypesInput: React.FC<DropdownProps> = ({ expenceOptions, disabled, 
                                             readOnly
                                             type="number"
                                             disabled={disabled}
-                                            value={option.totalPrice}
+                                            value={option.totalAmount}
                                             className="rounded w-full border-[1.5px] border-boxdark-2 bg-transparent py-1 px-2 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                         />
                                     </div>

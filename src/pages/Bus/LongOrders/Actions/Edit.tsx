@@ -437,39 +437,8 @@ const EditBusLong = () => {
     } else {
       console.error('FRONTDA PROBLEM VAR');
     }
-  }, [selectedVehicleClass]);
-
-
-  // Special extra charge for the customer
-
-  useEffect(() => {
-    if (!!selectedCustomer && !!selectedVehicleClass) {
-      fetch(`https://encodehertz.xyz/api/Long/GetExtraCharges?customerCode=${selectedCustomer}&vehicleClass=${selectedVehicleClass}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setFormOptions(prevData => ({
-            ...prevData,
-            extraChargePanel: data
-          }));
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
-    } else {
-      console.error('FRONTDA PROBLEM VAR');
-    }
-
-  }, [selectedCustomer]);
+  }, [selectedCustomer, selectedVehicleClass]);
+  
 
   useEffect(() => {
     if (selectedServiceType !== "M-000003") {

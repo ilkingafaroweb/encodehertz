@@ -8,6 +8,19 @@ import Swal from 'sweetalert2';
 import DatePickerTwo from '../../../components/Forms/DatePicker/DatePickerTwo';
 import RepairTypesInput from '../../../components/Forms/RepairTypes';
 import DatePickerOne from '../../../components/Forms/DatePicker/DatePickerOne';
+import ExpenceTypesInput from '../../../components/Forms/ExpenceTypes';
+
+interface Option {
+    id: number;
+    name: string;
+
+    quantity: number;
+    unitPrice: number;
+    totalAmount: number;
+
+    description: string;
+    isSelected: boolean | null;
+}
 
 interface FormData {
     manager: string;
@@ -17,18 +30,18 @@ interface FormData {
     date: string
     comment: string;
     totalAmount: number;
-    expenceTypes: { id: number, name: string, price: number, isSelected: boolean }[];
+    expenceTypes: Option[] | [];
 }
 
 interface SelectedData {
     cardNumber: string | null;
-    expenceTypes: { id: number, name: string, price: number }[];
+    selectedExpenceTypes: Option[];
 
     selectedVehicle: string;
     selectedEmployee: string;
 
     amount: number;
-    totalAmount: number;
+    totalPrice: number;
 
     date: string;
     comment: string;
@@ -36,13 +49,13 @@ interface SelectedData {
 
 const initialSelectedData: SelectedData = {
     cardNumber: '',
-    expenceTypes: [],
+    selectedExpenceTypes: [],
 
     selectedVehicle: '',
-    selectedEmployee: '',
+    selectedEmployee: '',    
 
     amount: 0,
-    totalAmount: 0,
+    totalPrice: 0,
 
     date: '',
     comment: '',
@@ -54,9 +67,20 @@ const PreviewExpences = () => {
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
-    const {
-        cardNumber, selectedEmployee, selectedVehicle, expenceTypes, date, comment, amount, totalAmount
+    let {
+        selectedEmployee, selectedVehicle, selectedExpenceTypes, date, comment, totalPrice, cardNumber
     } = selectedData
+
+    useEffect(() => {
+        let newTotalAmount = 0;
+        selectedExpenceTypes?.forEach((item) => {
+            newTotalAmount += item.totalAmount;
+        });
+        setSelectedData(prevState => ({
+            ...prevState,
+            totalPrice: newTotalAmount
+        }));
+    }, [selectedExpenceTypes]);
 
     // Form options 
 
@@ -102,6 +126,10 @@ const PreviewExpences = () => {
         getEdit();
     }, []);
 
+    useEffect(() => {
+        console.clear()
+        console.log("EXPENCE edit form values:", JSON.stringify(selectedData));
+    }, [selectedData])
 
     const handleBack = () => {
         navigate("/expences")
@@ -109,14 +137,14 @@ const PreviewExpences = () => {
 
     return (
         <DefaultLayout>
-            <Breadcrumb pageName={`Preview / ${cardNumber}`} prevPageName='Expences' prevRoute='/expences' />
+            <Breadcrumb pageName={`Edit / ${cardNumber}`} prevPageName='Expences' prevRoute='/expences' />
             {formOptions ? (
                 <div className="max-w-full mx-auto gap-9 sm:grid-cols-2">
                     <div className="flex flex-col gap-9">
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <form>
                                 <div className="p-6.5">
-                                    <div className="mb-3 flex flex-col gap-6 xl:flex-row">
+                                <div className="mb-3 flex flex-col gap-6 xl:flex-row">
                                         <SelectGroupOne text="Employee" options={formOptions.employees || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedEmployee} />
                                         <SelectGroupOne text='Vehicle' options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedVehicle} />
                                     </div>
@@ -129,23 +157,24 @@ const PreviewExpences = () => {
                                     </div>
 
                                     <div className='mb-6 flex flex-col gap-3'>
-                                        <div className="w-full xl:w-max">
+                                    <div className="w-full xl:w-max">
                                             <label className="mb-2.5 block text-black text-xl font-semibold dark:text-white">
-                                                Total Amount
+                                                Total Price
                                             </label>
                                             <input
                                                 disabled
                                                 type="text"
-                                                value={totalAmount}
-                                                placeholder="Enter total amount"
+                                                value={totalPrice}
                                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black font-semibold outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                             />
                                         </div>
-                                        <label className="mt-3 block text-md font-medium text-black dark:text-white">
-                                            Expence Types
-                                        </label>
-                                        <RepairTypesInput repairOptions={formOptions.expenceTypes || []} disabled={true} setSelectedData={setSelectedData} defaultValue={expenceTypes} stateName='selectedExpenceTypes' />
-                                    </div>
+                                        {
+                                            formOptions.expenceTypes.length > 0 && <><label className="mt-3 block text-md font-medium text-black dark:text-white">
+                                                Expence Types
+                                            </label>
+                                                <ExpenceTypesInput expenceOptions={formOptions.expenceTypes || []} disabled={true} setSelectedData={setSelectedData} defaultValue={selectedExpenceTypes} stateName='selectedExpenceTypes' />
+                                            </>
+                                        }</div>
 
                                     <div className="mb-3 flex flex-col gap-6 xl:flex-row">
                                         <div className='w-full'>
@@ -167,7 +196,7 @@ const PreviewExpences = () => {
                                     </div>
                                     <div className='flex gap-3'>
                                         <button type='button' onClick={handleBack} className="flex w-full justify-center rounded bg-danger dark:bg-danger p-3 font-medium text-gray hover:bg-opacity-90">
-                                            Back
+                                            Cancel
                                         </button>
                                     </div>
                                 </div>
