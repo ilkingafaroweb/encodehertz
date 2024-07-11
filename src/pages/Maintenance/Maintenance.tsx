@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 const Maintenance = () => {
   const token = localStorage.getItem('token')
   const [maintenance, setMaintenance] = useState([]);
+  const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
   const getMaintenanceList = () => {
     fetch('https://encodehertz.xyz/api/MaintenanceMaintenance/List', {
@@ -81,9 +82,7 @@ const Maintenance = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Maintenance' prevPageName='Dashboard' prevRoute='/' />
-      {maintenance.length > 0 && (
-        <TableThree data={maintenance} handleDelete={handleDelete} />
-      )}
+      <TableThree data={maintenance} handleDelete={handleDelete} actions={actions}/>
     </DefaultLayout>
   );
 };

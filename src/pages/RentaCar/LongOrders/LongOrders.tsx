@@ -8,6 +8,7 @@ import RentLongData from '../../../data/Rentacar/LongOrders'
 const RentLongOrders = () => {
   const [carLong, setCarLong] = useState([]);
   const [update, setUpdate] = useState(false); 
+  const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
   const getCarLongList = async () => {
     const token = await localStorage.getItem("token");
@@ -87,9 +88,7 @@ const RentLongOrders = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Rent a car long orders' prevPageName='Dashboard' prevRoute='/'/>
-      {
-        carLong.length > 0 && (<TableThree data={carLong} handleDelete={handleDelete} />)
-      }
+      <TableThree data={carLong} handleDelete={handleDelete} actions={actions}/>
     </DefaultLayout>
   );
 }

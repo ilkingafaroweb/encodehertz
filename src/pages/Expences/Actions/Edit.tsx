@@ -218,35 +218,6 @@ const EditExpences = () => {
         });
     };
 
-    // Special expence types on change 
-
-    useEffect(() => {
-        if (!!selectedEmployee) {
-            const fetchExpenceTypes = async () => {
-                try {
-                    const response = await fetch(`https://encodehertz.xyz/api/Expences/Expence/GetExpenceTypesOnChange?expenceId=${actionID}&selectedEmployee=${selectedEmployee}`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const data = await response.json();
-                    setFormOptions(prevData => ({
-                        ...prevData,
-                        expenceTypes: data
-                    }));
-                } catch (error) {
-                    console.error('Error fetching data:', error);
-                }
-            };
-            fetchExpenceTypes();
-        } else {
-            console.error('FRONTDA PROBLEM VAR');
-        }
-    }, [selectedEmployee, token, actionID]);
 
     return (
         <DefaultLayout>
@@ -258,7 +229,17 @@ const EditExpences = () => {
                             <form>
                                 <div className="p-6.5">
                                 <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                                        <SelectGroupOne text="Employee" options={formOptions.employees || []} setSelectedData={setSelectedData} disabled={!formOptions.employees} defaultValue={selectedEmployee} />
+                                <div className="w-full xl:w-full">
+                                            <label className="mb-2.5 block text-black dark:text-white">
+                                                Employee
+                                            </label>
+                                            <input
+                                                disabled
+                                                value={selectedEmployee}
+                                                type="text"
+                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                            />
+                                        </div>
                                         <SelectGroupOne text='Vehicle' options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue={selectedVehicle} />
                                     </div>
 
@@ -285,7 +266,7 @@ const EditExpences = () => {
                                             formOptions.expenceTypes?.length > 0 && <><label className="mt-3 block text-md font-medium text-black dark:text-white">
                                                 Expence Types
                                             </label>
-                                                <ExpenceTypesInput expenceOptions={formOptions.expenceTypes || []} disabled={false} setSelectedData={setSelectedData} defaultValue={formOptions.expenceTypes} stateName='selectedExpenceTypes' />
+                                                <ExpenceTypesInput expenceOptions={formOptions.expenceTypes || []} disabled={false} setSelectedData={setSelectedData} defaultValue={expenceTypes} stateName='selectedExpenceTypes' />
                                             </>
                                         }</div>
 

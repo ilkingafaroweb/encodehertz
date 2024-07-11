@@ -26,7 +26,7 @@ interface Option {
 interface FormData {
     manager: string;
     cardNumber: string | null;
-    employees: [] | null;
+    employee: string;
     vehicles: [] | null;
     date: string
     comment: string;
@@ -68,7 +68,6 @@ const AddExpences = () => {
         selectedEmployee, selectedVehicle, selectedExpenceTypes, date, comment, totalPrice
     } = selectedData
 
-
     useEffect(() => {
         let newTotalAmount = 0;
         selectedExpenceTypes?.forEach((item) => {
@@ -79,16 +78,6 @@ const AddExpences = () => {
             totalPrice: newTotalAmount
         }));
     }, [selectedExpenceTypes]);
-
-
-    useEffect(() => {
-        if (selectedEmployee) {
-          fetch(`https://encodehertz.xyz/api/Expences/Expence/GetExpenceTypes?selectedEmployee=${selectedEmployee}`)
-            .then(response => response.json())
-            .then(data => setFormOptions(prevOptions => ({ ...prevOptions, expenceTypes: data })))
-            .catch(error => console.error('Error fetching data:', error));
-        }
-      }, [selectedEmployee]);
 
     // Form options 
 
@@ -116,9 +105,14 @@ const AddExpences = () => {
 
 
     useEffect(() => {
-        console.clear()
-        console.log("Expences add form values :", selectedData);
-    }, [selectedData])
+        console.log(formOptions);
+    },[formOptions])
+
+
+    // useEffect(() => {
+    //     console.clear()
+    //     console.log("Expences add form values :", selectedData);
+    // }, [selectedData])
 
     
     const handleSubmit = async () => {
@@ -216,7 +210,21 @@ const AddExpences = () => {
                             <form>
                                 <div className="p-6.5">
                                     <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                                        <SelectGroupOne text="Employee" options={formOptions.employees || []} setSelectedData={setSelectedData} disabled={!formOptions.employees} defaultValue='' />
+                                        <div className="w-full xl:w-full">
+                                            <label className="mb-2.5 block text-black dark:text-white">
+                                                Employee
+                                            </label>
+                                            <input
+                                                disabled
+                                                value={formOptions.employee}
+                                                onChange={(e) => setSelectedData(prevData => ({
+                                                    ...prevData,
+                                                    selectedEmployee: e.target.value
+                                                }))}
+                                                type="text"
+                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                            />
+                                        </div>
                                         <SelectGroupOne text='Vehicle' options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue='' />
                                     </div>
 

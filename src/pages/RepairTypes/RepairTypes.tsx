@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 const RepairTypes = () => {
   const token = localStorage.getItem('token')
   const [repairTypes, setRepairTypes] = useState([]);
+  const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
   const getRepairTypesList = () => {
     fetch('https://encodehertz.xyz/api/RepairTypes/RepairTypes/List', {
@@ -81,9 +82,7 @@ const RepairTypes = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Repair Types' prevPageName='Dashboard' prevRoute='/' />
-      {repairTypes.length > 0 && (
-        <TableThree data={repairTypes} handleDelete={handleDelete} />
-      )}
+      <TableThree data={repairTypes} handleDelete={handleDelete} actions={actions}/>
     </DefaultLayout>
   );
 };

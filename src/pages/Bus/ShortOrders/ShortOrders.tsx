@@ -9,6 +9,7 @@ const ShortOrders = () => {
 
   const [busShort, setBusShort] = useState([]);
   const token = localStorage.getItem('token')
+  const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
   const getBusShortList = () => {
     fetch('https://encodehertz.xyz/api/Short/List', {
@@ -84,10 +85,7 @@ const ShortOrders = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Bus Short Orders' prevPageName='Dashboard' prevRoute='/' />
-      {
-        busShort.length > 0 && <TableThree data={busShort} handleDelete={handleDelete} />
-      }
-      
+      <TableThree data={busShort} handleDelete={handleDelete} actions={actions} />      
     </DefaultLayout>
   )
 }

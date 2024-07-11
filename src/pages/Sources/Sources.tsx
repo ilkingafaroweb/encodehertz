@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 const Sources = () => {
   const token = localStorage.getItem('token')
   const [sources, setSources] = useState([]);
+  const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
   const getSourcesList = () => {
     fetch('https://encodehertz.xyz/api/Source/List', {
@@ -81,9 +82,7 @@ const Sources = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Sources' prevPageName='Dashboard' prevRoute='/' />
-      {sources.length > 0 && (
-        <TableThree data={sources} handleDelete={handleDelete} />
-      )}
+      <TableThree data={sources} handleDelete={handleDelete} actions={actions}/>
     </DefaultLayout>
   );
 };

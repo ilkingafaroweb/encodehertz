@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 const RentShortOrders = () => {
   const [carShort, setCarShort] = useState([]);
   const [update, setUpdate] = useState(false); 
+  const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
   const getCarShortList = async () => {
     const token = await localStorage.getItem("token");
@@ -86,9 +87,7 @@ const RentShortOrders = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Rent a car short orders' prevPageName='Dashboard' prevRoute='/'/>
-      {
-        carShort.length > 0 && (<TableThree data={carShort} handleDelete={handleDelete} />)
-      }
+      <TableThree data={carShort} handleDelete={handleDelete} actions={actions}/>
     </DefaultLayout>
   );
 }

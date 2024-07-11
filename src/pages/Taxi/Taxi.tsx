@@ -7,6 +7,7 @@ import Swal from 'sweetalert2'
 const Taxi = () => {
   const token = localStorage.getItem('token')
   const [taxi, setTaxi] = useState([]);
+  const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
   const getTaxiList = () => {
     fetch('https://encodehertz.xyz/api/Taxi/Taxi/List', {
@@ -81,7 +82,7 @@ const Taxi = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Taxi' prevPageName='Dashboard' prevRoute='/' />
-        <TableThree data={taxi} handleDelete={handleDelete} />
+      <TableThree data={taxi} handleDelete={handleDelete} actions={actions}/>
     </DefaultLayout>
   );
 }

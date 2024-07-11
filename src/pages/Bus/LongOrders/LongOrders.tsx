@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 const LongOrders = () => {
   const [busLong, setBusLong] = useState([]);
   const token = localStorage.getItem('token')
+  const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
   const getBusLongList = () => {
     fetch('https://encodehertz.xyz/api/Long/List', {
@@ -83,9 +84,7 @@ const LongOrders = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Bus long orders' prevPageName='Dashboard' prevRoute='/' />
-      {
-        busLong.length > 0 && (<TableThree data={busLong} handleDelete={handleDelete} />)
-      }
+      <TableThree data={busLong} handleDelete={handleDelete} actions={actions}/>      
     </DefaultLayout>
   );
 }

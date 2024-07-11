@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 const Expences = () => {
   const token = localStorage.getItem('token')
   const [expences, setExpences] = useState([]);
+  const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
   const getExpencesList = () => {
     fetch('https://encodehertz.xyz/api/Expences/Expence/List', {
@@ -34,7 +35,7 @@ const Expences = () => {
   }, [])
 
   const handleDelete = async () => {
-    const actionID = await parseInt(localStorage.getItem('ActionID'));
+    const actionID = localStorage.getItem('ActionID');
 
     Swal.fire({
       title: 'Are you sure?',
@@ -45,7 +46,7 @@ const Expences = () => {
       cancelButtonText: 'No, cancel!'
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/Expences/Expence/Delete?id=${actionID}`;
+        const url = `https://encodehertz.xyz/api/Expences/Expence/DeleteRange?listOfID=${actionID}`;
         fetch(url, {
           method: 'GET',
           headers: {
@@ -81,9 +82,7 @@ const Expences = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Expences' prevPageName='Dashboard' prevRoute='/' />
-      {expences.length > 0 && (
-        <TableThree data={expences} handleDelete={handleDelete} />
-      )}
+      <TableThree data={expences} handleDelete={handleDelete} actions={actions} />
     </DefaultLayout>
   );
 };

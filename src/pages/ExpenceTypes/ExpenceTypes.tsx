@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 const ExpenceTypes = () => {
   const token = localStorage.getItem('token')
   const [expenceTypes, setExpenceTypes] = useState([]);
+  const [actions, setActions] = useState(['preview'])
 
   const getExpenceTypesList = () => {
     fetch('https://encodehertz.xyz/api/Expences/ExpenceType/List', {
@@ -81,9 +82,7 @@ const ExpenceTypes = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Expence Types' prevPageName='Dashboard' prevRoute='/' />
-      {expenceTypes.length > 0 && (
-        <TableThree data={expenceTypes} handleDelete={handleDelete} />
-      )}
+      <TableThree data={expenceTypes} handleDelete={handleDelete} actions={actions} />
     </DefaultLayout>
   );
 };

@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 import { isDOMComponent } from 'react-dom/test-utils';
 
-const TableThree = ({ data, handleDelete }: { data: any, handleDelete: any }) => {
+const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: any, actions: any }) => {
 
   /* Initial table data */
   const [selectedIds, setSelectedIds] = useState([]);
@@ -110,11 +110,6 @@ const TableThree = ({ data, handleDelete }: { data: any, handleDelete: any }) =>
     }
   };
 
-  /* Add Local Storage Action ID */
-  const addLocalActionId = (id: number) => {
-    localStorage.setItem("ActionID", id.toString());
-  }
-
   /* Excel Actions */
   const handleExcelDownload = () => {
     const ws = XLSX.utils.json_to_sheet(tableData);
@@ -123,42 +118,88 @@ const TableThree = ({ data, handleDelete }: { data: any, handleDelete: any }) =>
     XLSX.writeFile(wb, 'table_data.xlsx');
   };
 
+
+  /* Add Local Storage Action ID */
+
+  const addLocalActionId = (idList) => {
+    localStorage.setItem("ActionID", idList);
+  }
+
   // Selected row onchange function
 
   const handleCheckboxChange = (id) => {
     setSelectedIds((prevSelectedIds) => {
-      if (prevSelectedIds.includes(id)) {
-        return prevSelectedIds.filter((selectedId) => selectedId !== id);
+      if (Array.isArray(prevSelectedIds)) {
+        if (prevSelectedIds.includes(id)) {
+          const newSelectedIds = prevSelectedIds.filter((selectedId) => selectedId !== id);
+          return newSelectedIds;
+        } else {
+          return [...prevSelectedIds, id];
+        }
       } else {
-        return [...prevSelectedIds, id];
+        return prevSelectedIds === id ? [] : [prevSelectedIds, id];
       }
     });
   };
 
+  useEffect(() => {
+    addLocalActionId(selectedIds)
+  }, [selectedIds])
+
+
   return (
     <div className="relative rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className='w-full mb-6 flex justify-end gap-2'>
-        <Link
-          to="./add"
-          className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
-        >
-          Add <FontAwesomeIcon icon={faPlus} />
-        </Link>
-        <button
-          className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
-        >
-          Edit <FontAwesomeIcon icon={faEdit} />
-        </button>
-        <button
-          className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
-        >
-          Preview <FontAwesomeIcon icon={faEye} />
-        </button>
-        <button
-          className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
-        >
-          Delete <FontAwesomeIcon icon={faTrash} />
-        </button>
+      {
+        selectedIds.length === 0 && (
+          actions.includes('add') && (
+            <Link
+              to="./add"
+              className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
+            >
+              Add <FontAwesomeIcon icon={faPlus} />
+            </Link>
+        )
+      )}
+
+      {selectedIds.length > 1 ? (
+        actions.includes('delete') && (
+          <button
+            className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
+            onClick={handleDelete}
+          >
+            Delete <FontAwesomeIcon icon={faTrash} />
+          </button>
+        )
+      ) : (
+        <>
+          {actions.includes('edit') && (
+            <Link 
+              to='./edit' 
+              onClick={() => addLocalActionId(selectedIds[0])}
+              className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
+            >
+              Edit <FontAwesomeIcon icon={faEdit} />
+            </Link>
+          )}
+          {actions.includes('preview') && (
+            <Link
+              to='./preview'
+              onClick={() => addLocalActionId(selectedIds[0])}
+              className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
+            >
+              Preview <FontAwesomeIcon icon={faEye} />
+            </Link>
+          )}
+          {actions.includes('delete') && (
+            <button
+              className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
+              onClick={handleDelete}
+            >
+              Delete <FontAwesomeIcon icon={faTrash} />
+            </button>
+          )}
+        </>)}
         {
           !!tableData.length && <><button
             onClick={handleExcelDownload}
@@ -200,112 +241,112 @@ const TableThree = ({ data, handleDelete }: { data: any, handleDelete: any }) =>
           </div>
         ) : (
           <table className="w-max min-w-full table-auto">
-          <thead>
-            <tr className="w-max bg-gray-2 text-left dark:bg-meta-4">
-              <th className="w-max py-4 px-4 font-medium text-black text-center dark:text-white">
-                <input
-                  type="checkbox"
-                  className='w-4 h-4'
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      const allIds = currentItems.map(item => item.id);
-                      setSelectedIds(allIds);
-                    } else {
-                      setSelectedIds([]);
-                    }
-                  }}
-                />
-              </th>
-              {columnOrder.length > 0 && columnOrder.map((header, index) => (
-                visibleColumns.includes(header) && (
-                  <th
-                    key={index}
-                    className="w-max py-4 px-4 font-medium text-black text-center dark:text-white"
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, index)}
-                    onDrop={(e) => handleDrop(e, index)}
-                    onDragOver={(e) => e.preventDefault()}
-                  >
-                    <div className='flex gap-2'>
-                      <div onClick={() => handleSort(header)} className='mx-auto'>
-                        {header.toUpperCase()}
-                      </div>
-                      {sortConfig.key === header && (
-                        <span>
-                          {sortConfig.direction === 'ascending' ?
-                            <FontAwesomeIcon icon={faArrowDownAZ} /> :
-                            (sortConfig.direction === 'descending' ?
-                              <FontAwesomeIcon icon={faArrowDownZA} /> :
-                              null
-                            )
-                          }
-                        </span>
-                      )}
-                    </div>
-                  </th>
-                )
-              ))}
-              <th className='w-max py-4 px-4 font-medium text-black dark:text-white text-center'>ACTIONS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItems.map((rowData, rowIndex) => (
-              <tr key={rowIndex}>
-                <td className="border-b border-[#eee] py-4 px-4 text-center dark:border-strokedark">
+            <thead>
+              <tr className="w-max bg-gray-2 text-left dark:bg-meta-4">
+                <th className="w-max py-4 px-4 font-medium text-black text-center dark:text-white">
                   <input
                     type="checkbox"
                     className='w-4 h-4'
-                    checked={selectedIds.includes(rowData.id)}
-                    onChange={() => handleCheckboxChange(rowData.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        const allIds = currentItems.map(item => item.id);
+                        setSelectedIds(allIds);
+                      } else {
+                        setSelectedIds([]);
+                      }
+                    }}
                   />
-                </td>
-                {columnOrder.map((header, colIndex) => (
+                </th>
+                {columnOrder.length > 0 && columnOrder.map((header, index) => (
                   visibleColumns.includes(header) && (
-                    <td
-                      key={colIndex}
-                      className="border-b border-[#eee] py-4 px-4 text-center dark:border-strokedark"
+                    <th
+                      key={index}
+                      className="w-max py-4 px-4 font-medium text-black text-center dark:text-white"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, index)}
+                      onDrop={(e) => handleDrop(e, index)}
+                      onDragOver={(e) => e.preventDefault()}
                     >
-                      <h5 className="font-medium text-center text-black dark:text-white">
-                        {rowData[header]}
-                      </h5>
-                    </td>
+                      <div className='flex gap-2'>
+                        <div onClick={() => handleSort(header)} className='mx-auto'>
+                          {header.toUpperCase()}
+                        </div>
+                        {sortConfig.key === header && (
+                          <span>
+                            {sortConfig.direction === 'ascending' ?
+                              <FontAwesomeIcon icon={faArrowDownAZ} /> :
+                              (sortConfig.direction === 'descending' ?
+                                <FontAwesomeIcon icon={faArrowDownZA} /> :
+                                null
+                              )
+                            }
+                          </span>
+                        )}
+                      </div>
+                    </th>
                   )
                 ))}
-                <td className='flex justify-center items-center max-w-max min-w-full gap-2 border-b text-boxdark-2 border-[#eee] py-5 px-4 dark:border-strokedark dark:text-white'>
-                  <Tooltip placement="top" title="Preview">
-                    <Link to="./preview" onClick={() => addLocalActionId(rowData.id)} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
-                      <FontAwesomeIcon icon={faEye} />
-                    </Link>
-                  </Tooltip>
-                  <Tooltip placement="top" title="Edit">
-                    <Link to="./edit" onClick={() => addLocalActionId(rowData.id)} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
-                      <FontAwesomeIcon icon={faPenToSquare} />
-                    </Link>
-                  </Tooltip>
-                  <Tooltip placement='top' title="Delete">
-                    <button onClick={() => { addLocalActionId(rowData.id); handleDelete(); }} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </Tooltip>
-                </td>
+                {/* <th className='w-max py-4 px-4 font-medium text-black dark:text-white text-center'>ACTIONS</th> */}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {currentItems.map((rowData, rowIndex) => (
+                <tr key={rowIndex}>
+                  <td className="border-b border-[#eee] py-4 px-4 text-center dark:border-strokedark">
+                    <input
+                      type="checkbox"
+                      className='w-4 h-4'
+                      checked={selectedIds.includes(rowData.id)}
+                      onChange={() => handleCheckboxChange(rowData.id)}
+                    />
+                  </td>
+                  {columnOrder.map((header, colIndex) => (
+                    visibleColumns.includes(header) && (
+                      <td
+                        key={colIndex}
+                        className="border-b border-[#eee] py-4 px-4 text-center dark:border-strokedark"
+                      >
+                        <h5 className="font-medium text-center text-black dark:text-white">
+                          {rowData[header]}
+                        </h5>
+                      </td>
+                    )
+                  ))}
+                  {/* <td className='flex justify-center items-center max-w-max min-w-full gap-2 border-b text-boxdark-2 border-[#eee] py-5 px-4 dark:border-strokedark dark:text-white'>
+                    <Tooltip placement="top" title="Preview">
+                      <Link to="./preview" onClick={() => addLocalActionId(rowData.id)} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
+                        <FontAwesomeIcon icon={faEye} />
+                      </Link>
+                    </Tooltip>
+                    <Tooltip placement="top" title="Edit">
+                      <Link to="./edit" onClick={() => addLocalActionId(rowData.id)} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                      </Link>
+                    </Tooltip>
+                    <Tooltip placement='top' title="Delete">
+                      <button onClick={() => { addLocalActionId(rowData.id); handleDelete(); }} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </Tooltip>
+                  </td> */}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
       {
         tableData.length !== 0 && <Pagination
-        itemsPerPage={itemsPerPage}
-        setItemsPerPage={setItemsPerPage}
-        itemsPerPageOptions={itemsPerPageOptions}
-        totalItems={tableData.length}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        onPageChange={handlePageChange}
-      />
+          itemsPerPage={itemsPerPage}
+          setItemsPerPage={setItemsPerPage}
+          itemsPerPageOptions={itemsPerPageOptions}
+          totalItems={tableData.length}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          onPageChange={handlePageChange}
+        />
       }
-      
+
     </div>
   );
 };

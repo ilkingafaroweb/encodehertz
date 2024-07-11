@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 const ExtraCharges = () => {
   const token = localStorage.getItem('token')
   const [extraCharges, setExtraCharges] = useState([]);
+  const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
   const getExtraChargesList = () => {
     fetch('https://encodehertz.xyz/api/ECP/List', {
@@ -82,9 +83,7 @@ const ExtraCharges = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Extra Charges' prevPageName='Dashboard' prevRoute='/' />
-      {extraCharges.length > 0 && (
-        <TableThree data={extraCharges} handleDelete={handleDelete} />
-      )}
+      <TableThree data={extraCharges} handleDelete={handleDelete} actions={actions}/>
     </DefaultLayout>
   );
 };
