@@ -132,10 +132,10 @@ const EditExpences = () => {
     }, []);
 
 
-    useEffect(() => {
-        console.clear()
-        console.log("EXPENCE edit form values:", JSON.stringify(selectedData));
-    }, [selectedData])
+    // useEffect(() => {
+    //     console.clear()
+    //     console.log("EXPENCE edit form values:", JSON.stringify(selectedData));
+    // }, [selectedData])
 
     const handleSave = async () => {
         await fetch('https://encodehertz.xyz/api/Expences/Expence/Edit', {
@@ -282,10 +282,10 @@ const EditExpences = () => {
                                             />
                                         </div>
                                         {
-                                            formOptions.expenceTypes.length > 0 && <><label className="mt-3 block text-md font-medium text-black dark:text-white">
+                                            formOptions.expenceTypes?.length > 0 && <><label className="mt-3 block text-md font-medium text-black dark:text-white">
                                                 Expence Types
                                             </label>
-                                                <ExpenceTypesInput expenceOptions={formOptions.expenceTypes || []} disabled={false} setSelectedData={setSelectedData} defaultValue={expenceTypes} stateName='selectedExpenceTypes' />
+                                                <ExpenceTypesInput expenceOptions={formOptions.expenceTypes || []} disabled={false} setSelectedData={setSelectedData} defaultValue={formOptions.expenceTypes} stateName='selectedExpenceTypes' />
                                             </>
                                         }</div>
 

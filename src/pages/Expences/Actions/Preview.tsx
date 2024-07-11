@@ -63,6 +63,7 @@ const initialSelectedData: SelectedData = {
 
 const PreviewExpences = () => {
     const navigate = useNavigate()
+    const actionID = localStorage.getItem('ActionID')
     const token = localStorage.getItem("token")
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
@@ -135,6 +136,34 @@ const PreviewExpences = () => {
         navigate("/expences")
     };
 
+    useEffect(() => {
+        if (!!selectedEmployee) {
+            const fetchExpenceTypes = async () => {
+                try {
+                    const response = await fetch(`https://encodehertz.xyz/api/Expences/Expence/GetExpenceTypesOnChange?expenceId=${actionID}&selectedEmployee=${selectedEmployee}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    setFormOptions(prevData => ({
+                        ...prevData,
+                        expenceTypes: data
+                    }));
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            };
+            fetchExpenceTypes();
+        } else {
+            console.error('FRONTDA PROBLEM VAR');
+        }
+    }, [selectedEmployee, token, actionID]);
+
     return (
         <DefaultLayout>
             <Breadcrumb pageName={`Edit / ${cardNumber}`} prevPageName='Expences' prevRoute='/expences' />
@@ -172,7 +201,7 @@ const PreviewExpences = () => {
                                             formOptions.expenceTypes.length > 0 && <><label className="mt-3 block text-md font-medium text-black dark:text-white">
                                                 Expence Types
                                             </label>
-                                                <ExpenceTypesInput expenceOptions={formOptions.expenceTypes || []} disabled={true} setSelectedData={setSelectedData} defaultValue={selectedExpenceTypes} stateName='selectedExpenceTypes' />
+                                                <ExpenceTypesInput expenceOptions={formOptions.expenceTypes || []} disabled={true} setSelectedData={setSelectedData} defaultValue={formOptions.expenceTypes} stateName='selectedExpenceTypes' />
                                             </>
                                         }</div>
 
