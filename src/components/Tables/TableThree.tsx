@@ -150,56 +150,56 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
   return (
     <div className="relative rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className='w-full mb-6 flex justify-end gap-2'>
-      {
-        selectedIds.length === 0 && (
-          actions.includes('add') && (
-            <Link
-              to="./add"
-              className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
-            >
-              Add <FontAwesomeIcon icon={faPlus} />
-            </Link>
-        )
-      )}
+        {
+          selectedIds.length === 0 && (
+            actions.includes('add') && (
+              <Link
+                to="./add"
+                className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
+              >
+                Add <FontAwesomeIcon icon={faPlus} />
+              </Link>
+            )
+          )}
 
-      {selectedIds.length > 1 ? (
-        actions.includes('delete') && (
-          <button
-            className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
-            onClick={handleDelete}
-          >
-            Delete <FontAwesomeIcon icon={faTrash} />
-          </button>
-        )
-      ) : (
-        <>
-          {actions.includes('edit') && (
-            <Link 
-              to='./edit' 
-              onClick={() => addLocalActionId(selectedIds[0])}
-              className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
-            >
-              Edit <FontAwesomeIcon icon={faEdit} />
-            </Link>
-          )}
-          {actions.includes('preview') && (
-            <Link
-              to='./preview'
-              onClick={() => addLocalActionId(selectedIds[0])}
-              className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
-            >
-              Preview <FontAwesomeIcon icon={faEye} />
-            </Link>
-          )}
-          {actions.includes('delete') && (
+        {selectedIds.length > 1 ? (
+          actions.includes('delete') && (
             <button
               className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
               onClick={handleDelete}
             >
               Delete <FontAwesomeIcon icon={faTrash} />
             </button>
-          )}
-        </>)}
+          )
+        ) : (
+          <>
+            {actions.includes('edit') && (
+              <Link
+                to='./edit'
+                onClick={() => addLocalActionId(selectedIds[0])}
+                className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
+              >
+                Edit <FontAwesomeIcon icon={faEdit} />
+              </Link>
+            )}
+            {actions.includes('preview') && (
+              <Link
+                to='./preview'
+                onClick={() => addLocalActionId(selectedIds[0])}
+                className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
+              >
+                Preview <FontAwesomeIcon icon={faEye} />
+              </Link>
+            )}
+            {actions.includes('delete') && (
+              <button
+                className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
+                onClick={handleDelete}
+              >
+                Delete <FontAwesomeIcon icon={faTrash} />
+              </button>
+            )}
+          </>)}
         {
           !!tableData.length && <><button
             onClick={handleExcelDownload}
@@ -243,20 +243,20 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
           <table className="w-max min-w-full table-auto">
             <thead>
               <tr className="w-max bg-gray-2 text-left dark:bg-meta-4">
-                <th className="w-max py-4 px-4 font-medium text-black text-center dark:text-white">
+                {actions.length > 0 && (<th className="w-max py-4 px-4 font-medium text-black text-center dark:text-white">
                   <input
                     type="checkbox"
                     className='w-4 h-4'
                     onChange={(e) => {
                       if (e.target.checked) {
-                        const allIds = currentItems.map(item => item.id);
+                        const allIds = tableData.map(item => item.id);
                         setSelectedIds(allIds);
                       } else {
                         setSelectedIds([]);
                       }
                     }}
                   />
-                </th>
+                </th>)}
                 {columnOrder.length > 0 && columnOrder.map((header, index) => (
                   visibleColumns.includes(header) && (
                     <th
@@ -292,14 +292,16 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
             <tbody>
               {currentItems.map((rowData, rowIndex) => (
                 <tr key={rowIndex}>
-                  <td className="border-b border-[#eee] py-4 px-4 text-center dark:border-strokedark">
-                    <input
-                      type="checkbox"
-                      className='w-4 h-4'
-                      checked={selectedIds.includes(rowData.id)}
-                      onChange={() => handleCheckboxChange(rowData.id)}
-                    />
-                  </td>
+                  {
+                    actions.length > 0 && (<td className="border-b border-[#eee] py-4 px-4 text-center dark:border-strokedark">
+                      <input
+                        type="checkbox"
+                        className='w-4 h-4'
+                        checked={selectedIds.includes(rowData.id)}
+                        onChange={() => handleCheckboxChange(rowData.id)}
+                      />
+                    </td>)
+                  }
                   {columnOrder.map((header, colIndex) => (
                     visibleColumns.includes(header) && (
                       <td
