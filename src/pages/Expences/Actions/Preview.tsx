@@ -9,6 +9,7 @@ import DatePickerTwo from '../../../components/Forms/DatePicker/DatePickerTwo';
 import RepairTypesInput from '../../../components/Forms/RepairTypes';
 import DatePickerOne from '../../../components/Forms/DatePicker/DatePickerOne';
 import ExpenceTypesInput from '../../../components/Forms/ExpenceTypes';
+import ExpenceTypes from '../../ExpenceTypes/ExpenceTypes';
 
 interface Option {
     id: number;
@@ -35,6 +36,8 @@ interface FormData {
 
 interface SelectedData {
     cardNumber: string | null;
+
+    expenceTypes: Option[];
     selectedExpenceTypes: Option[];
 
     selectedVehicle: string;
@@ -49,10 +52,11 @@ interface SelectedData {
 
 const initialSelectedData: SelectedData = {
     cardNumber: '',
+    expenceTypes: [],
     selectedExpenceTypes: [],
 
     selectedVehicle: '',
-    selectedEmployee: '',    
+    selectedEmployee: '',
 
     amount: 0,
     totalPrice: 0,
@@ -69,7 +73,7 @@ const PreviewExpences = () => {
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
     let {
-        selectedEmployee, selectedVehicle, selectedExpenceTypes, date, comment, totalPrice, cardNumber
+        selectedEmployee, selectedVehicle, selectedExpenceTypes, expenceTypes, date, comment, totalPrice, cardNumber
     } = selectedData
 
     useEffect(() => {
@@ -127,42 +131,43 @@ const PreviewExpences = () => {
         getEdit();
     }, []);
 
-    useEffect(() => {
-        console.clear()
-        console.log("EXPENCE edit form values:", JSON.stringify(selectedData));
-    }, [selectedData])
+    const handleSave = async () => {
+        await fetch('https://encodehertz.xyz/api/Expences/Expence/Edit', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedData),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: data,
+                });
+                navigate('/expences')
+            })
+            .catch(error => {
+                console.error('Error sending data:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error,
+                });
+            });
+    }
 
     const handleBack = () => {
         navigate("/expences")
     };
 
-    useEffect(() => {
-        if (!!selectedEmployee) {
-            const fetchExpenceTypes = async () => {
-                try {
-                    const response = await fetch(`https://encodehertz.xyz/api/Expences/Expence/GetExpenceTypesOnChange?expenceId=${actionID}&selectedEmployee=${selectedEmployee}`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const data = await response.json();
-                    setFormOptions(prevData => ({
-                        ...prevData,
-                        expenceTypes: data
-                    }));
-                } catch (error) {
-                    console.error('Error fetching data:', error);
-                }
-            };
-            fetchExpenceTypes();
-        } else {
-            console.error('FRONTDA PROBLEM VAR');
-        }
-    }, [selectedEmployee, token, actionID]);
 
     return (
         <DefaultLayout>
@@ -173,8 +178,18 @@ const PreviewExpences = () => {
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <form>
                                 <div className="p-6.5">
-                                <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                                        <SelectGroupOne text="Employee" options={formOptions.employees || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedEmployee} />
+                                    <div className="mb-3 flex flex-col gap-6 xl:flex-row">
+                                        <div className="w-full xl:w-full">
+                                            <label className="mb-2.5 block text-black dark:text-white">
+                                                Employee
+                                            </label>
+                                            <input
+                                                disabled
+                                                value={selectedEmployee}
+                                                type="text"
+                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                            />
+                                        </div>
                                         <SelectGroupOne text='Vehicle' options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedVehicle} />
                                     </div>
 
@@ -186,7 +201,7 @@ const PreviewExpences = () => {
                                     </div>
 
                                     <div className='mb-6 flex flex-col gap-3'>
-                                    <div className="w-full xl:w-max">
+                                        <div className="w-full xl:w-max">
                                             <label className="mb-2.5 block text-black text-xl font-semibold dark:text-white">
                                                 Total Price
                                             </label>
@@ -198,10 +213,10 @@ const PreviewExpences = () => {
                                             />
                                         </div>
                                         {
-                                            formOptions.expenceTypes.length > 0 && <><label className="mt-3 block text-md font-medium text-black dark:text-white">
+                                            formOptions.expenceTypes?.length > 0 && <><label className="mt-3 block text-md font-medium text-black dark:text-white">
                                                 Expence Types
                                             </label>
-                                                <ExpenceTypesInput expenceOptions={formOptions.expenceTypes || []} disabled={true} setSelectedData={setSelectedData} defaultValue={formOptions.expenceTypes} stateName='selectedExpenceTypes' />
+                                                <ExpenceTypesInput expenceOptions={formOptions.expenceTypes || []} disabled={true} setSelectedData={setSelectedData} defaultValue={expenceTypes} stateName='selectedExpenceTypes' />
                                             </>
                                         }</div>
 
