@@ -67,6 +67,7 @@ const Expences = () => {
               icon: 'success',
             });
             getExpencesList();
+            
           })
           .catch(error => {
             Swal.fire({

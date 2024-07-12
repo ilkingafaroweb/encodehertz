@@ -1,14 +1,43 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import DefaultLayout from '../../layout/DefaultLayout'
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb'
+import TableThree from '../../components/Tables/TableThree'
 
 const AllTransactions = () => {
+
+    const token = localStorage.getItem('token')
+    const [allTransactions, setAllTransactions] = useState([]);
+    const [actions, setActions] = useState([])
+
+    const getExpencesList = () => {
+        fetch('https://encodehertz.xyz/api/Transaction/AllTransactions', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Response didnt success');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setAllTransactions(data);
+            })
+            .catch(error => {
+                console.error('Error', error);
+            });
+    }
+
+    useEffect(() => {
+        getExpencesList()
+    }, [])
+
     return (
         <DefaultLayout>
             <Breadcrumb pageName='All Transactions' prevPageName='Dashboard' prevRoute='/' />
-            <div className='flex justify-center items-center text-3xl h-96'>
-                All Transactions
-            </div>
+            <TableThree data={allTransactions} handleDelete={null} actions={actions}/>
         </DefaultLayout>
     )
 }
