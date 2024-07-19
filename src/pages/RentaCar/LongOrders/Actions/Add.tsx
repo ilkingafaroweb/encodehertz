@@ -147,10 +147,8 @@ const AddRentLong = () => {
                 console.error('Error fetching data:', error);
             }
         };
-
         fetchData();
     }, []);
-
 
     useEffect(() => {
         const outsourceVehicleBoolean = !!selectedOutsourceVehicle;

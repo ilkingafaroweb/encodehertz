@@ -10,7 +10,7 @@ const AllTransactions = () => {
     const [actions, setActions] = useState([])
 
     const getExpencesList = () => {
-        fetch('https://encodehertz.xyz/api/Transaction/AllTransactions', {
+        fetch('https://encodehertz.xyz/api/General/Transaction/AllTransactions', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'

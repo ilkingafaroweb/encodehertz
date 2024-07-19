@@ -40,7 +40,7 @@ interface SelectedData {
     selectedVehicle: string;
     selectedEmployee: string;
 
-    totalPrice: number;
+    totalPrice: number | string;
 
     date: string;
     comment: string;
@@ -75,7 +75,7 @@ const AddExpences = () => {
         });
         setSelectedData(prevState => ({
             ...prevState,
-            totalPrice: newTotalAmount
+            totalPrice: newTotalAmount.toFixed(2)
         }));
     }, [selectedExpenceTypes]);
 
@@ -99,7 +99,6 @@ const AddExpences = () => {
                 console.error('Error fetching data:', error);
             }
         };
-
         fetchData();
     }, []);
 
@@ -107,12 +106,6 @@ const AddExpences = () => {
     useEffect(() => {
         console.log(formOptions);
     },[formOptions])
-
-
-    // useEffect(() => {
-    //     console.clear()
-    //     console.log("Expences add form values :", selectedData);
-    // }, [selectedData])
 
     
     const handleSubmit = async () => {
@@ -148,40 +141,6 @@ const AddExpences = () => {
             });
     }
 
-    const handleChange = (e, inputName) => {
-        let inputValue = e.target.value;
-    
-        if (inputName === "km") {
-            if (/^\d*$/.test(inputValue)) {
-                inputValue = inputValue === '' ? '0' : parseInt(inputValue, 10).toString();
-            } else {
-                return;
-            }
-        } else {
-            if (inputValue === '') {
-                inputValue = '0';
-            } else {
-                if (/^[0-9]*\.?[0-9]*$/.test(inputValue)) {
-                    if (inputValue.includes('.')) {
-                        inputValue = inputValue.replace(/^0+(?=\d)/, '');
-                    } else {
-                        inputValue = parseFloat(inputValue).toString();
-                    }
-                } else {
-                    return;
-                }
-            }
-        }
-    
-        setSelectedData(prevData => {
-            const updatedData = {
-                ...prevData,
-                [inputName]: inputValue
-            };
-            return updatedData;
-        });
-    };
-
     const handleCancel = () => {
         Swal.fire({
             title: 'Are you sure?',
@@ -195,7 +154,6 @@ const AddExpences = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 navigate("/expences")
-                console.log('Changes discarded');
             }
         });
     };

@@ -9,6 +9,10 @@ const Taxi = () => {
   const [taxi, setTaxi] = useState([]);
   const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
+  const removeLocalActionId = () => {
+    localStorage.removeItem("ActionID");
+}
+
   const getTaxiList = () => {
     fetch('https://encodehertz.xyz/api/Taxi/Taxi/List', {
       headers: {
@@ -31,6 +35,7 @@ const Taxi = () => {
   }
 
   useEffect(() => {
+    removeLocalActionId()
     getTaxiList()
   }, [])
 
@@ -82,7 +87,7 @@ const Taxi = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Taxi' prevPageName='Dashboard' prevRoute='/' />
-      <TableThree data={taxi} handleDelete={handleDelete} actions={actions}/>
+      <TableThree data={taxi} handleDelete={handleDelete} actions={actions} />
     </DefaultLayout>
   );
 }

@@ -9,6 +9,10 @@ const Expences = () => {
   const [expences, setExpences] = useState([]);
   const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
+  const removeLocalActionId = () => {
+    localStorage.removeItem("ActionID");
+}
+
   const getExpencesList = () => {
     fetch('https://encodehertz.xyz/api/Expences/Expence/List', {
       headers: {
@@ -31,6 +35,7 @@ const Expences = () => {
   }
 
   useEffect(() => {
+    removeLocalActionId()
     getExpencesList()
   }, [])
 
@@ -67,7 +72,7 @@ const Expences = () => {
               icon: 'success',
             });
             getExpencesList();
-            
+            removeLocalActionId()
           })
           .catch(error => {
             Swal.fire({

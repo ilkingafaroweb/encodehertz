@@ -79,7 +79,9 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
     setTableData(sortableData);
   }, [sortConfig, data]);
 
+
   /* Column reordering */
+
   const handleDrop = (e: any, targetColumnIndex: number) => {
     const sourceColumnIndex = e.dataTransfer.getData('columnIndex');
     const newColumnOrder = [...columnOrder];
@@ -89,6 +91,7 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
   };
 
   /* Column show/hide func */
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (columnDropRef.current && !columnDropRef.current.contains(event.target as Node)) {
@@ -117,7 +120,6 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'table_data.xlsx');
   };
-
 
   /* Add Local Storage Action ID */
 
@@ -160,46 +162,58 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                 Add <FontAwesomeIcon icon={faPlus} />
               </Link>
             )
-          )}
-
-        {selectedIds.length > 1 ? (
-          actions.includes('delete') && (
-            <button
-              className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
-              onClick={handleDelete}
-            >
-              Delete <FontAwesomeIcon icon={faTrash} />
-            </button>
           )
-        ) : (
-          <>
-            {actions.includes('edit') && (
-              <Link
-                to='./edit'
-                onClick={() => addLocalActionId(selectedIds[0])}
-                className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
-              >
-                Edit <FontAwesomeIcon icon={faEdit} />
-              </Link>
-            )}
-            {actions.includes('preview') && (
-              <Link
-                to='./preview'
-                onClick={() => addLocalActionId(selectedIds[0])}
-                className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
-              >
-                Preview <FontAwesomeIcon icon={faEye} />
-              </Link>
-            )}
-            {actions.includes('delete') && (
+        }
+        {
+          selectedIds.length === 1 && (
+            <>
+              {actions.includes('edit') && (
+                <Link
+                  to="./edit"
+                  onClick={() => addLocalActionId(selectedIds[0])}
+                  className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
+                >
+                  Edit <FontAwesomeIcon icon={faEdit} />
+                </Link>
+              )}
+              {actions.includes('preview') && (
+                <Link
+                  to="./preview"
+                  onClick={() => addLocalActionId(selectedIds[0])}
+                  className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
+                >
+                  Preview <FontAwesomeIcon icon={faEye} />
+                </Link>
+              )}
+              {actions.includes('delete') && (
+                <button
+                  className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
+                  onClick={() => {
+                    handleDelete();
+                    setSelectedIds([]);
+                  }}
+                >
+                  Delete <FontAwesomeIcon icon={faTrash} />
+                </button>
+              )}
+            </>
+          )
+        }
+        {
+          selectedIds.length > 1 && (
+            actions.includes('delete') && (
               <button
                 className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
-                onClick={handleDelete}
+                onClick={() => {
+                  handleDelete();
+                  setSelectedIds([]);
+                }}
               >
                 Delete <FontAwesomeIcon icon={faTrash} />
               </button>
-            )}
-          </>)}
+            )
+          )
+        }
         {
           !!tableData.length && <><button
             onClick={handleExcelDownload}
@@ -286,7 +300,6 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                     </th>
                   )
                 ))}
-                {/* <th className='w-max py-4 px-4 font-medium text-black dark:text-white text-center'>ACTIONS</th> */}
               </tr>
             </thead>
             <tbody>
@@ -314,23 +327,6 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                       </td>
                     )
                   ))}
-                  {/* <td className='flex justify-center items-center max-w-max min-w-full gap-2 border-b text-boxdark-2 border-[#eee] py-5 px-4 dark:border-strokedark dark:text-white'>
-                    <Tooltip placement="top" title="Preview">
-                      <Link to="./preview" onClick={() => addLocalActionId(rowData.id)} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                    </Tooltip>
-                    <Tooltip placement="top" title="Edit">
-                      <Link to="./edit" onClick={() => addLocalActionId(rowData.id)} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </Link>
-                    </Tooltip>
-                    <Tooltip placement='top' title="Delete">
-                      <button onClick={() => { addLocalActionId(rowData.id); handleDelete(); }} className="flex justify-center items-center gap-3 w-12 rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-boxdark-2 focus:outline-none hover:text-primary">
-                        <FontAwesomeIcon icon={faTrash} />
-                      </button>
-                    </Tooltip>
-                  </td> */}
                 </tr>
               ))}
             </tbody>
@@ -348,7 +344,6 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
           onPageChange={handlePageChange}
         />
       }
-
     </div>
   );
 };
