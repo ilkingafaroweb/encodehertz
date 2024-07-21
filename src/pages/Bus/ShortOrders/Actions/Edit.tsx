@@ -6,6 +6,7 @@ import DefaultLayout from '../../../../layout/DefaultLayout';
 import MultiSelect from '../../../../components/Forms/MultiSelect';
 import Swal from 'sweetalert2';
 import DatePickerTwo from '../../../../components/Forms/DatePicker/DatePickerTwo';
+import FormCheckbox from '../../../../components/Forms/Checkbox/FormCheckbox';
 
 interface FormData {
   address: string;
@@ -113,6 +114,7 @@ const initialSelectedData: SelectedData = {
 const EditBusShort = () => {
   const navigate = useNavigate()
   const token = localStorage.getItem('token')
+  const [showAllVehicles, setShowAllVehicles] = useState(false)
   const [formOptions, setFormOptions] = useState<FormData | null>(null);
   const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
@@ -296,33 +298,33 @@ const EditBusShort = () => {
     navigate("/bus/short-orders")
   }
 
-  //   Vehicles list
+  // Vehicles list
 
   useEffect(() => {
     if (!!selectedVehicleClass) {
-      fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
+        fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${showAllVehicles}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
         })
-        .then(data => {
-          setFormOptions(prevData => ({
-            ...prevData,
-            vehicles: data
-          }));
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setFormOptions(prevData => ({
+                    ...prevData,
+                    vehicles: data
+                }));
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
     }
-  }, [selectedVehicleClass, selectedOutsourceVehicle]);
+}, [selectedVehicleClass, selectedOutsourceVehicle, showAllVehicles]);
 
 
   const handleCancel = () => {
@@ -638,6 +640,7 @@ useEffect(() => {
                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                       <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedOutsourceVehicle ? "true" : ""} />
                       <SelectGroupOne text="Vehicle Class" options={formOptions.vehicleClasses || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicleClasses} defaultValue={selectedVehicleClass} />
+                      <FormCheckbox label="Show all vehicles" value={showAllVehicles} set={setShowAllVehicles} />
                       <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue={selectedVehicle} />
                     </div>
                   }

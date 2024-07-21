@@ -98,6 +98,7 @@ const initialSelectedData: SelectedData = {
 const AddRentShort = () => {
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
+    const [showAllVehicles, setShowAllVehicles] = useState(false)
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
@@ -129,6 +130,9 @@ const AddRentShort = () => {
         selectedExtraCharges
     } = selectedData
 
+    useEffect(() => {
+        console.log(showAllVehicles);
+    }, [showAllVehicles])
     
     // Form options 
 
@@ -209,7 +213,7 @@ const AddRentShort = () => {
 
     const getVehicleList = async () => {
         if (!!selectedVehicleGroup) {
-            await fetch(`https://encodehertz.xyz/api/RentCar/Short/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}`, {
+            await fetch(`https://encodehertz.xyz/api/RentCar/Short/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${showAllVehicles}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -235,7 +239,7 @@ const AddRentShort = () => {
 
     useEffect(() => {
         getVehicleList()
-    }, [selectedVehicleGroup, selectedOutsourceVehicle]);
+    }, [selectedVehicleGroup, selectedOutsourceVehicle, showAllVehicles]);
 
 
     // Extra charges
@@ -344,7 +348,7 @@ const AddRentShort = () => {
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue="" />
                                         <SelectGroupOne text="Vehicle Group" options={formOptions.vehicleGroups || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicleGroups} defaultValue='' />
-                                        <FormCheckbox label="Show all vehicles"/>
+                                        <FormCheckbox label="Show all vehicles" value={showAllVehicles} set={setShowAllVehicles} />
                                         <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue='' />
                                     </div>
 

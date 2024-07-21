@@ -6,6 +6,7 @@ import DefaultLayout from '../../../../layout/DefaultLayout';
 import MultiSelect from '../../../../components/Forms/MultiSelect';
 import Swal from 'sweetalert2';
 import DatePickerTwo from '../../../../components/Forms/DatePicker/DatePickerTwo';
+import FormCheckbox from '../../../../components/Forms/Checkbox/FormCheckbox';
 
 interface FormData {
     cardNumber: string | null;
@@ -106,6 +107,7 @@ const initialSelectedData: SelectedData = {
 const AddBusShort = () => {
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
+    const [showAllVehicles, setShowAllVehicles] = useState(false)
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
@@ -268,7 +270,7 @@ const AddBusShort = () => {
 
     useEffect(() => {
         if (!!selectedVehicleClass) {
-            fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}`, {
+            fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${showAllVehicles}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -290,7 +292,7 @@ const AddBusShort = () => {
                     console.error('Error fetching data:', error);
                 });
         }
-    }, [selectedVehicleClass, selectedOutsourceVehicle]);
+    }, [selectedVehicleClass, selectedOutsourceVehicle, showAllVehicles]);
 
     // Form options 
 
@@ -520,6 +522,7 @@ const AddBusShort = () => {
                                         <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                             <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
                                             <SelectGroupOne text="Vehicle Class" options={formOptions.vehicleClasses || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicleClasses} defaultValue='' />
+                                            <FormCheckbox label="Show all vehicles" value={showAllVehicles} set={setShowAllVehicles} />
                                             <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue='' />
                                         </div>
                                     }

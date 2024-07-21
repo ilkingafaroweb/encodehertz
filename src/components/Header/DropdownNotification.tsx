@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 const DropdownNotification = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifying, setNotifying] = useState(true);
+  const [notificationCount, setNotificationCount] = useState(3);
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
@@ -40,18 +41,23 @@ const DropdownNotification = () => {
         ref={trigger}
         onClick={() => {
           setNotifying(false);
+          setNotificationCount(0); 
           setDropdownOpen(!dropdownOpen);
         }}
         to="#"
         className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke bg-gray hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
       >
         <span
-          className={`absolute -top-0.5 right-0 z-1 h-2 w-2 rounded-full bg-meta-1 ${
-            notifying === false ? 'hidden' : 'inline'
-          }`}
+          className={`absolute -top-2 -right-2 z-1 h-4 w-4 rounded-full bg-meta-1 ${notifying === false ? 'hidden' : 'inline'
+            }`}
+          // onClick={handleNotificationClick}
         >
           <span className="absolute -z-1 inline-flex h-full w-full animate-ping rounded-full bg-meta-1 opacity-75"></span>
+          {notifying && notificationCount > 0 && (
+            <span className="relative z-2 text-sm -top-1 -right-1 text-white">{notificationCount}</span>
+          )}
         </span>
+
 
         <svg
           className="fill-current duration-300 ease-in-out"
