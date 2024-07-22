@@ -6,6 +6,7 @@ import DefaultLayout from '../../../../layout/DefaultLayout';
 import MultiSelect from '../../../../components/Forms/MultiSelect';
 import Swal from 'sweetalert2';
 import DatePickerTwo from '../../../../components/Forms/DatePicker/DatePickerTwo';
+import FormCheckbox from '../../../../components/Forms/Checkbox/FormCheckbox';
 
 interface FormData {
     cardNumber: string | null;
@@ -36,6 +37,7 @@ interface FormData {
     priceToSupplier: number;
     supplierPaymentMethods: { value: string; text: string }[];
     selectedSupplierPaymentMethod: string | null;
+    isAllVehiclesSelected: boolean;
     extraChargePanel: any[];
 }
 
@@ -49,6 +51,7 @@ interface SelectedData {
     selectedServiceType: string;
     selectedCustomerPaymentMethod: string;
     selectedOutsourceVehicle: string | boolean;
+    selectedSource: string;
 
     selectedVehicleGroup: string;
     // selectedVehicleClass: string;
@@ -66,6 +69,8 @@ interface SelectedData {
     requestedPerson: string;
     comment: string;
 
+    isAllVehiclesSelected: boolean;
+
     extraChargePanel: []
     selectedExtraCharges: []
 }
@@ -81,6 +86,7 @@ const initialSelectedData: SelectedData = {
     selectedCustomerPaymentMethod: "",
     selectedOutsourceVehicle: "",
     selectedVehicleGroup: "",
+    selectedSource: "",
 
     // selectedVehicleClass: "",
 
@@ -97,6 +103,8 @@ const initialSelectedData: SelectedData = {
 
     requestedPerson: "",
     comment: "",
+
+    isAllVehiclesSelected: false,
 
     extraChargePanel: [],
     selectedExtraCharges: []
@@ -140,7 +148,7 @@ const PreviewRentShort = () => {
             }
             const data = await response.json();
             setSelectedData(data as SelectedData);
-            console.log("Preview form data : ", selectedData);
+            console.log("Edit form data : ", selectedData);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -166,6 +174,7 @@ const PreviewRentShort = () => {
         selectedServiceType,
         selectedCustomerPaymentMethod,
         selectedOutsourceVehicle,
+        selectedSource,
 
         selectedVehicleGroup,
         // selectedVehicleClass,
@@ -184,6 +193,8 @@ const PreviewRentShort = () => {
         requestedPerson,
         comment,
 
+        isAllVehiclesSelected,
+
         extraChargePanel,
         selectedExtraCharges
     } = selectedData
@@ -199,11 +210,16 @@ const PreviewRentShort = () => {
     }, [selectedOutsourceVehicle]);
 
 
+    useEffect(() => {
+        console.clear()
+        console.log("Rentacar short orders add form values:", selectedData);
+    }, [selectedData])
+
     // Vehicles list
 
     const getVehicleList = async () => {
         if (!!selectedVehicleGroup) {
-            await fetch(`https://encodehertz.xyz/api/RentCar/Short/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}`, {
+            await fetch(`https://encodehertz.xyz/api/RentCar/Short/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -229,44 +245,14 @@ const PreviewRentShort = () => {
 
     useEffect(() => {
         getVehicleList()
-    }, [selectedVehicleGroup, selectedOutsourceVehicle]);
+    }, [selectedVehicleGroup, selectedOutsourceVehicle, isAllVehiclesSelected]);
 
-
-    // Extra charges
-
-    const getExtraCharges = async () => {
-        setFormOptions(prevData => ({
-            ...prevData,
-            extraChargePanel: []
+    const handleCheckboxChange = (value: boolean) => {
+        setSelectedData((prevState) => ({
+          ...prevState,
+          isAllVehiclesSelected: value,
         }));
-        if (!!selectedCustomer && !!selectedVehicleGroup) {
-            await fetch(`https://encodehertz.xyz/api/RentCar/Short/GetExtraCharges?customerCode=${selectedCustomer}&vehicleGroup=${selectedVehicleGroup}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setFormOptions(prevData => ({
-                        ...prevData,
-                        extraChargePanel: data
-                    }));
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        }
-    }
-
-    useEffect(() => {
-        getExtraCharges()
-    }, [selectedCustomer, selectedVehicleGroup])
+    };
 
 
     // Form options 
@@ -315,7 +301,7 @@ const PreviewRentShort = () => {
                                                 Customer Name
                                             </label>
                                             <input
-                                                disabled={true}
+                                                disabled
                                                 type="text"
                                                 onChange={(e) => setSelectedData(prevData => ({
                                                     ...prevData,
@@ -335,7 +321,7 @@ const PreviewRentShort = () => {
                                                 Driver
                                             </label>
                                             <input
-                                                disabled={true}
+                                                disabled
                                                 onChange={(e) => setSelectedData(prevData => ({
                                                     ...prevData,
                                                     driver: e.target.value
@@ -356,6 +342,7 @@ const PreviewRentShort = () => {
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedOutsourceVehicle ? "true" : ""} />
                                         <SelectGroupOne text="Vehicle Group" options={formOptions.vehicleGroups || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedVehicleGroup} />
+                                        <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange}  disabled={true}/>
                                         <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedVehicle} />
                                     </div>
 
@@ -382,9 +369,10 @@ const PreviewRentShort = () => {
                                         </div>
                                     </div>
                                     {
-                                        selectedData.selectedOutsourceVehicle == true && <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                            <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedSupplier} />
-                                            <SelectGroupOne text="Supplier Payment Method" options={formOptions.supplierPaymentMethods || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedSupplierPaymentMethod} />
+                                        selectedData.selectedOutsourceVehicle == true &&
+                                        <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
+                                            <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={!formOptions.suppliers} defaultValue={selectedSupplier} />
+                                            <SelectGroupOne text="Supplier Payment Method" options={formOptions.supplierPaymentMethods || []} setSelectedData={setSelectedData} disabled={!formOptions.supplierPaymentMethods} defaultValue={selectedSupplierPaymentMethod} />
                                             <div className="w-full xl:w-full">
                                                 <label className="mb-2.5 block text-black dark:text-white">
                                                     Price To Supplier
@@ -412,7 +400,7 @@ const PreviewRentShort = () => {
                                                 Requested Person
                                             </label>
                                             <input
-                                                disabled={true}
+                                                disabled
                                                 value={requestedPerson}
                                                 onChange={(e) => setSelectedData(prevData => ({
                                                     ...prevData,
@@ -423,9 +411,7 @@ const PreviewRentShort = () => {
                                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                             />
                                         </div>
-                                        <div className="w-full hidden xl:w-full xl:block">
-
-                                        </div>
+                                        <SelectGroupOne text="Source" options={formOptions.sources} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedSource} />
                                     </div>
                                     {
                                         formOptions.extraChargePanel?.length !== 0 && <div className='mb-6 flex flex-col gap-3'>
@@ -441,7 +427,7 @@ const PreviewRentShort = () => {
                                                 Comment
                                             </label>
                                             <textarea
-                                                disabled={true}
+                                                disabled
                                                 value={comment}
                                                 onChange={(e) => setSelectedData(prevData => ({
                                                     ...prevData,
@@ -454,7 +440,7 @@ const PreviewRentShort = () => {
                                         </div>
                                     </div>
                                     <div className='flex gap-3'>
-                                        <button type='button' onClick={handleBack} className="flex w-full justify-center rounded bg-danger dark:bg-danger p-3 font-medium text-gray hover:bg-opacity-90">
+                                        <button type='button' onClick={handleBack} className="flex w-full justify-center rounded bg-meta-1 p-3 font-medium text-gray hover:bg-opacity-90">
                                             Back
                                         </button>
                                     </div>

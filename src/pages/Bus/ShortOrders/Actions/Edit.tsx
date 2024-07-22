@@ -37,6 +37,7 @@ interface FormData {
   selectedVehicleClass: string | null;
   vehicles: [] | null;
   selectedVehicle: string | null;
+  isAllVehiclesSelected: boolean;
   priceToSupplier: number;
   supplierPaymentMethods: { value: string; text: string }[];
   selectedSupplierPaymentMethod: string | null;
@@ -61,6 +62,7 @@ interface SelectedData {
   selectedOutsourceVehicle: boolean | string;
   selectedVehicleClass: string;
   selectedVehicle: string;
+  isAllVehiclesSelected: boolean;
   selectedSupplierPaymentMethod: string;
   selectedDriver: string;
 
@@ -94,6 +96,7 @@ const initialSelectedData: SelectedData = {
   selectedOutsourceVehicle: '',
   selectedVehicleClass: "",
   selectedVehicle: "",
+  isAllVehiclesSelected: false,
   selectedSupplierPaymentMethod: "",
   selectedDriver: "",
 
@@ -185,6 +188,7 @@ const EditBusShort = () => {
     selectedOutsourceVehicle,
     selectedVehicleClass,
     selectedVehicle,
+    isAllVehiclesSelected,
     selectedDriver,
     selectedSupplierPaymentMethod,
 
@@ -300,31 +304,43 @@ const EditBusShort = () => {
 
   // Vehicles list
 
-  useEffect(() => {
+  const getVehicleList = async () => {
     if (!!selectedVehicleClass) {
-        fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${showAllVehicles}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
+      await fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleGroup=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                setFormOptions(prevData => ({
-                    ...prevData,
-                    vehicles: data
-                }));
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
+        .then(data => {
+          setFormOptions(prevData => ({
+            ...prevData,
+            vehicles: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
     }
-}, [selectedVehicleClass, selectedOutsourceVehicle, showAllVehicles]);
+  }
+
+  useEffect(() => {
+    getVehicleList()
+  }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected]);
+
+  const handleCheckboxChange = (value: boolean) => {
+    setSelectedData((prevState) => ({
+      ...prevState,
+      isAllVehiclesSelected: value,
+    }));
+  };
+
 
 
   const handleCancel = () => {
@@ -345,87 +361,87 @@ const EditBusShort = () => {
     });
   };
 
- // Customer monthly payment default
+  // Customer monthly payment default
 
- const getCustomerMonthlyPayment = async () => {
-  if (selectedServiceType && selectedCustomer && selectedServiceTypeDetail && selectedVehicleClass) {
+  const getCustomerMonthlyPayment = async () => {
+    if (selectedServiceType && selectedCustomer && selectedServiceTypeDetail && selectedVehicleClass) {
       let apiUrl = `https://encodehertz.xyz/api/Short/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
 
       setSelectedData(prevData => ({
-          ...prevData,
-          priceToCustomer: 0
+        ...prevData,
+        priceToCustomer: 0
       }));
 
       await fetch(apiUrl, {
-          headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-          },
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
       })
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
-              }
-              return response.json();
-          })
-          .then(data => {
-              setSelectedData(prevData => ({
-                  ...prevData,
-                  priceToCustomer: data
-              }));
-          })
-          .catch(error => {
-              console.error('Error fetching data:', error);
-          });
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setSelectedData(prevData => ({
+            ...prevData,
+            priceToCustomer: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
   }
-}
 
-useEffect(() => {
-  return () => {
+  useEffect(() => {
+    return () => {
       getCustomerMonthlyPayment()
-  }
-}, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedServiceTypeDetail]);
+    }
+  }, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedServiceTypeDetail]);
 
-// Outsource monthly payment default
+  // Outsource monthly payment default
 
-const getSupplierMonthlyPayment = async () => {
-  if (selectedServiceType && selectedSupplier && selectedServiceTypeDetail && selectedVehicleClass) {
+  const getSupplierMonthlyPayment = async () => {
+    if (selectedServiceType && selectedSupplier && selectedServiceTypeDetail && selectedVehicleClass) {
       let apiUrl = `https://encodehertz.xyz/api/Short/GetSupplierMonthlyPaymentCWD?selectedSupplier=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
 
       setSelectedData(prevData => ({
-          ...prevData,
-          priceToSupplier: 0
+        ...prevData,
+        priceToSupplier: 0
       }));
 
       await fetch(apiUrl, {
-          headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-          }
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       })
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
-              }
-              return response.json();
-          })
-          .then(data => {
-              setSelectedData(prevData => ({
-                  ...prevData,
-                  priceToSupplier: data
-              }));
-          })
-          .catch(error => {
-              console.error('Error fetching data:', error);
-          });
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setSelectedData(prevData => ({
+            ...prevData,
+            priceToSupplier: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
   }
-}
 
-useEffect(() => {
- return () => {
-  getSupplierMonthlyPayment()
- }
-}, [selectedServiceType, selectedServiceTypeDetail, selectedSupplier, selectedVehicleClass]);
+  useEffect(() => {
+    return () => {
+      getSupplierMonthlyPayment()
+    }
+  }, [selectedServiceType, selectedServiceTypeDetail, selectedSupplier, selectedVehicleClass]);
 
 
   // Extra Charges 
@@ -640,7 +656,7 @@ useEffect(() => {
                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                       <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedOutsourceVehicle ? "true" : ""} />
                       <SelectGroupOne text="Vehicle Class" options={formOptions.vehicleClasses || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicleClasses} defaultValue={selectedVehicleClass} />
-                      <FormCheckbox label="Show all vehicles" value={showAllVehicles} set={setShowAllVehicles} />
+                      <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false}/>
                       <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue={selectedVehicle} />
                     </div>
                   }

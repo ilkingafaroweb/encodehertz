@@ -35,6 +35,7 @@ interface FormData {
     selectedVehicleClass: string | null;
     vehicles: [] | null;
     selectedVehicle: string | null;
+    isAllVehiclesSelected: boolean;
     priceToSupplier: number;
     supplierPaymentMethods: { value: string; text: string }[];
     selectedSupplierPaymentMethod: string | null;
@@ -57,6 +58,7 @@ interface SelectedData {
     selectedOutsourceVehicle: boolean | string;
     selectedVehicleClass: string;
     selectedVehicle: string;
+    isAllVehiclesSelected: boolean;
     selectedSupplierPaymentMethod: string;
     selectedDriver: string;
 
@@ -88,6 +90,7 @@ const initialSelectedData: SelectedData = {
     selectedOutsourceVehicle: '',
     selectedVehicleClass: "",
     selectedVehicle: "",
+    isAllVehiclesSelected: false,
     selectedSupplierPaymentMethod: "",
     selectedDriver: "",
 
@@ -125,6 +128,7 @@ const AddBusShort = () => {
         selectedOutsourceVehicle,
         selectedVehicleClass,
         selectedVehicle,
+        isAllVehiclesSelected,
         selectedDriver,
         selectedSupplierPaymentMethod,
 
@@ -268,9 +272,9 @@ const AddBusShort = () => {
 
     // Vehicles list
 
-    useEffect(() => {
+    const getVehicleList = async () => {
         if (!!selectedVehicleClass) {
-            fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${showAllVehicles}`, {
+            await fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleGroup=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -292,7 +296,18 @@ const AddBusShort = () => {
                     console.error('Error fetching data:', error);
                 });
         }
-    }, [selectedVehicleClass, selectedOutsourceVehicle, showAllVehicles]);
+    }
+
+    useEffect(() => {
+        getVehicleList()
+    }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected]);
+
+    const handleCheckboxChange = (value: boolean) => {
+        setSelectedData((prevState) => ({
+            ...prevState,
+            isAllVehiclesSelected: value,
+        }));
+    };
 
     // Form options 
 
@@ -522,7 +537,7 @@ const AddBusShort = () => {
                                         <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                             <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
                                             <SelectGroupOne text="Vehicle Class" options={formOptions.vehicleClasses || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicleClasses} defaultValue='' />
-                                            <FormCheckbox label="Show all vehicles" value={showAllVehicles} set={setShowAllVehicles} />
+                                            <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false}/>
                                             <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue='' />
                                         </div>
                                     }

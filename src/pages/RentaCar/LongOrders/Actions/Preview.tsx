@@ -6,6 +6,7 @@ import DefaultLayout from '../../../../layout/DefaultLayout';
 import MultiSelect from '../../../../components/Forms/MultiSelect';
 import Swal from 'sweetalert2';
 import DatePickerTwo from '../../../../components/Forms/DatePicker/DatePickerTwo';
+import FormCheckbox from '../../../../components/Forms/Checkbox/FormCheckbox';
 
 interface FormData {
     cardNumber: string | null;
@@ -36,6 +37,7 @@ interface FormData {
     priceToSupplier: number;
     supplierPaymentMethods: { value: string; text: string }[];
     selectedSupplierPaymentMethod: string | null;
+    isAllVehiclesSelected: boolean;
     extraChargePanel: any[];
 }
 
@@ -65,6 +67,8 @@ interface SelectedData {
 
     requestedPerson: string;
     comment: string;
+
+    isAllVehiclesSelected: boolean;
 
     extraChargePanel: []
     selectedExtraCharges: []
@@ -97,6 +101,8 @@ const initialSelectedData: SelectedData = {
 
     requestedPerson: "",
     comment: "",
+
+    isAllVehiclesSelected: false,
 
     extraChargePanel: [],
     selectedExtraCharges: []
@@ -184,6 +190,8 @@ const PreviewRentLong = () => {
         requestedPerson,
         comment,
 
+        isAllVehiclesSelected,
+
         extraChargePanel,
         selectedExtraCharges
     } = selectedData
@@ -232,7 +240,7 @@ const PreviewRentLong = () => {
 
     const getVehicleList = async () => {
         if (!!selectedVehicleGroup) {
-            await fetch(`https://encodehertz.xyz/api/RentCar/Long/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}`, {
+            await fetch(`https://encodehertz.xyz/api/RentCar/Long/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -258,7 +266,14 @@ const PreviewRentLong = () => {
 
     useEffect(() => {
         getVehicleList()
-    }, [selectedVehicleGroup, selectedOutsourceVehicle]);
+    }, [selectedVehicleGroup, selectedOutsourceVehicle, isAllVehiclesSelected]);
+
+    const handleCheckboxChange = (value: boolean) => {
+        setSelectedData((prevState) => ({
+          ...prevState,
+          isAllVehiclesSelected: value,
+        }));
+    };
 
 
     // Extra charges
@@ -355,6 +370,7 @@ const PreviewRentLong = () => {
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedOutsourceVehicle ? "true" : ""} />
                                         <SelectGroupOne text="Vehicle Group" options={formOptions.vehicleGroups || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedVehicleGroup} />
+                                        <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange}  disabled={true}/>
                                         <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedVehicle} />
                                     </div>
 

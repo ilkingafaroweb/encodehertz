@@ -36,6 +36,7 @@ interface FormData {
   selectedVehicleClass: string | null;
   vehicles: [] | null;
   selectedVehicle: string | null;
+  isAllVehiclesSelected: boolean;
   priceToSupplier: number;
   supplierPaymentMethods: { value: string; text: string }[];
   selectedSupplierPaymentMethod: string | null;
@@ -60,6 +61,7 @@ interface SelectedData {
   selectedOutsourceVehicle: boolean | string;
   selectedVehicleClass: string;
   selectedVehicle: string;
+  isAllVehiclesSelected: boolean;
   selectedSupplierPaymentMethod: string;
   selectedDriver: string;
 
@@ -93,6 +95,7 @@ const initialSelectedData: SelectedData = {
   selectedOutsourceVehicle: '',
   selectedVehicleClass: "",
   selectedVehicle: "",
+  isAllVehiclesSelected: false,
   selectedSupplierPaymentMethod: "",
   selectedDriver: "",
 
@@ -179,6 +182,7 @@ const PreviewBusShort = () => {
     selectedOutsourceVehicle,
     selectedVehicleClass,
     selectedVehicle,
+    isAllVehiclesSelected,
     selectedDriver,
     selectedSupplierPaymentMethod,
 
@@ -196,11 +200,11 @@ const PreviewBusShort = () => {
     selectedExtraCharges
   } = selectedData
 
-  //   Vehicles list
+  // Vehicles list
 
-  useEffect(() => {
+  const getVehicleList = async () => {
     if (!!selectedVehicleClass) {
-      fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}`, {
+      await fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleGroup=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -222,7 +226,18 @@ const PreviewBusShort = () => {
           console.error('Error fetching data:', error);
         });
     }
-  }, [selectedVehicleClass, selectedOutsourceVehicle]);
+  }
+
+  useEffect(() => {
+    getVehicleList()
+  }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected]);
+
+  const handleCheckboxChange = (value: boolean) => {
+    setSelectedData((prevState) => ({
+      ...prevState,
+      isAllVehiclesSelected: value,
+    }));
+  };
 
   useEffect(() => {
     if (selectedServiceType) {

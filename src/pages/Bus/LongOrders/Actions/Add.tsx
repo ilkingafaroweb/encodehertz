@@ -6,6 +6,7 @@ import DefaultLayout from '../../../../layout/DefaultLayout';
 import DatePickerOne from '../../../../components/Forms/DatePicker/DatePickerOne';
 import MultiSelect from '../../../../components/Forms/MultiSelect';
 import Swal from 'sweetalert2';
+import FormCheckbox from '../../../../components/Forms/Checkbox/FormCheckbox';
 
 interface FormData {
   cardNumber: string | null;
@@ -29,6 +30,7 @@ interface FormData {
   vehicleClasses: { value: string; text: string }[];
   selectedVehicleClass: string | null;
   vehicles: [] | null;
+  isAllVehiclesSelected: boolean;
   selectedVehicle: string | null;
   priceToSupplier: number;
   supplierPaymentMethods: { value: string; text: string }[];
@@ -60,6 +62,8 @@ interface SelectedData {
   requestedPerson: string;
   comment: string;
 
+  isAllVehiclesSelected: boolean;
+
   extraChargePanel: [];
   selectedExtraCharges: []
 }
@@ -85,6 +89,8 @@ const initialSelectedData: SelectedData = {
 
   requestedPerson: "",
   comment: "",
+
+  isAllVehiclesSelected: false,
 
   extraChargePanel: [],
   selectedExtraCharges: []
@@ -117,6 +123,8 @@ const AddBusLong = () => {
 
     requestedPerson,
     comment,
+
+    isAllVehiclesSelected,
 
     extraChargePanel,
     selectedExtraCharges
@@ -263,7 +271,7 @@ const AddBusLong = () => {
 
   const getVehicleList = async () => {
     if (!!selectedVehicleClass) {
-      await fetch(`https://encodehertz.xyz/api/Long/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}`, {
+      await fetch(`https://encodehertz.xyz/api/Long/GetVehicles?vehicleGroup=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -289,9 +297,16 @@ const AddBusLong = () => {
 
   useEffect(() => {
     getVehicleList()
-  }, [selectedVehicleClass, selectedOutsourceVehicle]);
+  }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected]);
 
+  const handleCheckboxChange = (value: boolean) => {
+    setSelectedData((prevState) => ({
+      ...prevState,
+      isAllVehiclesSelected: value,
+    }));
+  };
 
+  
   // Extra charges
 
   const getExtraCharges = async () => {
@@ -455,6 +470,7 @@ const AddBusLong = () => {
                     selectedData.selectedServiceType === "M-000003" && <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                       <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue="" />
                       <SelectGroupOne text="Vehicle Class" options={formOptions.vehicleClasses || []} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
+                      <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false}/>
                       <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={formOptions.vehicles ? false : true} defaultValue='' />
                     </div>
                   }
