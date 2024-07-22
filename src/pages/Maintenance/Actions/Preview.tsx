@@ -29,7 +29,7 @@ interface SelectedData {
     endDateTime: string;
 
     comment: string;
-    totalAmount: number;
+    totalAmount: number | string;
     km: number;
 }
 

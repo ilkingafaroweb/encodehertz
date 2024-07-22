@@ -30,7 +30,7 @@ interface SelectedData {
     endDateTime: string;
 
     comment: string;
-    totalAmount: number;
+    totalAmount: number | string;
     km: number;
 }
 
@@ -65,7 +65,7 @@ const AddMaintenance = () => {
         });
         setSelectedData(prevState => ({
             ...prevState,
-            totalAmount: newTotalAmount
+            totalAmount: newTotalAmount.toFixed(2)
         }));
     }, [selectedRepairTypes]);
     

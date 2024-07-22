@@ -44,7 +44,7 @@ interface SelectedData {
     selectedEmployee: string;
 
     amount: number;
-    totalPrice: number;
+    totalPrice: number | string;
 
     date: string;
     comment: string;
@@ -83,7 +83,7 @@ const PreviewExpences = () => {
         });
         setSelectedData(prevState => ({
             ...prevState,
-            totalPrice: newTotalAmount
+            totalPrice: newTotalAmount.toFixed(2)
         }));
     }, [selectedExpenceTypes]);
 
