@@ -185,6 +185,15 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                   Preview <FontAwesomeIcon icon={faEye} />
                 </Link>
               )}
+              {actions.includes('duplicate') && (
+                <Link
+                  to="./duplicate"
+                  onClick={() => addLocalActionId(selectedIds[0])}
+                  className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
+                >
+                  Duplicate <FontAwesomeIcon icon={faCopy} />
+                </Link>
+              )}
               {actions.includes('delete') && (
                 <button
                   className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"

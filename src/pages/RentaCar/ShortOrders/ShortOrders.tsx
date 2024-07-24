@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 const RentShortOrders = () => {
   const [carShort, setCarShort] = useState([]);
   const [update, setUpdate] = useState(false); 
-  const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
+  const [actions, setActions] = useState(['add', 'edit', 'preview','duplicate', 'delete'])
 
   const getCarShortList = async () => {
     const token = await localStorage.getItem("token");
@@ -36,7 +36,6 @@ const RentShortOrders = () => {
     getCarShortList() 
   }, [])
 
-  
 
   const handleDelete = async () => {
     const actionID = localStorage.getItem('ActionID');

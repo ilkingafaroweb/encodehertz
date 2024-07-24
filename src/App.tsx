@@ -60,6 +60,9 @@ import AddExpences from './pages/Expences/Actions/Add';
 import EditExpences from './pages/Expences/Actions/Edit';
 import PreviewExpences from './pages/Expences/Actions/Preview';
 import AllTransactions from './pages/AllTransactions/AllTransactions';
+import DuplicateBusShort from './pages/Bus/ShortOrders/Actions/Duplicate';
+import DuplicateRentLong from './pages/RentaCar/LongOrders/Actions/Duplicate';
+import DuplicateRentShort from './pages/RentaCar/ShortOrders/Actions/Duplicate';
 
 function App() {
   const [userToken, setUserToken] = useState(localStorage.getItem("userId") || '')
@@ -150,12 +153,11 @@ function App() {
         path="/bus/long-orders/duplicate"
         element={
           <>
-            <PageTitle title="Add Bus Long Orders | ENCODE" />
+            <PageTitle title="Duplicate Bus Long Orders | ENCODE" />
             <DuplicateBusLong />
           </>
         }
       />
-
 
       {/* Bus short orders  */}
 
@@ -192,6 +194,15 @@ function App() {
           <>
             <PageTitle title="Preview Bus Short Orders | ENCODE" />
             <PreviewBusShort />
+          </>
+        }
+      />
+      <Route
+        path="/bus/short-orders/duplicate"
+        element={
+          <>
+            <PageTitle title="Duplicate Bus Short Orders | ENCODE" />
+            <DuplicateBusShort />
           </>
         }
       />
@@ -234,6 +245,15 @@ function App() {
           </>
         }
       />
+      <Route
+        path="/car/long-orders/duplicate"
+        element={
+          <>
+            <PageTitle title="Duplicate Rentacar Long Orders | ENCODE" />
+            <DuplicateRentLong />
+          </>
+        }
+      />
 
       {/* Rent a car long orders end */}
 
@@ -271,6 +291,15 @@ function App() {
           <>
             <PageTitle title="Preview Rentacar Short Orders | ENCODE" />
             <PreviewRentShort />
+          </>
+        }
+      />
+      <Route
+        path="/car/short-orders/duplicate"
+        element={
+          <>
+            <PageTitle title="Duplicate Rentacar Short Orders | ENCODE" />
+            <DuplicateRentShort />
           </>
         }
       />

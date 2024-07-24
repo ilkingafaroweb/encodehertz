@@ -8,7 +8,7 @@ import RentLongData from '../../../data/Rentacar/LongOrders'
 const RentLongOrders = () => {
   const [carLong, setCarLong] = useState([]);
   const [update, setUpdate] = useState(false); 
-  const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
+  const [actions, setActions] = useState(['add', 'edit', 'preview', 'duplicate', 'delete'])
 
   const getCarLongList = async () => {
     const token = await localStorage.getItem("token");
@@ -36,7 +36,6 @@ const RentLongOrders = () => {
   useEffect(() => {
     getCarLongList() 
   }, [])
-
   
 
   const handleDelete = async () => {

@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 const LongOrders = () => {
   const [busLong, setBusLong] = useState([]);
   const token = localStorage.getItem('token')
-  const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
+  const [actions, setActions] = useState(['add', 'edit', 'preview', 'duplicate', 'delete'])
 
   const getBusLongList = () => {
     fetch('https://encodehertz.xyz/api/Long/List', {

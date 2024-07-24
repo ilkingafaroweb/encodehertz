@@ -9,7 +9,7 @@ const ShortOrders = () => {
 
   const [busShort, setBusShort] = useState([]);
   const token = localStorage.getItem('token')
-  const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
+  const [actions, setActions] = useState(['add', 'edit', 'preview', 'duplicate', 'delete'])
 
   const getBusShortList = () => {
     fetch('https://encodehertz.xyz/api/Short/List', {

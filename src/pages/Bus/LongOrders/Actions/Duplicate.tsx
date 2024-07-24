@@ -1,209 +1,642 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Breadcrumb from '../../../../components/Breadcrumbs/Breadcrumb';
 import SelectGroupOne from '../../../../components/Forms/SelectGroup/SelectGroupOne';
 import DefaultLayout from '../../../../layout/DefaultLayout';
 import DatePickerOne from '../../../../components/Forms/DatePicker/DatePickerOne';
 import MultiSelect from '../../../../components/Forms/MultiSelect';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
+import FormCheckbox from '../../../../components/Forms/Checkbox/FormCheckbox';
+
+interface FormData {
+  contracts: { value: string; text: string }[];
+  selectedContract: string | null;
+  supplierContracts: { value: string; text: string }[];
+  selectedSupplierContract: string | null;
+  customers: { value: string; text: string }[];
+  selectedCustomer: string | null;
+  suppliers: { value: string; text: string }[];
+  startDateTime: string;
+  endDateTime: string;
+  serviceTypes: { value: string; text: string }[];
+  selectedServiceType: string | null;
+  sources: { value: string; text: string }[];
+  selectedSource: string | null;
+  priceToCustomer: number;
+  customerPaymentMethods: { value: string; text: string }[];
+  selectedCustomerPaymentMethod: string | null;
+  requestedPerson: string;
+  vehicleClasses: { value: string; text: string }[];
+  selectedVehicleClass: string | null;
+  vehicles: [] | null;
+  selectedVehicle: string | null;
+  isAllVehiclesSelected: boolean;
+  priceToSupplier: number;
+  supplierPaymentMethods: { value: string; text: string }[];
+  selectedSupplierPaymentMethod: string | null;
+  extraChargePanel: any[];
+  drivers: { value: string; text: string }[];
+  selectedDriver: string | null;
+}
+
+interface SelectedData {
+  selectedContract: string;
+  selectedSupplier: string;
+  selectedSupplierContract: string;
+  selectedCustomer: string;
+  selectedServiceType: string;
+  selectedCustomerPaymentMethod: string;
+  selectedOutsourceVehicle: string | boolean;
+  selectedVehicleClass: string;
+  selectedVehicle: string;
+  isAllVehiclesSelected: boolean;
+  selectedSupplierPaymentMethod: string;
+  selectedDriver: string;
+
+  priceToCustomer: number | "";
+  priceToSupplier: number | "";
+
+  startDateTime: string;
+  endDateTime: string;
+
+  requestedPerson: string;
+  comment: string;
+
+  extraChargePanel: [],
+  selectedExtraCharges: []
+}
+
+const initialSelectedData: SelectedData = {
+  selectedContract: "",
+  selectedSupplier: "",
+  selectedSupplierContract: "",
+  selectedCustomer: "",
+  selectedServiceType: "",
+  selectedCustomerPaymentMethod: "",
+  selectedOutsourceVehicle: false,
+  selectedVehicleClass: "",
+  selectedVehicle: "",
+  isAllVehiclesSelected: false,
+  selectedSupplierPaymentMethod: "",
+  selectedDriver: "",
+
+  priceToCustomer: 0,
+  priceToSupplier: 0,
+
+  startDateTime: "",
+  endDateTime: "",
+
+  requestedPerson: "",
+  comment: "",
+
+  extraChargePanel: [],
+  selectedExtraCharges: []
+};
 
 const DuplicateBusLong = () => {
+  const navigate = useNavigate()
+  const token = localStorage.getItem('token')
+  const [formOptions, setFormOptions] = useState<FormData | null>(null);
+  const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
-    const [showExtraCharge, setShowExtraCharge] = useState(false)
+  const fetchData = async () => {
+    try {
+      const response = await fetch('https://encodehertz.xyz/api/Long/Create', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setFormOptions(data as FormData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
-    const navigate = useNavigate()
+  const getPreview = async () => {
+    try {
+      const ActionID = await localStorage.getItem("ActionID")
+      const response = await fetch(`https://encodehertz.xyz/api/Long/Edit?id=${ActionID}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setSelectedData(data as SelectedData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
-    const handleCancel = () => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You have unsaved changes!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, discard changes!',
-            cancelButtonText: 'No, keep editing'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                navigate(-1)
-                console.log('Changes discarded');
-            }
+  const getData = async () => {
+    await fetchData()
+    getPreview();
+  };
+
+  useEffect(() => {
+    getData();
+  }, [])
+
+  const {
+    selectedContract,
+    selectedSupplier,
+    selectedSupplierContract,
+    selectedCustomer,
+    selectedServiceType,
+    selectedCustomerPaymentMethod,
+    selectedOutsourceVehicle,
+    selectedVehicleClass,
+    selectedVehicle,
+    isAllVehiclesSelected,
+    selectedDriver,
+    selectedSupplierPaymentMethod,
+
+    priceToCustomer,
+    priceToSupplier,
+
+    startDateTime,
+    endDateTime,
+
+    requestedPerson,
+    comment,
+
+    extraChargePanel,
+    selectedExtraCharges
+  } = selectedData
+
+  useEffect(() => {
+    const outsourceVehicleBoolean = Boolean(selectedOutsourceVehicle);
+    setSelectedData(prevData => ({
+      ...prevData,
+      selectedOutsourceVehicle: outsourceVehicleBoolean
+    }));
+  }, [selectedOutsourceVehicle]);
+
+  useEffect(() => {
+    if(!priceToCustomer){
+      setSelectedData(prevData => ({
+        ...prevData,
+        priceToCustomer: 0
+      }));
+    } 
+  }, [priceToCustomer])
+
+  useEffect(() => {
+    if(!priceToSupplier){
+      setSelectedData(prevData => ({
+        ...prevData,
+        priceToSupplier: 0
+      }));
+    } 
+  }, [priceToSupplier])
+
+   // Customer monthly payment default
+
+   const getCustomerMonthlyPayment = async () => {
+    if (!!selectedServiceType && !!selectedCustomer) {
+      let apiUrl = `https://encodehertz.xyz/api/Long/GetCustomerMonthlyPayment?selectedCustomer=${selectedCustomer}&selectedServiceType=${selectedServiceType}`;
+
+      setSelectedData(prevData => ({
+        ...prevData,
+        priceToCustomer: 0
+      }));
+
+      if (!!selectedVehicleClass) {
+        apiUrl = `https://encodehertz.xyz/api/Long/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}`;
+      }
+
+      await fetch(apiUrl, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setSelectedData(prevData => ({
+            ...prevData,
+            priceToCustomer: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
         });
-    };
+    }
+  }
 
-    const handleAdd = () => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "Do you want to add this item?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, add it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire(
-                    'Successfully added',
-                    '',
-                    'success'
-                );
-                console.log('Item added');
-                navigate(-1)
-            }
+  useEffect(() => {
+    return () => {
+      getCustomerMonthlyPayment()
+    }
+  }, [selectedServiceType, selectedCustomer, selectedVehicleClass]);
+
+
+  // Outsource monthly payment default
+
+  const getOutsourceMonthlyPayment = async () => {
+    if (!!selectedServiceType && !!selectedSupplier) {
+      let apiUrl = `https://encodehertz.xyz/api/Long/GetSupplierMonthlyPayment?selectedSupplier=${selectedSupplier}&selectedServiceType=${selectedServiceType}`;
+
+      setSelectedData(prevData => ({
+        ...prevData,
+        priceToSupplier: 0
+      }));
+
+      if (!!selectedVehicleClass) {
+        apiUrl = `https://encodehertz.xyz/api/Long/GetSupplierMonthlyPaymentCWD?selectedSupplier=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}`;
+      }
+
+      await fetch(apiUrl, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setSelectedData(prevData => ({
+            ...prevData,
+            priceToSupplier: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
         });
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      getOutsourceMonthlyPayment()
     };
+  }, [selectedServiceType, selectedSupplier, selectedVehicleClass]);
 
-    return (
-        <DefaultLayout>
-            <Breadcrumb pageName="Edit Bus Long Orders" />
 
-            <div className="max-w-full mx-auto gap-9 sm:grid-cols-2">
-                <div className="flex flex-col gap-9">
-                    <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                        <form action="#">
-                            <div className="p-6.5">
-                                <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                                    <div className="w-full xl:w-full">
-                                        <label className="mb-2.5 block text-black dark:text-white">
-                                            Card Number
-                                        </label>
-                                        <input
-                                            readOnly
-                                            disabled
-                                            type="text"
-                                            placeholder="Enter..."
-                                            value="BLO-0124-000001"
-                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                        />
-                                    </div>
-                                    <SelectGroupOne text="Card Type" disabled={false} />
-                                </div>
+  // Vehicles list
 
-                                <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                    <DatePickerOne labelName="Start Date Time" disabled={false} />
-                                    <DatePickerOne labelName="End Date Time" disabled={false} />
-                                </div>
+  const getVehicleList = async () => {
+    if (!!selectedVehicleClass) {
+      await fetch(`https://encodehertz.xyz/api/Long/GetVehicles?vehicleGroup=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setFormOptions(prevData => ({
+            ...prevData,
+            vehicles: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+  }
 
-                                <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                    <SelectGroupOne text="Customer" disabled={false} />
-                                    <SelectGroupOne text="Source" disabled={false} />
-                                </div>
+  useEffect(() => {
+    getVehicleList()
+  }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected]);
 
-                                <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                    <SelectGroupOne text="Service Type" disabled={false} />
-                                    <SelectGroupOne text="Contract" disabled={false} />
-                                </div>
+  const handleCheckboxChange = (value: boolean) => {
+    setSelectedData((prevState) => ({
+      ...prevState,
+      isAllVehiclesSelected: value,
+    }));
+  };
 
-                                <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                    <SelectGroupOne text="Driver" disabled={false} />
-                                </div>
 
-                                <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                    <SelectGroupOne text="Vehicle Class" disabled={false} />
-                                    <SelectGroupOne text="Vehicle" disabled={false} />
-                                </div>
+  const handleCancel = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You have unsaved changes!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, discard changes!',
+      cancelButtonText: 'No, keep editing'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate("/bus/long-orders")
+      }
+    });
+  };
 
-                                <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                    <SelectGroupOne text="Customer Payment Method" disabled={false} />
-                                    <div className="w-full xl:w-full">
-                                        <label className="mb-2.5 block text-black dark:text-white">
-                                            Price To Costumer Monthly
-                                        </label>
-                                        <input
-                                            type="number"
-                                            placeholder="Enter price"
-                                            inputMode='numeric'
-                                            min={0}
-                                            step="1"
-                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                        />
-                                    </div>
-                                </div>
+  const addBusLong = async () => {
+    await fetch('https://encodehertz.xyz/api/Long/Create', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(selectedData),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(data => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: data,
+        });
+        navigate('/bus/long-orders')
+      })
+      .catch(error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.message,
+        });
+      });
+  }
 
-                                <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                    <div className="w-full xl:w-full">
-                                        <label className="mb-2.5 block text-black dark:text-white">
-                                            Requested Person
-                                        </label>
-                                        <input
-                                            type="text"
-                                            placeholder="Enter person name"
-                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                        />
-                                    </div>
-                                    <SelectGroupOne text="Supplier" disabled={false} />
-                                </div>
+  // Extra Charges 
 
-                                <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                    <div className="w-full xl:w-full">
-                                        <label className="mb-2.5 block text-black dark:text-white">
-                                            Price To Outsource Monthly
-                                        </label>
-                                        <input
-                                            type="number"
-                                            min="0"
-                                            placeholder="Enter outsource price"
-                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                        />
-                                    </div>
-                                    <SelectGroupOne text="Outsource Payment Method" disabled={false} />
-                                </div>
+  useEffect(() => {
+    if (!!selectedCustomer && !!selectedVehicleClass) {
+      fetch(`https://encodehertz.xyz/api/Long/GetExtraCharges?customerCode=${selectedCustomer}&vehicleClass=${selectedVehicleClass}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setFormOptions(prevData => ({
+            ...prevData,
+            extraChargePanel: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    } else {
+      console.error('FRONTDA PROBLEM VAR');
+    }
+  }, [selectedCustomer, selectedVehicleClass]);
+  
 
-                                <div className='mb-3 w-full flex justify-between items-end'>
-                                    <label className="mb-3 block text-md font-medium text-black dark:text-white">
-                                        Extra Charge Panel
-                                    </label>
-                                    <button
-                                        type='button'
-                                        onClick={() => setShowExtraCharge(!showExtraCharge)}
-                                        className='flex w-12 h-12 justify-center items-center rounded bg-white border border-stroke dark:bg-boxdark-2 p-3 font-medium dark:border-form-strokedark dark:text-gray hover:bg-opacity-90'>
-                                        {showExtraCharge ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
-                                    </button>
-                                </div>
-                                {
-                                    showExtraCharge && <div className='mb-6 flex flex-col gap-6 xl:flex-row'>
-                                        <MultiSelect id="1" disabled={false} />
-                                    </div>
-                                }
+  useEffect(() => {
+    if (selectedServiceType !== "M-000003") {
+      setSelectedData(prevState => ({
+        ...prevState,
+        selectedOutsourceVehicle: '',
+        selectedVehicleClass: '',
+        selectedVehicle: ''
+      }));
+    }
+  }, [selectedServiceType]);
 
-                                <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                                    <div className='w-full'>
-                                        <label className="mb-2.5 block text-black dark:text-white">
-                                            Comment
-                                        </label>
-                                        <textarea
-                                            rows={6}
-                                            placeholder="Type your comment"
-                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                        ></textarea>
-                                    </div>
-                                </div>
 
-                                <div className='flex gap-3'>
-                                    <button
-                                        type='button'
-                                        onClick={handleCancel}
-                                        className="flex w-full justify-center rounded bg-danger dark:bg-danger p-3 font-medium text-gray hover:bg-opacity-90">
-                                        Cancel
-                                    </button>
-                                    <button
-                                        type='button'
-                                        onClick={handleAdd}
-                                        className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                                        Add
-                                    </button>
-                                </div>
+  useEffect(() => {
+    if (!!selectedCustomer) {
+      fetch(`https://encodehertz.xyz/api/Long/GetContracts?customerCode=${selectedCustomer}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setFormOptions(prevData => ({
+            ...prevData,
+            contracts: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    } else {
+      console.error('FRONTDA PROBLEM VAR');
+    }
 
-                            </div>
-                        </form>
+  }, [selectedCustomer]);
+
+
+  useEffect(() => {
+    if (!!selectedSupplier) {
+      fetch(`https://encodehertz.xyz/api/Long/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setFormOptions(prevData => ({
+            ...prevData,
+            supplierContracts: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    } else {
+      console.error('FRONTDA PROBLEM VAR');
+    }
+  }, [selectedSupplier]);
+
+
+  return (
+    <DefaultLayout>
+      <Breadcrumb pageName={`Duplicate`} prevPageName='Bus long orders' prevRoute='/bus/long-orders' />
+      {formOptions ? (
+        <div className="max-w-full mx-auto gap-9 sm:grid-cols-2">
+          <div className="flex flex-col gap-9">
+            <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+
+              <form>
+                <div className="p-6.5">
+                  <div className="mb-3 flex flex-col gap-6 xl:flex-row">
+                    <SelectGroupOne text="Customer" options={formOptions.customers || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedCustomer} />
+                    <SelectGroupOne text="Service Type" options={formOptions.serviceTypes || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedServiceType} />
+                  </div>
+
+                  <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
+                    <DatePickerOne labelName="Start Date Time" disabled={false} setSelectedData={setSelectedData} value={startDateTime} />
+                    <DatePickerOne labelName="End Date Time" disabled={false} setSelectedData={setSelectedData} value={endDateTime} />
+                  </div>
+
+                  <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
+                    <SelectGroupOne text="Contract" options={formOptions.contracts || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedContract} />
+                    <SelectGroupOne text="Driver" options={formOptions.drivers || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedDriver} />
+                  </div>
+
+                  {
+                    selectedServiceType === "M-000003" && <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
+                      <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedOutsourceVehicle ? "true" : ""} />
+                      <SelectGroupOne text="Vehicle Class" options={formOptions.vehicleClasses || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedVehicleClass} />
+                      <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false}/>
+                      <SelectGroupOne text="Vehicle" options={formOptions?.vehicles || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedVehicle} />
                     </div>
+                  }
+
+                  <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
+                    <SelectGroupOne text="Customer Payment Method" options={formOptions.customerPaymentMethods || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedCustomerPaymentMethod} />
+                    <div className="w-full xl:w-full">
+                      <label className="mb-2.5 block text-black dark:text-white">
+                        Price To Customer
+                      </label>
+                      <input
+                        type='number'
+                        disabled={false}
+                        value={priceToCustomer !== 0 ? priceToCustomer : 0}
+                        placeholder='Empty'
+                        onChange={(e) => {
+                          let newValue = e.target.value;
+                          newValue = newValue.replace(/^0+(?=\d)/, '');
+                          const parsedValue = parseFloat(newValue);
+                          setSelectedData(prevData => ({
+                            ...prevData,
+                            priceToCustomer: !isNaN(parsedValue) ? parsedValue : ''
+                          }));
+                        }}
+                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      />
+                    </div>
+                  </div>
+
+                  {
+                    selectedOutsourceVehicle && <> <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
+                      <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedSupplier} />
+                      <SelectGroupOne text="Supplier Contract" options={formOptions.supplierContracts || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedSupplierContract} />
+                    </div>
+
+                      <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
+                        <SelectGroupOne text="Supplier Payment Method" options={formOptions.supplierPaymentMethods || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedSupplierPaymentMethod} />
+                        <div className="w-full xl:w-full">
+                          <label className="mb-2.5 block text-black dark:text-white">
+                            Price To Supplier
+                          </label>
+                          <input
+                            type="number"
+                            disabled={false}
+                            placeholder="Empty"
+                            value={priceToSupplier}
+                            onChange={(e) => {
+                              const newValue = parseFloat(e.target.value);
+                              setSelectedData(prevData => ({
+                                ...prevData,
+                                priceToSupplier: newValue
+                              }))
+                            }}
+                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                          />
+                        </div>
+                      </div></>
+                  }
+                  <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
+                    <div className="w-full xl:w-full">
+                      <label className="mb-2.5 block text-black dark:text-white">
+                        Requested Person
+                      </label>
+                      <input
+                        type='text'
+                        disabled={false}
+                        value={requestedPerson}
+                        placeholder="Empty"
+                        onChange={(e) => setSelectedData(prevData => ({
+                          ...prevData,
+                          requestedPerson: e.target.value
+                        }))}
+                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      />
+                    </div>
+                    <div className='w-full'>
+
+                    </div>
+                  </div>
+                  {
+                    selectedServiceType === "M-000003" && <div className='mb-6 flex flex-col gap-3'>
+                      <label className="mt-3 block text-md font-medium text-black dark:text-white">
+                        Extra Charge Panel
+                      </label>
+                      <MultiSelect ecpOptions={formOptions.extraChargePanel || []} setSelectedData={setSelectedData} disabled={false} defaultValue={extraChargePanel} outsource={selectedOutsourceVehicle} />
+                    </div>
+                  }
+                  <div className="mb-3 flex flex-col gap-6 xl:flex-row">
+                    <div className='w-full'>
+                      <label className="mb-2.5 block text-black dark:text-white">
+                        Comment
+                      </label>
+                      <textarea
+                        rows={2}
+                        disabled={false}
+                        value={comment}
+                        placeholder="Empty"
+                        onChange={(e) => setSelectedData(prevData => ({
+                          ...prevData,
+                          comment: e.target.value
+                        }))}
+                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div className='flex gap-3'>
+                    <button type='button' onClick={handleCancel} className="flex w-full justify-center rounded bg-meta-1 p-3 font-medium text-gray hover:bg-opacity-90">
+                      Cancel
+                    </button>
+                    <button type='button' onClick={addBusLong} className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
+                      Insert
+                    </button>
+                  </div>
+
                 </div>
+              </form>
             </div>
-        </DefaultLayout>
-    );
+          </div>
+        </div>
+      ) : (
+        <div className='flex justify-center items-center h-96'>
+          <p className='text-2xl'>The form is loading...</p>
+        </div>
+      )}
+    </DefaultLayout>
+  );
 };
 
 export default DuplicateBusLong;
