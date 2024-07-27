@@ -99,6 +99,38 @@ const AddMaintenance = () => {
         console.log("Rentacar Short orders add form values:", selectedData);
     }, [selectedData])
 
+    // Vehicles list
+
+    const getVehicleList = async () => {
+        if (!!startDateTime && !!endDateTime) {
+            await fetch(`https://encodehertz.xyz/api/MaintenanceMaintenance/GetVehicles?startDate=${startDateTime}&endDate=${endDateTime}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    setFormOptions(prevData => ({
+                        ...prevData,
+                        vehicles: data
+                    }));
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+    }
+
+    useEffect(() => {
+        getVehicleList()
+    }, [startDateTime, endDateTime]);
+
     // Rentacar Short order post 
 
     const handleSubmit = async () => {
@@ -197,14 +229,14 @@ const AddMaintenance = () => {
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <form>
                                 <div className="p-6.5">
-                                    <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                                        <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={!formOptions.suppliers} defaultValue='' />
-                                        <SelectGroupOne text='Vehicle' options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue='' />
-                                    </div>
-
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <DatePickerTwo labelName="Start Date Time" disabled={false} setSelectedData={setSelectedData} value={startDateTime} />
                                         <DatePickerTwo labelName="End Date Time" disabled={false} setSelectedData={setSelectedData} value={endDateTime} />
+                                    </div>
+
+                                    <div className="mb-3 flex flex-col gap-6 xl:flex-row">
+                                        <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={!formOptions.suppliers} defaultValue='' />
+                                        <SelectGroupOne text='Vehicle' options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue='' />
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>

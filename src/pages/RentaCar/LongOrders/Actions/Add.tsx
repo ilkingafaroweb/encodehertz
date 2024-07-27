@@ -171,11 +171,9 @@ const AddRentLong = () => {
         console.log("Rentacar long orders add form values:", selectedData);
     }, [selectedData])
 
-     // Vehicles list
-
-     const getVehicleList = async () => {
-        if (!!selectedVehicleGroup) {
-            await fetch(`https://encodehertz.xyz/api/RentCar/Short/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}`, {
+    const getVehicleList = async () => {
+        if (!!selectedVehicleGroup && !!startDateTime && !!endDateTime) {
+            await fetch(`https://encodehertz.xyz/api/RentCar/Long/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -201,12 +199,12 @@ const AddRentLong = () => {
 
     useEffect(() => {
         getVehicleList()
-    }, [selectedVehicleGroup, selectedOutsourceVehicle, isAllVehiclesSelected]);
+    }, [selectedVehicleGroup, selectedOutsourceVehicle, isAllVehiclesSelected, startDateTime, endDateTime]);
 
     const handleCheckboxChange = (value: boolean) => {
         setSelectedData((prevState) => ({
-          ...prevState,
-          isAllVehiclesSelected: value,
+            ...prevState,
+            isAllVehiclesSelected: value,
         }));
     };
 
@@ -351,7 +349,7 @@ const AddRentLong = () => {
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue="" />
                                         <SelectGroupOne text="Vehicle Group" options={formOptions.vehicleGroups || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicleGroups} defaultValue='' />
-                                        <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false}/>
+                                        <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false} />
                                         <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue='' />
                                     </div>
 

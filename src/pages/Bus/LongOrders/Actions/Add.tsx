@@ -131,6 +131,11 @@ const AddBusLong = () => {
   } = selectedData
 
   useEffect(() => {
+    console.clear();
+    console.log('SELECTED DATA -->', selectedData);
+  },[selectedData])
+
+  useEffect(() => {
     const outsourceVehicleBoolean = !!selectedOutsourceVehicle;
     setSelectedData(prevData => ({
       ...prevData,
@@ -270,8 +275,8 @@ const AddBusLong = () => {
   // Vehicles list
 
   const getVehicleList = async () => {
-    if (!!selectedVehicleClass) {
-      await fetch(`https://encodehertz.xyz/api/Long/GetVehicles?vehicleGroup=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}`, {
+    if (!!selectedVehicleClass && !!startDateTime && !! endDateTime) {
+      await fetch(`https://encodehertz.xyz/api/Long/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -297,7 +302,7 @@ const AddBusLong = () => {
 
   useEffect(() => {
     getVehicleList()
-  }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected]);
+  }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected, startDateTime, endDateTime]);
 
   const handleCheckboxChange = (value: boolean) => {
     setSelectedData((prevState) => ({

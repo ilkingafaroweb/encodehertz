@@ -272,35 +272,35 @@ const AddBusShort = () => {
 
     // Vehicles list
 
-    const getVehicleList = async () => {
-        if (!!selectedVehicleClass) {
-            await fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleGroup=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setFormOptions(prevData => ({
-                        ...prevData,
-                        vehicles: data
-                    }));
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
+  const getVehicleList = async () => {
+    if (!!selectedVehicleClass && !!startDateTime && !! endDateTime) {
+      await fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setFormOptions(prevData => ({
+            ...prevData,
+            vehicles: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
     }
+  }
 
-    useEffect(() => {
-        getVehicleList()
-    }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected]);
+  useEffect(() => {
+    getVehicleList()
+  }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected, startDateTime, endDateTime]);
 
     const handleCheckboxChange = (value: boolean) => {
         setSelectedData((prevState) => ({
