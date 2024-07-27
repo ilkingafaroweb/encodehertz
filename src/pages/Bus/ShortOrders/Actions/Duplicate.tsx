@@ -226,8 +226,8 @@ const DuplicateBusShort = () => {
     // Vehicles list
 
     const getVehicleList = async () => {
-        if (!!selectedVehicleClass) {
-            await fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleGroup=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}`, {
+        if (!!selectedVehicleClass && !!startDateTime && !!endDateTime) {
+            await fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -253,7 +253,7 @@ const DuplicateBusShort = () => {
 
     useEffect(() => {
         getVehicleList()
-    }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected]);
+    }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected, startDateTime, endDateTime]);
 
     const handleCheckboxChange = (value: boolean) => {
         setSelectedData((prevState) => ({

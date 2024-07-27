@@ -236,6 +236,38 @@ const EditMaintenance = () => {
             }
         });
     };
+
+     // Vehicles list
+
+     const getVehicleList = async () => {
+        if (!!startDateTime && !!endDateTime) {
+            await fetch(`https://encodehertz.xyz/api/MaintenanceMaintenance/GetVehicles?startDate=${startDateTime}&endDate=${endDateTime}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    setFormOptions(prevData => ({
+                        ...prevData,
+                        vehicles: data
+                    }));
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+    }
+
+    useEffect(() => {
+        getVehicleList()
+    }, [startDateTime, endDateTime]);
     
 
     return (

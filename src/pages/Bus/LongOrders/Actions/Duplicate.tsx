@@ -181,26 +181,26 @@ const DuplicateBusLong = () => {
   }, [selectedOutsourceVehicle]);
 
   useEffect(() => {
-    if(!priceToCustomer){
+    if (!priceToCustomer) {
       setSelectedData(prevData => ({
         ...prevData,
         priceToCustomer: 0
       }));
-    } 
+    }
   }, [priceToCustomer])
 
   useEffect(() => {
-    if(!priceToSupplier){
+    if (!priceToSupplier) {
       setSelectedData(prevData => ({
         ...prevData,
         priceToSupplier: 0
       }));
-    } 
+    }
   }, [priceToSupplier])
 
-   // Customer monthly payment default
+  // Customer monthly payment default
 
-   const getCustomerMonthlyPayment = async () => {
+  const getCustomerMonthlyPayment = async () => {
     if (!!selectedServiceType && !!selectedCustomer) {
       let apiUrl = `https://encodehertz.xyz/api/Long/GetCustomerMonthlyPayment?selectedCustomer=${selectedCustomer}&selectedServiceType=${selectedServiceType}`;
 
@@ -293,8 +293,8 @@ const DuplicateBusLong = () => {
   // Vehicles list
 
   const getVehicleList = async () => {
-    if (!!selectedVehicleClass) {
-      await fetch(`https://encodehertz.xyz/api/Long/GetVehicles?vehicleGroup=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}`, {
+    if (!!selectedVehicleClass && !!startDateTime && !!endDateTime) {
+      await fetch(`https://encodehertz.xyz/api/Long/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -320,7 +320,7 @@ const DuplicateBusLong = () => {
 
   useEffect(() => {
     getVehicleList()
-  }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected]);
+  }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected, startDateTime, endDateTime]);
 
   const handleCheckboxChange = (value: boolean) => {
     setSelectedData((prevState) => ({
@@ -408,7 +408,7 @@ const DuplicateBusLong = () => {
       console.error('FRONTDA PROBLEM VAR');
     }
   }, [selectedCustomer, selectedVehicleClass]);
-  
+
 
   useEffect(() => {
     if (selectedServiceType !== "M-000003") {
@@ -424,7 +424,7 @@ const DuplicateBusLong = () => {
 
   useEffect(() => {
     if (!!selectedCustomer) {
-      fetch(`https://encodehertz.xyz/api/Long/GetContracts?customerCode=${selectedCustomer}`,{
+      fetch(`https://encodehertz.xyz/api/Long/GetContracts?customerCode=${selectedCustomer}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -510,7 +510,7 @@ const DuplicateBusLong = () => {
                     selectedServiceType === "M-000003" && <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                       <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedOutsourceVehicle ? "true" : ""} />
                       <SelectGroupOne text="Vehicle Class" options={formOptions.vehicleClasses || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedVehicleClass} />
-                      <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false}/>
+                      <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false} />
                       <SelectGroupOne text="Vehicle" options={formOptions?.vehicles || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedVehicle} />
                     </div>
                   }

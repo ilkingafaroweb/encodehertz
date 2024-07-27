@@ -209,98 +209,98 @@ const AddBusShort = () => {
                 });
             });
     }
-    
-  // Customer monthly payment 
 
-  useEffect(() => {
-    if (selectedServiceType && selectedCustomer && selectedServiceTypeDetail && selectedVehicleClass) {
-      let apiUrl = `https://encodehertz.xyz/api/Short/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
+    // Customer monthly payment 
 
-      fetch(apiUrl, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setSelectedData(prevData => ({
-            ...prevData,
-            priceToCustomer: data
-          }));
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
-    }
-  }, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedServiceTypeDetail]);
+    useEffect(() => {
+        if (selectedServiceType && selectedCustomer && selectedServiceTypeDetail && selectedVehicleClass) {
+            let apiUrl = `https://encodehertz.xyz/api/Short/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
 
-  // Supplier monthly payment
-
-  useEffect(() => {
-    if (selectedServiceType && selectedSupplier && selectedServiceTypeDetail && selectedVehicleClass) {
-      let apiUrl = `https://encodehertz.xyz/api/Short/GetSupplierMonthlyPaymentCWD?selectedCustomer=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
-
-      fetch(apiUrl, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+            fetch(apiUrl, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    setSelectedData(prevData => ({
+                        ...prevData,
+                        priceToCustomer: data
+                    }));
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
         }
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setSelectedData(prevData => ({
-            ...prevData,
-            priceToSupplier: data
-          }));
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
-    }
-  }, [selectedServiceType, selectedServiceTypeDetail, selectedSupplier, selectedVehicleClass]);
+    }, [selectedServiceType, selectedCustomer, selectedVehicleClass, selectedServiceTypeDetail]);
+
+    // Supplier monthly payment
+
+    useEffect(() => {
+        if (selectedServiceType && selectedSupplier && selectedServiceTypeDetail && selectedVehicleClass) {
+            let apiUrl = `https://encodehertz.xyz/api/Short/GetSupplierMonthlyPaymentCWD?selectedCustomer=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
+
+            fetch(apiUrl, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    setSelectedData(prevData => ({
+                        ...prevData,
+                        priceToSupplier: data
+                    }));
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+    }, [selectedServiceType, selectedServiceTypeDetail, selectedSupplier, selectedVehicleClass]);
 
     // Vehicles list
 
-  const getVehicleList = async () => {
-    if (!!selectedVehicleClass && !!startDateTime && !! endDateTime) {
-      await fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+    const getVehicleList = async () => {
+        if (!!selectedVehicleClass && !!startDateTime && !!endDateTime) {
+            await fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    setFormOptions(prevData => ({
+                        ...prevData,
+                        vehicles: data
+                    }));
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
         }
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setFormOptions(prevData => ({
-            ...prevData,
-            vehicles: data
-          }));
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
     }
-  }
 
-  useEffect(() => {
-    getVehicleList()
-  }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected, startDateTime, endDateTime]);
+    useEffect(() => {
+        getVehicleList()
+    }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected, startDateTime, endDateTime]);
 
     const handleCheckboxChange = (value: boolean) => {
         setSelectedData((prevState) => ({
@@ -537,7 +537,7 @@ const AddBusShort = () => {
                                         <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                             <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
                                             <SelectGroupOne text="Vehicle Class" options={formOptions.vehicleClasses || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicleClasses} defaultValue='' />
-                                            <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false}/>
+                                            <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false} />
                                             <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue='' />
                                         </div>
                                     }
