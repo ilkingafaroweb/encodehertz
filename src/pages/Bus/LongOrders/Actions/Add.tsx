@@ -133,7 +133,7 @@ const AddBusLong = () => {
   useEffect(() => {
     console.clear();
     console.log('SELECTED DATA -->', selectedData);
-  },[selectedData])
+  }, [selectedData])
 
   useEffect(() => {
     const outsourceVehicleBoolean = !!selectedOutsourceVehicle;
@@ -144,7 +144,7 @@ const AddBusLong = () => {
   }, [selectedOutsourceVehicle]);
 
   useEffect(() => {
-    if(!priceToCustomer){
+    if (!priceToCustomer) {
       setSelectedData(prevData => ({
         ...prevData,
         priceToCustomer: 0
@@ -153,12 +153,12 @@ const AddBusLong = () => {
   }, [priceToCustomer])
 
   useEffect(() => {
-    if(!priceToSupplier){
+    if (!priceToSupplier) {
       setSelectedData(prevData => ({
         ...prevData,
         priceToSupplier: 0
       }));
-    } 
+    }
   }, [priceToSupplier])
 
   // Bus long order post 
@@ -275,7 +275,7 @@ const AddBusLong = () => {
   // Vehicles list
 
   const getVehicleList = async () => {
-    if (!!selectedVehicleClass && !!startDateTime && !! endDateTime) {
+    if (!!selectedVehicleClass && !!startDateTime && !!endDateTime) {
       await fetch(`https://encodehertz.xyz/api/Long/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -311,7 +311,7 @@ const AddBusLong = () => {
     }));
   };
 
-  
+
   // Extra charges
 
   const getExtraCharges = async () => {
@@ -345,7 +345,7 @@ const AddBusLong = () => {
   }
 
   useEffect(() => {
-   getExtraCharges()
+    getExtraCharges()
   }, [selectedCustomer, selectedVehicleClass])
 
 
@@ -443,7 +443,7 @@ const AddBusLong = () => {
         .catch(error => {
           console.error('Error fetching data:', error);
         });
-    } 
+    }
   }, [selectedSupplier]);
 
   return (
@@ -475,7 +475,7 @@ const AddBusLong = () => {
                     selectedData.selectedServiceType === "M-000003" && <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                       <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue="" />
                       <SelectGroupOne text="Vehicle Class" options={formOptions.vehicleClasses || []} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
-                      <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false}/>
+                      <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false} />
                       <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={formOptions.vehicles ? false : true} defaultValue='' />
                     </div>
                   }
