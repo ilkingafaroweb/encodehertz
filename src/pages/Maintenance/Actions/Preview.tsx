@@ -54,7 +54,7 @@ const PreviewMaintenance = () => {
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
     const {
-       cardNumber, selectedSupplier, selectedVehicle, repairTypes, startDateTime, endDateTime, comment, totalAmount, km
+        cardNumber, selectedSupplier, selectedVehicle, repairTypes, startDateTime, endDateTime, comment, totalAmount, km
     } = selectedData
 
     // Form options 
@@ -107,74 +107,42 @@ const PreviewMaintenance = () => {
         console.log("Rentacar Short orders add form values:", selectedData);
     }, [selectedData])
 
-    // Rentacar Short order post 
 
-    const handleSave = async () => {
-        await fetch('https://encodehertz.xyz/api/MaintenanceMaintenance/Edit', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(selectedData),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+    // Vehicles list
+
+    const getVehicleList = async () => {
+        if (!!startDateTime && !!endDateTime) {
+            await fetch(`https://encodehertz.xyz/api/MaintenanceMaintenance/GetVehicles?startDate=${startDateTime}&endDate=${endDateTime}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
-                return response.text();
             })
-            .then(data => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: data,
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    setFormOptions(prevData => ({
+                        ...prevData,
+                        vehicles: data
+                    }));
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
                 });
-                navigate('/maintenance')
-            })
-            .catch(error => {
-                console.error('Error sending data:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: error,
-                });
-            });
+        }
     }
 
-    const handleChange = (e, inputName) => {
-        let inputValue = e.target.value;
-    
-        if (inputName === "km") {
-            if (/^\d*$/.test(inputValue)) {
-                inputValue = inputValue === '' ? '0' : parseInt(inputValue, 10).toString();
-            } else {
-                return;
-            }
-        } else {
-            if (inputValue === '') {
-                inputValue = '0';
-            } else {
-                if (/^[0-9]*\.?[0-9]*$/.test(inputValue)) {
-                    if (inputValue.includes('.')) {
-                        inputValue = inputValue.replace(/^0+(?=\d)/, '');
-                    } else {
-                        inputValue = parseFloat(inputValue).toString();
-                    }
-                } else {
-                    return;
-                }
-            }
-        }
-    
-        setSelectedData(prevData => {
-            const updatedData = {
-                ...prevData,
-                [inputName]: inputValue
-            };
-            return updatedData;
-        });
-    };
+    useEffect(() => {
+        getVehicleList()
+    }, [startDateTime, endDateTime]);
+
+
+
+
 
     const handleBack = () => {
         navigate("/maintenance")
@@ -206,7 +174,6 @@ const PreviewMaintenance = () => {
                                             </label>
                                             <input
                                                 disabled
-                                                onChange={(e) => {handleChange(e, "km")}}
                                                 type="text"
                                                 value={km}
                                                 placeholder="Enter km"
@@ -214,7 +181,7 @@ const PreviewMaintenance = () => {
                                             />
                                         </div>
                                         <div className="w-full xl:w-full">
-                                            
+
                                         </div>
                                     </div>
 

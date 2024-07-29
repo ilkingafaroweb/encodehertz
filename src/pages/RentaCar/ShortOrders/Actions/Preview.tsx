@@ -218,8 +218,8 @@ const PreviewRentShort = () => {
     // Vehicles list
 
     const getVehicleList = async () => {
-        if (!!selectedVehicleGroup) {
-            await fetch(`https://encodehertz.xyz/api/RentCar/Short/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}`, {
+        if (!!selectedVehicleGroup && !!startDateTime && !!endDateTime) {
+            await fetch(`https://encodehertz.xyz/api/RentCar/Long/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -245,7 +245,7 @@ const PreviewRentShort = () => {
 
     useEffect(() => {
         getVehicleList()
-    }, [selectedVehicleGroup, selectedOutsourceVehicle, isAllVehiclesSelected]);
+    }, [selectedVehicleGroup, selectedOutsourceVehicle, isAllVehiclesSelected, startDateTime, endDateTime]);
 
     const handleCheckboxChange = (value: boolean) => {
         setSelectedData((prevState) => ({

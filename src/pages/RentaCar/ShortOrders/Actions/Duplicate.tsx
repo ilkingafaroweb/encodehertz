@@ -248,7 +248,6 @@ const DuplicateRentShort = () => {
         getVehicleList()
     }, [selectedVehicleGroup, selectedOutsourceVehicle, isAllVehiclesSelected, startDateTime, endDateTime]);
 
-
     const handleCheckboxChange = (value: boolean) => {
         setSelectedData((prevState) => ({
             ...prevState,
