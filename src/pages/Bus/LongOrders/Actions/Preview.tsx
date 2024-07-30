@@ -178,11 +178,9 @@ const PreviewBusLong = () => {
   } = selectedData
 
  
-  // Vehicles list
-
   const getVehicleList = async () => {
-    if (!!selectedVehicleClass && !!startDateTime && !!endDateTime) {
-      await fetch(`https://encodehertz.xyz/api/Long/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
+    if (!!cardNumber && !!selectedVehicleClass && !!startDateTime && !!endDateTime) {
+      await fetch(`https://encodehertz.xyz/api/Long/GetVehiclesOnEdit?cardNumber=${cardNumber}&vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -208,7 +206,9 @@ const PreviewBusLong = () => {
 
   useEffect(() => {
     getVehicleList()
-  }, [selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected, startDateTime, endDateTime]);
+  }, [cardNumber, selectedVehicleClass, selectedOutsourceVehicle, isAllVehiclesSelected, startDateTime, endDateTime]);
+
+
   const handleCheckboxChange = (value: boolean) => {
     setSelectedData((prevState) => ({
       ...prevState,
