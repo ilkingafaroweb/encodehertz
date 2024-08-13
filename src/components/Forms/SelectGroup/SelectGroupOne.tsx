@@ -11,9 +11,10 @@ interface SelectGroupOneProps {
   setSelectedData: React.Dispatch<React.SetStateAction<any>>;
   disabled: boolean;
   defaultValue?: string;
+  isInvalid?: boolean; 
 }
 
-const SelectGroupOne: React.FC<SelectGroupOneProps> = ({ text, options, setSelectedData, disabled, defaultValue }) => {
+const SelectGroupOne: React.FC<SelectGroupOneProps> = ({ text, options, setSelectedData, disabled, defaultValue, isInvalid }) => {
   const [selectedOption, setSelectedOption] = useState<string>(defaultValue || "");
   const propertyName = `selected${text.replace(/\s+/g, '')}`;
 
@@ -30,6 +31,8 @@ const SelectGroupOne: React.FC<SelectGroupOneProps> = ({ text, options, setSelec
     setIsOptionSelected(true);
   };
 
+  const isDefaultValueValid = options.some(option => option.value === defaultValue);
+
   return (
     <div className="w-full mb-2">
       <label className="mb-3 block text-black dark:text-white">
@@ -42,9 +45,9 @@ const SelectGroupOne: React.FC<SelectGroupOneProps> = ({ text, options, setSelec
             setSelectedOption(e.target.value);
             changeTextColor();
           }}
-          className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary ${isOptionSelected ? 'text-black dark:text-white' : ''}`}
+          className={`${isInvalid ? 'focus:border-danger active:border-danger border-danger bg-red-100 ' : 'focus:border-primary active:border-primary border-stroke dark:border-form-strokedark dark:bg-form-input'} relative z-20 w-full appearance-none rounded border bg-transparent py-3 px-5 outline-none transition  ${isOptionSelected ? 'text-black dark:text-white' : ''}`}
         >
-          <option value="" selected={defaultValue === ""} disabled className="text-body dark:text-bodydark hidden">
+          <option value="" selected={isDefaultValueValid}  className="text-body dark:text-bodydark hidden">
             Select {text}
           </option>
           {options?.map((option, index) => (

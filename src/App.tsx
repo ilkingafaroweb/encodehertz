@@ -4,8 +4,6 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 import ECommerce from './pages/Dashboard/ECommerce';
-import FormElements from './pages/Form/FormElements';
-import FormLayout from './pages/Form/FormLayout';
 import Profile from './pages/Settings';
 import Maintenance from './pages/Maintenance/Maintenance';
 import Taxi from './pages/Taxi/Taxi';
@@ -13,15 +11,12 @@ import Login from './pages/Authentication/Login';
 import ForgotPassword from './pages/Authentication/Forgot';
 import Reset from './pages/Authentication/Reset';
 import ShortOrders from './pages/Bus/ShortOrders/ShortOrders';
-import BusShortData from './data/Bus/ShortOrders';
-import BusLongData from './data/Bus/LongOrders';
 import LongOrders from './pages/Bus/LongOrders/LongOrders';
 import AddBusLong from './pages/Bus/LongOrders/Actions/Add';
 import EditBusLong from './pages/Bus/LongOrders/Actions/Edit';
 import PreviewBusLong from './pages/Bus/LongOrders/Actions/Preview';
 import DuplicateBusLong from './pages/Bus/LongOrders/Actions/Duplicate';
 import ExtraCharges from './pages/ExtraCharge/ExtraCharges';
-import extraChargesData from './data/Extra/ExtraCharges';
 import AddExtraCharge from './pages/ExtraCharge/Actions/Add';
 import EditExtraCharge from './pages/ExtraCharge/Actions/Edit';
 import PreviewExtraCharge from './pages/ExtraCharge/Actions/Preview';
@@ -63,6 +58,8 @@ import AllTransactions from './pages/AllTransactions/AllTransactions';
 import DuplicateBusShort from './pages/Bus/ShortOrders/Actions/Duplicate';
 import DuplicateRentLong from './pages/RentaCar/LongOrders/Actions/Duplicate';
 import DuplicateRentShort from './pages/RentaCar/ShortOrders/Actions/Duplicate';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [userToken, setUserToken] = useState(localStorage.getItem("userId") || '')
@@ -709,6 +706,7 @@ function App() {
     <Loader />
   ) :
     <>
+      <ToastContainer position='top-center' toastClassName='w-96' />
       {
         userToken ? privateRoutes() : publicRoutes()
       }

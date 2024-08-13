@@ -7,8 +7,7 @@ import DatePickerOne from '../../../../components/Forms/DatePicker/DatePickerOne
 import MultiSelect from '../../../../components/Forms/MultiSelect';
 import Swal from 'sweetalert2';
 import FormCheckbox from '../../../../components/Forms/Checkbox/FormCheckbox';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 interface FormData {
   cardNumber: string | null;
@@ -103,10 +102,7 @@ const AddBusLong = () => {
   const token = localStorage.getItem("token")
   const [formOptions, setFormOptions] = useState<FormData | null>(null);
   const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
-
-  let timerInterval: any;
-  let timeoutId: any;
-  let remainingTime: number | null = null;
+  const [invalidFields, setInvalidFields] = useState<string[]>([])
 
   const {
     selectedContract,
@@ -136,107 +132,39 @@ const AddBusLong = () => {
     selectedExtraCharges
   } = selectedData
 
+  const getRequiredFields = () => [
+    { value: selectedCustomer, label: "Customer" },
+    { value: selectedServiceType, label: "Service Type" },
+    { value: startDateTime, label: "Start Date Time" },
+    { value: endDateTime, label: "End Date Time" },
+    { value: selectedDriver, label: "Driver" },
+    { value: requestedPerson, label: "Requested Person" },
+    ...(selectedData.selectedServiceType === "M-000003" ? [{ value: selectedVehicleClass, label: "Vehicle Class" }, { value: selectedVehicle, label: "Vehicle" }] : []),
+    ...(selectedData.selectedOutsourceVehicle == true ? [{ value: selectedSupplier, label: "Supplier" }] : []),
+  ];
+
   const validateForm = (): boolean => {
-    const requiredFields = [
-      { value: selectedCustomer, label: "Customer" },
-      { value: selectedServiceType, label: "Service Type" },
-      { value: startDateTime, label: "Start Date Time" },
-      { value: endDateTime, label: "End Date Time" },
-      { value: selectedDriver, label: "Driver" },
-      { value: requestedPerson, label: "Requested Person" },
-      { value: selectedVehicleClass, label: "Vehicle Class" },
-      { value: selectedVehicle, label: "Vehicle" },
-      // { value: selectedSupplier, label: "Supplier" },
-    ];
-  
-    const invalidFields = requiredFields.filter(field => !field.value);
-  
-    if (invalidFields.length > 0) {
-      const missingFields = invalidFields.map(field => field.label).join(', ');
+    const requiredFields = getRequiredFields();
 
-  
-      Swal.fire({
-        icon: 'warning',
-        title: 'The following fields are required:',
-        text: `${missingFields}`,
-        timerProgressBar: false,
-        showConfirmButton: true, // OK butonunu gizle
-        // didOpen: (toast) => {
-        //   // İlk başta kalan süreyi almak
-        //   remainingTime = Swal.getTimerLeft();
-    
-        //   toast.addEventListener('mouseover', () => {
-        //     if (remainingTime !== null) {
-        //       clearTimeout(timeoutId); // Hover edilince zamanlayıcıyı durdur
-        //       Swal.stopTimer(); // Timer'ı durdur
-        //     }
-        //   });
-    
-        //   toast.addEventListener('mouseout', () => {
-        //     if (remainingTime !== null) {
-        //       Swal.resumeTimer(); // Timer'ı yeniden başlat
-        //       timeoutId = setTimeout(() => {
-        //         Swal.fire({
-        //           icon: 'warning',
-        //           title: 'The following fields are required:',
-        //           text: `${missingFields}`,
-        //           timer: remainingTime, // Kaldığı yerden devam et
-        //           timerProgressBar: true,
-        //           showConfirmButton: false,
-        //           customClass: {
-        //             container: 'my-toast-container'
-        //           }
-        //         });
-        //       }, 100); // Bu kısa gecikme, hover ile hemen bir etki sağlamayı amaçlar
-        //     }
-        //   });
-        // },
-        // willClose: () => {
-        //   clearInterval(timerInterval); // Toast kapandığında zamanlayıcıyı temizle
-        //   clearTimeout(timeoutId); // Timeout'u temizle
-        //   remainingTime = null; // Kalan süreyi sıfırla
-        // },
-        // customClass: {
-        //   container: 'my-toast-container'
-        // }
-      });
+    const newInvalidFields = requiredFields.filter(field => !field.value).map(field => field.label);
 
-      // toast.warning(
-      //   `The following fields are required: ${missingFields}`,
-      //   {
-      //     position: "top-center",
-      //     autoClose: 3000,
-      //     hideProgressBar: false,
-      //     closeOnClick: true,
-      //     pauseOnHover: true,
-      //     draggable: true,
-      //     style: {
-      //       backgroundColor: '#fff4e6', 
-      //       color: '#ff6f61', 
-      //       border: '1px solid #ffebd9', 
-      //       borderRadius: '8px', 
-      //       padding: '12px 24px', 
-      //       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', 
-      //       fontSize: '16px', 
-      //       fontWeight: '500', 
-      //     },
-      //     icon: false 
-      //   }
-      // );
-  
-      // Add red border effect to invalid fields
-      // invalidFields.forEach(field => {
-      //   document.querySelector(`[name="${field.label}"]`)?.classList.add('border-red-500');
-      //   setTimeout(() => {
-      //     document.querySelector(`[name="${field.label}"]`)?.classList.remove('border-red-500');
-      //   }, 5000);
-      // });
-  
+    setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => newInvalidFields.includes(field)));
+
+    if (newInvalidFields.length > 0) {
+      toast.warn("The fields marked below are mandatory");
+      setInvalidFields(newInvalidFields);
       return false;
     }
-  
+
+    setInvalidFields([]);
     return true;
   };
+
+  useEffect(() => {
+    const requiredFields = getRequiredFields();
+    const validFields = requiredFields.filter(field => field.value).map(field => field.label);
+    setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => !validFields.includes(field)));
+  }, [selectedCustomer, selectedServiceType, startDateTime, endDateTime, selectedDriver, requestedPerson, selectedVehicleClass, selectedVehicle, selectedSupplier]);
 
   useEffect(() => {
     console.clear();
@@ -282,27 +210,27 @@ const AddBusLong = () => {
       },
       body: JSON.stringify(selectedData),
     })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.text();
-    })
-    .then(data => {
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: data,
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(data => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: data,
+        });
+        navigate('/bus/long-orders');
+      })
+      .catch(error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.message,
+        });
       });
-      navigate('/bus/long-orders');
-    })
-    .catch(error => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.message,
-      });
-    });
   };
 
   // Customer monthly payment default
@@ -420,7 +348,6 @@ const AddBusLong = () => {
       isAllVehiclesSelected: value,
     }));
   };
-
 
   // Extra charges
 
@@ -558,7 +485,6 @@ const AddBusLong = () => {
 
   return (
     <DefaultLayout>
-      <ToastContainer />
       <Breadcrumb pageName="Insert" prevPageName='Bus long orders' prevRoute='/bus/long-orders' />
       {formOptions ? (
         <div className="max-w-full mx-auto gap-9 sm:grid-cols-2">
@@ -568,26 +494,26 @@ const AddBusLong = () => {
               <form>
                 <div className="p-6.5">
                   <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                    <SelectGroupOne text="Customer" options={formOptions.customers || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedData.selectedCustomer} />
-                    <SelectGroupOne text="Service Type" options={formOptions.serviceTypes || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedData.selectedServiceType} />
+                    <SelectGroupOne text="Customer" options={formOptions.customers || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedData.selectedCustomer} isInvalid={invalidFields.includes('Customer')} />
+                    <SelectGroupOne text="Service Type" options={formOptions.serviceTypes || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedData.selectedServiceType} isInvalid={invalidFields.includes('Service Type')} />
                   </div>
 
                   <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                    <DatePickerOne labelName="Start Date Time" disabled={false} setSelectedData={setSelectedData} value={startDateTime} />
-                    <DatePickerOne labelName="End Date Time" disabled={false} setSelectedData={setSelectedData} value={endDateTime} />
+                    <DatePickerOne labelName="Start Date Time" disabled={false} setSelectedData={setSelectedData} value={startDateTime} isInvalid={invalidFields.includes('Start Date Time')} />
+                    <DatePickerOne labelName="End Date Time" disabled={false} setSelectedData={setSelectedData} value={endDateTime} isInvalid={invalidFields.includes('End Date Time')} />
                   </div>
 
                   <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                    <SelectGroupOne text="Contract" options={formOptions.contracts || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedData.selectedContract} />
-                    <SelectGroupOne text="Driver" options={formOptions.drivers || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedData.selectedDriver} />
+                    <SelectGroupOne text="Contract" options={formOptions.contracts || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedData.selectedContract} isInvalid={invalidFields.includes('Contract')} />
+                    <SelectGroupOne text="Driver" options={formOptions.drivers || []} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedData.selectedDriver} isInvalid={invalidFields.includes('Driver')} />
                   </div>
 
                   {
                     selectedData.selectedServiceType === "M-000003" && <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                       <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue="" />
-                      <SelectGroupOne text="Vehicle Class" options={formOptions.vehicleClasses || []} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
+                      <SelectGroupOne text="Vehicle Class" options={formOptions.vehicleClasses || []} setSelectedData={setSelectedData} disabled={false} defaultValue='' isInvalid={invalidFields.includes('Vehicle Class')} />
                       <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false} />
-                      <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={formOptions.vehicles ? false : true} defaultValue='' />
+                      <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={formOptions.vehicles ? false : true} defaultValue='' isInvalid={invalidFields.includes('Vehicle')} />
                     </div>
                   }
 
@@ -618,7 +544,7 @@ const AddBusLong = () => {
 
                   {
                     selectedData.selectedOutsourceVehicle == true && <> <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                      <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
+                      <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={false} defaultValue='' isInvalid={invalidFields.includes('Supplier')} />
                       <SelectGroupOne text="Supplier Contract" options={formOptions.supplierContracts || []} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
                     </div>
 
@@ -657,7 +583,8 @@ const AddBusLong = () => {
                         }))}
                         type="text"
                         placeholder="Enter person name"
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        className={`w-full rounded border-[1.5px] ${invalidFields.includes("Requested Person") ? 'focus:border-danger active:border-danger border-danger bg-red-100 ' : 'focus:border-primary border-stroke active:border-primary dark:border-form-strokedark dark:bg-form-input'}  bg-transparent py-3 px-5 text-black 
+                                    outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`}
                       />
                     </div>
                     <div className='w-full'>
@@ -684,7 +611,10 @@ const AddBusLong = () => {
                         }))}
                         rows={3}
                         placeholder="Type your comment"
-                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        className={`w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5
+                                  text-black outline-none transition focus:border-primary active:border-primary 
+                                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
+                                  dark:bg-form-input dark:text-white dark:focus:border-primary`}
                       ></textarea>
                     </div>
                   </div>

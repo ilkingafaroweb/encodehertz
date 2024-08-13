@@ -7,6 +7,7 @@ import DatePickerOne from '../../../../components/Forms/DatePicker/DatePickerOne
 import MultiSelect from '../../../../components/Forms/MultiSelect';
 import Swal from 'sweetalert2';
 import FormCheckbox from '../../../../components/Forms/Checkbox/FormCheckbox';
+import { toast } from 'react-toastify';
 
 interface FormData {
   contracts: { value: string; text: string }[];
@@ -98,6 +99,7 @@ const DuplicateBusLong = () => {
   const token = localStorage.getItem('token')
   const [formOptions, setFormOptions] = useState<FormData | null>(null);
   const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
+  const [invalidFields, setInvalidFields] = useState<string[]>([])
 
   const fetchData = async () => {
     try {
@@ -171,6 +173,41 @@ const DuplicateBusLong = () => {
     extraChargePanel,
     selectedExtraCharges
   } = selectedData
+
+  const getRequiredFields = () => [
+    { value: selectedCustomer, label: "Customer" },
+    { value: selectedServiceType, label: "Service Type" },
+    { value: startDateTime, label: "Start Date Time" },
+    { value: endDateTime, label: "End Date Time" },
+    { value: selectedDriver, label: "Driver" },
+    { value: requestedPerson, label: "Requested Person" },
+    ...(selectedData.selectedServiceType === "M-000003" ? [{ value: selectedVehicleClass, label: "Vehicle Class" }, { value: selectedVehicle, label: "Vehicle" }] : []),
+    ...(selectedData.selectedOutsourceVehicle == true ? [{ value: selectedSupplier, label: "Supplier" }] : []),
+  ];
+
+  const validateForm = (): boolean => {
+    const requiredFields = getRequiredFields();
+
+    const newInvalidFields = requiredFields.filter(field => !field.value).map(field => field.label);
+
+    setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => newInvalidFields.includes(field)));
+
+    if (newInvalidFields.length > 0) {
+      toast.warn("The fields marked below are mandatory");
+      setInvalidFields(newInvalidFields);
+      return false;
+    }
+
+    setInvalidFields([]);
+    return true;
+  };
+
+  useEffect(() => {
+    const requiredFields = getRequiredFields();
+    const validFields = requiredFields.filter(field => field.value).map(field => field.label);
+    setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => !validFields.includes(field)));
+  }, [selectedCustomer, selectedServiceType, startDateTime, endDateTime, selectedDriver, requestedPerson, selectedVehicleClass, selectedVehicle, selectedSupplier]);
+
 
   useEffect(() => {
     const outsourceVehicleBoolean = Boolean(selectedOutsourceVehicle);
@@ -348,6 +385,9 @@ const DuplicateBusLong = () => {
   };
 
   const addBusLong = async () => {
+
+    if (!validateForm()) return;
+
     await fetch('https://encodehertz.xyz/api/Long/Create', {
       method: 'POST',
       headers: {

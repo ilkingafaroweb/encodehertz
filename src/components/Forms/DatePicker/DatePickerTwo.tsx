@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-const DatePickerTwo: React.FC<{ labelName: string, disabled: boolean, setSelectedData: any,  value: string }> = ({ labelName, disabled, setSelectedData, value }) => {
+const DatePickerTwo: React.FC<{ labelName: string, disabled: boolean, setSelectedData: any,  value: string, isInvalid?: boolean }> = ({ labelName, disabled, setSelectedData, value, isInvalid }) => {
   
   const [inputValue, setInputValue] = useState(value || '');
 
@@ -55,7 +55,7 @@ const DatePickerTwo: React.FC<{ labelName: string, disabled: boolean, setSelecte
       <div className="relative">
         <input
           disabled={disabled}
-          className={`form-datepicker-${formatPropertyName(propertyName)} w-full rounded border-[1.5px] text-black border-stroke bg-transparent px-5 py-3 font-normal outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:text-white dark:bg-form-input dark:focus:border-primary`}
+          className={`form-datepicker-${formatPropertyName(propertyName)} w-full rounded ${isInvalid ? 'focus:border-danger active:border-danger border-danger bg-red-100 ' : 'focus:border-primary border-stroke active:border-primary dark:border-form-strokedark dark:bg-form-input'} border-[1.5px]  bg-transparent px-5 py-3 font-normal outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary`}
           placeholder="dd/mm/yyyy hh:mm"
           data-class="flatpickr-right"
           value={value}

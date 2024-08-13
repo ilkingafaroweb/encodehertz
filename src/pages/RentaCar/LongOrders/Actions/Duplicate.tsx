@@ -7,6 +7,7 @@ import MultiSelect from '../../../../components/Forms/MultiSelect';
 import Swal from 'sweetalert2';
 import DatePickerTwo from '../../../../components/Forms/DatePicker/DatePickerTwo';
 import FormCheckbox from '../../../../components/Forms/Checkbox/FormCheckbox';
+import { toast } from 'react-toastify';
 
 interface FormData {
     cardNumber: string | null;
@@ -113,6 +114,7 @@ const DuplicateRentLong = () => {
     const token = localStorage.getItem("token")
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
+    const [invalidFields, setInvalidFields] = useState<string[]>([])
 
     const fetchData = async () => {
         try {
@@ -195,6 +197,39 @@ const DuplicateRentLong = () => {
         extraChargePanel,
         selectedExtraCharges
     } = selectedData
+
+    const getRequiredFields = () => [
+        { value: selectedCustomer, label: "Customer" },
+        { value: selectedServiceType, label: "Service Type" },
+        { value: startDateTime, label: "Start Date Time" },
+        { value: endDateTime, label: "End Date Time" },
+        { value: requestedPerson, label: "Requested Person" },
+        ...(selectedData.selectedServiceType === "M-000003" ? [{ value: selectedVehicleGroup, label: "Vehicle Class" }, { value: selectedVehicle, label: "Vehicle" }] : []),
+        ...(selectedData.selectedOutsourceVehicle == true ? [{ value: selectedSupplier, label: "Supplier" }] : []),
+    ];
+
+    const validateForm = (): boolean => {
+        const requiredFields = getRequiredFields();
+
+        const newInvalidFields = requiredFields.filter(field => !field.value).map(field => field.label);
+
+        setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => newInvalidFields.includes(field)));
+
+        if (newInvalidFields.length > 0) {
+            toast.warn("The fields marked below are mandatory");
+            setInvalidFields(newInvalidFields);
+            return false;
+        }
+
+        setInvalidFields([]);
+        return true;
+    };
+
+    useEffect(() => {
+        const requiredFields = getRequiredFields();
+        const validFields = requiredFields.filter(field => field.value).map(field => field.label);
+        setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => !validFields.includes(field)));
+    }, [selectedCustomer, selectedServiceType, startDateTime, endDateTime, requestedPerson, selectedVehicleGroup, selectedVehicle, selectedSupplier]);
 
     // Form options 
 
@@ -374,7 +409,7 @@ const DuplicateRentLong = () => {
                             <form>
                                 <div className="p-6.5">
                                     <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                                        <SelectGroupOne text="Customer" options={formOptions.customers || []} setSelectedData={setSelectedData} disabled={!formOptions.customers} defaultValue={selectedCustomer} />
+                                        <SelectGroupOne text="Customer" options={formOptions.customers || []} setSelectedData={setSelectedData} disabled={!formOptions.customers} defaultValue={selectedCustomer} isInvalid={invalidFields.includes('Customer')}/>
                                         <div className="w-full xl:w-full">
                                             <label className="mb-2.5 block text-black dark:text-white">
                                                 Customer Name
@@ -393,7 +428,7 @@ const DuplicateRentLong = () => {
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                        <SelectGroupOne text="Service Type" options={[{ value: "M-000089", text: "Rent a Car Long" }]} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedServiceType} />
+                                        <SelectGroupOne text="Service Type" options={[{ value: "M-000089", text: "Rent a Car Long" }]} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedServiceType} isInvalid={invalidFields.includes('Service Type')}/>
                                         <div className="w-full xl:w-full">
                                             <label className="mb-2.5 block text-black dark:text-white">
                                                 Driver
@@ -412,15 +447,15 @@ const DuplicateRentLong = () => {
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                        <DatePickerTwo labelName="Start Date Time" disabled={false} setSelectedData={setSelectedData} value={startDateTime} />
-                                        <DatePickerTwo labelName="End Date Time" disabled={false} setSelectedData={setSelectedData} value={endDateTime} />
+                                        <DatePickerTwo labelName="Start Date Time" disabled={false} setSelectedData={setSelectedData} value={startDateTime} isInvalid={invalidFields.includes('Start Date Time')}/>
+                                        <DatePickerTwo labelName="End Date Time" disabled={false} setSelectedData={setSelectedData} value={endDateTime} isInvalid={invalidFields.includes('End Date Time')}/>
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue={selectedOutsourceVehicle ? "true" : ""} />
-                                        <SelectGroupOne text="Vehicle Group" options={formOptions.vehicleGroups || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicleGroups} defaultValue={selectedVehicleGroup} />
+                                        <SelectGroupOne text="Vehicle Group" options={formOptions.vehicleGroups || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicleGroups} defaultValue={selectedVehicleGroup} isInvalid={invalidFields.includes('Vehicle Group')}/>
                                         <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false} />
-                                        <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue={selectedVehicle} />
+                                        <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue={selectedVehicle} isInvalid={invalidFields.includes('Vehicle')}/>
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
@@ -448,7 +483,7 @@ const DuplicateRentLong = () => {
                                     {
                                         selectedData.selectedOutsourceVehicle == true &&
                                         <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                            <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={!formOptions.suppliers} defaultValue='' />
+                                            <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={!formOptions.suppliers} defaultValue='' isInvalid={invalidFields.includes('Supplier')}/>
                                             <SelectGroupOne text="Supplier Payment Method" options={formOptions.supplierPaymentMethods || []} setSelectedData={setSelectedData} disabled={!formOptions.supplierPaymentMethods} defaultValue='' />
                                             <div className="w-full xl:w-full">
                                                 <label className="mb-2.5 block text-black dark:text-white">
@@ -484,8 +519,8 @@ const DuplicateRentLong = () => {
                                                 }))}
                                                 type="text"
                                                 placeholder="Enter person name"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                            />
+                                                className={`w-full rounded border-[1.5px] ${invalidFields.includes("Requested Person") ? 'focus:border-danger active:border-danger border-danger bg-red-100 ' : 'focus:border-primary border-stroke active:border-primary dark:border-form-strokedark dark:bg-form-input'}  bg-transparent py-3 px-5 text-black 
+                                                outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`}                                            />
                                         </div>
                                         <div className="w-full hidden xl:w-full xl:block">
 
