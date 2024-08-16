@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import DatePickerTwo from '../../../components/Forms/DatePicker/DatePickerTwo';
 import RepairTypes from '../../RepairTypes/RepairTypes';
 import RepairTypesInput from '../../../components/Forms/RepairTypes';
+import { toast } from 'react-toastify';
 
 interface FormData {
     cardNumber: string | null;
@@ -53,10 +54,48 @@ const AddMaintenance = () => {
     const token = localStorage.getItem("token")
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
+    const [invalidFields, setInvalidFields] = useState<string[]>([])
 
     let {
         selectedSupplier, selectedVehicle, repairTypes, selectedRepairTypes, startDateTime, endDateTime, comment, totalAmount, km
     } = selectedData
+
+    const getRequiredFields = () => [
+        { value: startDateTime, label: "Start Date Time" },
+        { value: endDateTime, label: "End Date Time" },
+        { value: selectedSupplier, label: "Supplier" },
+        { value: selectedVehicle, label: "Vehicle" },
+        { value: selectedRepairTypes, label: "Repair Types" },
+    ];
+
+    const validateForm = (): boolean => {
+        const requiredFields = getRequiredFields();
+
+        const newInvalidFields = requiredFields.filter(field => {
+            if (Array.isArray(field.value)) {
+                return field.value.length === 0;
+            }
+            return !field.value;
+        }).map(field => field.label);
+
+        setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => newInvalidFields.includes(field)));
+
+        if (newInvalidFields.length > 0) {
+            toast.warn("The fields marked below are mandatory");
+            setInvalidFields(newInvalidFields);
+            return false;
+        }
+
+        setInvalidFields([]);
+        return true;
+    };
+
+    useEffect(() => {
+        const requiredFields = getRequiredFields();
+        const validFields = requiredFields.filter(field => field.value).map(field => field.label);
+        setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => !validFields.includes(field)));
+    }, [startDateTime, endDateTime, selectedVehicle, selectedSupplier, selectedRepairTypes]);
+
 
     useEffect(() => {
         let newTotalAmount = 0;
@@ -134,6 +173,9 @@ const AddMaintenance = () => {
     // Rentacar Short order post 
 
     const handleSubmit = async () => {
+        
+        if (!validateForm()) return;
+
         await fetch('https://encodehertz.xyz/api/MaintenanceMaintenance/Create', {
             method: 'POST',
             headers: {
@@ -230,13 +272,13 @@ const AddMaintenance = () => {
                             <form>
                                 <div className="p-6.5">
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                        <DatePickerTwo labelName="Start Date Time" disabled={false} setSelectedData={setSelectedData} value={startDateTime} />
-                                        <DatePickerTwo labelName="End Date Time" disabled={false} setSelectedData={setSelectedData} value={endDateTime} />
+                                        <DatePickerTwo labelName="Start Date Time" disabled={false} setSelectedData={setSelectedData} value={startDateTime} isInvalid={invalidFields.includes('Start Date Time')}/>
+                                        <DatePickerTwo labelName="End Date Time" disabled={false} setSelectedData={setSelectedData} value={endDateTime} isInvalid={invalidFields.includes('End Date Time')}/>
                                     </div>
 
                                     <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                                        <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={!formOptions.suppliers} defaultValue='' />
-                                        <SelectGroupOne text='Vehicle' options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue='' />
+                                        <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={!formOptions.suppliers} defaultValue='' isInvalid={invalidFields.includes('Supplier')}/>
+                                        <SelectGroupOne text='Vehicle' options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue='' isInvalid={invalidFields.includes('Vehicle')}/>
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
@@ -273,7 +315,7 @@ const AddMaintenance = () => {
                                         <label className="mt-3 block text-md font-medium text-black dark:text-white">
                                             Repair Types
                                         </label>
-                                        <RepairTypesInput repairOptions={formOptions.repairTypes || []} disabled={false} setSelectedData={setSelectedData} defaultValue='' stateName='selectedRepairTypes' />
+                                        <RepairTypesInput repairOptions={formOptions.repairTypes || []} disabled={false} setSelectedData={setSelectedData} defaultValue='' stateName='selectedRepairTypes' isInvalid={invalidFields.includes('Repair Types')}/>
                                     </div>
 
 

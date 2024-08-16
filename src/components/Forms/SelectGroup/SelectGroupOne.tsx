@@ -31,7 +31,7 @@ const SelectGroupOne: React.FC<SelectGroupOneProps> = ({ text, options, setSelec
     setIsOptionSelected(true);
   };
 
-  const isDefaultValueValid = options.some(option => option.value === defaultValue);
+  const isDefaultValueValid = options?.some(option => option.value === defaultValue);
 
   return (
     <div className="w-full mb-2">

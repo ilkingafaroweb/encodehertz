@@ -7,6 +7,7 @@ import MultiSelect from '../../../components/Forms/MultiSelect';
 import Swal from 'sweetalert2';
 import DatePickerTwo from '../../../components/Forms/DatePicker/DatePickerTwo';
 import RepairTypesInput from '../../../components/Forms/RepairTypes';
+import { toast } from 'react-toastify';
 
 interface FormData {
     cardNumber: string | null;
@@ -54,10 +55,48 @@ const EditMaintenance = () => {
     const token = localStorage.getItem("token")
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
+    const [invalidFields, setInvalidFields] = useState<string[]>([])
+
 
     const {
        cardNumber, selectedSupplier, selectedVehicle, repairTypes, selectedRepairTypes, startDateTime, endDateTime, comment, totalAmount, km
     } = selectedData
+
+    const getRequiredFields = () => [
+        { value: startDateTime, label: "Start Date Time" },
+        { value: endDateTime, label: "End Date Time" },
+        { value: selectedSupplier, label: "Supplier" },
+        { value: selectedVehicle, label: "Vehicle" },
+        { value: selectedRepairTypes, label: "Repair Types" },
+    ];
+
+    const validateForm = (): boolean => {
+        const requiredFields = getRequiredFields();
+
+        const newInvalidFields = requiredFields.filter(field => {
+            if (Array.isArray(field.value)) {
+                return field.value.length === 0;
+            }
+            return !field.value;
+        }).map(field => field.label);
+
+        setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => newInvalidFields.includes(field)));
+
+        if (newInvalidFields.length > 0) {
+            toast.warn("The fields marked below are mandatory");
+            setInvalidFields(newInvalidFields);
+            return false;
+        }
+
+        setInvalidFields([]);
+        return true;
+    };
+
+    useEffect(() => {
+        const requiredFields = getRequiredFields();
+        const validFields = requiredFields.filter(field => field.value).map(field => field.label);
+        setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => !validFields.includes(field)));
+    }, [startDateTime, endDateTime, selectedVehicle, selectedSupplier, selectedRepairTypes]);
 
     useEffect(() => {
         let newTotalAmount = 0;
@@ -123,6 +162,9 @@ const EditMaintenance = () => {
     // Rentacar Short order post 
 
     const handleSave = async () => {
+
+        if (!validateForm()) return;
+
         await fetch('https://encodehertz.xyz/api/MaintenanceMaintenance/Edit', {
             method: 'POST',
             headers: {
@@ -190,6 +232,9 @@ const EditMaintenance = () => {
     };
 
     const handleSend = async () => {
+
+        if (!validateForm()) return;
+
         const maintID = localStorage.getItem('ActionID')
     
         try {

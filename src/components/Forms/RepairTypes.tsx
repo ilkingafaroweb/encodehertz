@@ -15,9 +15,10 @@ interface DropdownProps {
   disabled: boolean;
   defaultValue: any;
   stateName: string;
+  isInvalid?: boolean;
 }
 
-const RepairTypesInput: React.FC<DropdownProps> = ({ repairOptions, disabled, setSelectedData, defaultValue, stateName }) => {
+const RepairTypesInput: React.FC<DropdownProps> = ({ repairOptions, disabled, setSelectedData, defaultValue, stateName, isInvalid }) => {
   const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [sumOutsource, setSumOutsource] = useState(0);
@@ -52,7 +53,7 @@ const RepairTypesInput: React.FC<DropdownProps> = ({ repairOptions, disabled, se
     <div className="relative z-50 w-full">
       <div className="flex flex-col items-center">
         <div onClick={toggleDropdown} className="w-full relative">
-          <div className="mb-2 flex flex-wrap gap-3 rounded border border-stroke py-2 pl-3 pr-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
+          <div className={`mb-2 flex flex-wrap gap-3 rounded border ${isInvalid ? 'border-danger' : 'border-stroke'}  py-2 pl-3 pr-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input`}>
             {selectedOptions.map((option, index) => (
               <div key={option.id} className="my-1 flex items-center justify-center rounded border-[.5px] border-stroke bg-gray px-2.5 py-1.5 text-sm font-medium dark:border-strokedark dark:bg-white/30">
                 <div className="w-full flex flex-col lg:gap-6 items-center justify-between lg:flex-row" onClick={(e) => e.stopPropagation()}>

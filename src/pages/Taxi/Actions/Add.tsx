@@ -7,6 +7,7 @@ import MultiSelect from '../../../components/Forms/MultiSelect';
 import Swal from 'sweetalert2';
 import DatePickerTwo from '../../../components/Forms/DatePicker/DatePickerTwo';
 import TransactionPeriod from '../../../components/Forms/DatePicker/TransactionPeriod';
+import { toast } from 'react-toastify';
 
 interface FormData {
     cardNumber: string | null;
@@ -63,8 +64,42 @@ const AddTaxi = () => {
     const token = localStorage.getItem("token")
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
+    const [invalidFields, setInvalidFields] = useState<string[]>([])
 
-    const { transactionPeriod, otherComment, otherPrice, km } = selectedData
+    const { selectedCustomer, transactionPeriod, otherComment, otherPrice, km } = selectedData
+
+    const getRequiredFields = () => [
+        { value: selectedCustomer, label: "Customer" },
+        { value: transactionPeriod, label: "Transaction Period" },
+    ];
+
+    const validateForm = (): boolean => {
+        const requiredFields = getRequiredFields();
+
+        const newInvalidFields = requiredFields.filter(field => {
+            if (Array.isArray(field.value)) {
+                return field.value.length === 0;
+            }
+            return !field.value;
+        }).map(field => field.label);
+
+        setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => newInvalidFields.includes(field)));
+
+        if (newInvalidFields.length > 0) {
+            toast.warn("The fields marked below are mandatory");
+            setInvalidFields(newInvalidFields);
+            return false;
+        }
+
+        setInvalidFields([]);
+        return true;
+    };
+
+    useEffect(() => {
+        const requiredFields = getRequiredFields();
+        const validFields = requiredFields.filter(field => field.value).map(field => field.label);
+        setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => !validFields.includes(field)));
+    }, [selectedCustomer, transactionPeriod]);
 
     // Form options 
 
@@ -98,6 +133,9 @@ const AddTaxi = () => {
     // Rentacar Short order post 
 
     const addTaxi = async () => {
+
+        if (!validateForm()) return;
+
         await fetch('https://encodehertz.xyz/api/Taxi/Taxi/Create', {
             method: 'POST',
             headers: {
@@ -211,9 +249,9 @@ const AddTaxi = () => {
                             <form>
                                 <div className="p-6.5">
                                     <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                                        <SelectGroupOne text="Customer" options={formOptions.customers || []} setSelectedData={setSelectedData} disabled={!formOptions.customers} defaultValue='' />
+                                        <SelectGroupOne text="Customer" options={formOptions.customers || []} setSelectedData={setSelectedData} disabled={!formOptions.customers} defaultValue='' isInvalid={invalidFields.includes('Customer')}/>
                                         <SelectGroupOne text="Payment Method" options={formOptions.paymentMethods || []} setSelectedData={setSelectedData} disabled={!formOptions.paymentMethods} defaultValue='' />
-                                        <TransactionPeriod labelName="Transaction Period" disabled={false} setSelectedData={setSelectedData} value={transactionPeriod} />
+                                        <TransactionPeriod labelName="Transaction Period" disabled={false} setSelectedData={setSelectedData} value={transactionPeriod} isInvalid={invalidFields.includes('Transaction Period')}/>
                                     </div>
 
                                     <div className='flex flex-col justify-between mb-6 lg:flex-row'>

@@ -7,6 +7,7 @@ import MultiSelect from '../../../../components/Forms/MultiSelect';
 import Swal from 'sweetalert2';
 import DatePickerTwo from '../../../../components/Forms/DatePicker/DatePickerTwo';
 import FormCheckbox from '../../../../components/Forms/Checkbox/FormCheckbox';
+import { toast } from 'react-toastify';
 
 interface FormData {
     cardNumber: string | null;
@@ -115,6 +116,7 @@ const DuplicateRentShort = () => {
     const token = localStorage.getItem("token")
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
+    const [invalidFields, setInvalidFields] = useState<string[]>([])
 
     const fetchData = async () => {
         try {
@@ -198,6 +200,43 @@ const DuplicateRentShort = () => {
         extraChargePanel,
         selectedExtraCharges
     } = selectedData
+
+
+    const getRequiredFields = () => [
+        { value: selectedCustomer, label: "Customer" },
+        { value: selectedServiceType, label: "Service Type" },
+        { value: startDateTime, label: "Start Date Time" },
+        { value: endDateTime, label: "End Date Time" },
+        { value: requestedPerson, label: "Requested Person" },
+        // { value: selectedSource, label: "Source" },
+        { value: selectedVehicleGroup, label: "Vehicle Group" },
+        { value: selectedVehicle, label: "Vehicle" },
+        ...(selectedData.selectedOutsourceVehicle == true ? [{ value: selectedSupplier, label: "Supplier" }] : []),
+    ];
+
+    const validateForm = (): boolean => {
+        const requiredFields = getRequiredFields();
+
+        const newInvalidFields = requiredFields.filter(field => !field.value).map(field => field.label);
+
+        setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => newInvalidFields.includes(field)));
+
+        if (newInvalidFields.length > 0) {
+            toast.warn("The fields marked below are mandatory");
+            setInvalidFields(newInvalidFields);
+            return false;
+        }
+
+        setInvalidFields([]);
+        return true;
+    };
+
+    useEffect(() => {
+        const requiredFields = getRequiredFields();
+        const validFields = requiredFields.filter(field => field.value).map(field => field.label);
+        setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => !validFields.includes(field)));
+    }, [selectedCustomer, selectedServiceType, startDateTime, endDateTime, requestedPerson, selectedVehicleGroup, selectedVehicle, selectedSupplier]);
+
 
 
     useEffect(() => {
@@ -317,6 +356,8 @@ const DuplicateRentShort = () => {
     }, []);
 
     const addCarShort = async () => {
+        if (!validateForm()) return;
+
         await fetch('https://encodehertz.xyz/api/RentCar/Short/Create', {
             method: 'POST',
             headers: {

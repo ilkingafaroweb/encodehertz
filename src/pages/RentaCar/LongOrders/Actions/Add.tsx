@@ -143,7 +143,7 @@ const AddRentLong = () => {
         { value: startDateTime, label: "Start Date Time" },
         { value: endDateTime, label: "End Date Time" },
         { value: requestedPerson, label: "Requested Person" },
-        ...(selectedData.selectedServiceType === "M-000003" ? [{ value: selectedVehicleGroup, label: "Vehicle Class" }, { value: selectedVehicle, label: "Vehicle" }] : []),
+        ...(selectedData.selectedServiceType === "M-000003" ? [{ value: selectedVehicleGroup, label: "Vehicle Group" }, { value: selectedVehicle, label: "Vehicle" }] : []),
         ...(selectedData.selectedOutsourceVehicle == true ? [{ value: selectedSupplier, label: "Supplier" }] : []),
     ];
 
@@ -452,7 +452,7 @@ const AddRentLong = () => {
                                                 type="text"
                                                 placeholder="Enter person name"
                                                 className={`w-full rounded border-[1.5px] ${invalidFields.includes("Requested Person") ? 'focus:border-danger active:border-danger border-danger bg-red-100 ' : 'focus:border-primary border-stroke active:border-primary dark:border-form-strokedark dark:bg-form-input'}  bg-transparent py-3 px-5 text-black 
-                                                outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`}                                            />
+                                                outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`}/>
                                         </div>
                                         <div className="w-full hidden xl:w-full xl:block">
 

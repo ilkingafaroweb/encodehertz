@@ -10,6 +10,7 @@ import RepairTypesInput from '../../../components/Forms/RepairTypes';
 import DatePickerOne from '../../../components/Forms/DatePicker/DatePickerOne';
 import ExpenceTypesInput from '../../../components/Forms/ExpenceTypes';
 import ExpenceTypes from '../../ExpenceTypes/ExpenceTypes';
+import { toast } from 'react-toastify';
 
 interface Option {
     id: number;
@@ -71,10 +72,44 @@ const EditExpences = () => {
     const token = localStorage.getItem("token")
     const [formOptions, setFormOptions] = useState<FormData | null>(null);
     const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
+    const [invalidFields, setInvalidFields] = useState<string[]>([])
 
     let {
         selectedEmployee, selectedVehicle, selectedExpenceTypes, expenceTypes, date, comment, totalPrice, cardNumber
     } = selectedData
+
+    const getRequiredFields = () => [
+        { value: date, label: "Date" },
+        { value: selectedExpenceTypes, label: "Expence Types" },
+    ];
+
+    const validateForm = (): boolean => {
+        const requiredFields = getRequiredFields();
+
+        const newInvalidFields = requiredFields.filter(field => {
+            if (Array.isArray(field.value)) {
+                return field.value.length === 0;
+            }
+            return !field.value;
+        }).map(field => field.label);
+
+        setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => newInvalidFields.includes(field)));
+
+        if (newInvalidFields.length > 0) {
+            toast.warn("The fields marked below are mandatory");
+            setInvalidFields(newInvalidFields);
+            return false;
+        }
+
+        setInvalidFields([]);
+        return true;
+    };
+
+    useEffect(() => {
+        const requiredFields = getRequiredFields();
+        const validFields = requiredFields.filter(field => field.value).map(field => field.label);
+        setInvalidFields(prevInvalidFields => prevInvalidFields.filter(field => !validFields.includes(field)));
+    }, [date, selectedExpenceTypes]);
 
     useEffect(() => {
         let newTotalAmount = 0;
@@ -138,6 +173,9 @@ const EditExpences = () => {
     // }, [selectedData])
 
     const handleSave = async () => {
+
+        if (!validateForm()) return;
+
         await fetch('https://encodehertz.xyz/api/Expences/Expence/Edit', {
             method: 'POST',
             headers: {
@@ -171,6 +209,9 @@ const EditExpences = () => {
     }
 
     const handleSend = async () => {
+
+        if (!validateForm()) return;
+
         const expID = localStorage.getItem('ActionID')
     
         try {
@@ -218,7 +259,6 @@ const EditExpences = () => {
         });
     };
 
-
     return (
         <DefaultLayout>
             <Breadcrumb pageName={`Edit / ${cardNumber}`} prevPageName='Expences' prevRoute='/expences' />
@@ -244,7 +284,7 @@ const EditExpences = () => {
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                        <DatePickerOne labelName="Date" disabled={false} setSelectedData={setSelectedData} value={date} />
+                                        <DatePickerOne labelName="Date" disabled={false} setSelectedData={setSelectedData} value={date} isInvalid={invalidFields.includes('Date')}/>
                                         <div className='w-full'>
 
                                         </div>
@@ -266,7 +306,7 @@ const EditExpences = () => {
                                             formOptions.expenceTypes?.length > 0 && <><label className="mt-3 block text-md font-medium text-black dark:text-white">
                                                 Expence Types
                                             </label>
-                                                <ExpenceTypesInput expenceOptions={formOptions.expenceTypes || []} disabled={false} setSelectedData={setSelectedData} defaultValue={expenceTypes} stateName='selectedExpenceTypes' />
+                                                <ExpenceTypesInput expenceOptions={formOptions.expenceTypes || []} disabled={false} setSelectedData={setSelectedData} defaultValue={expenceTypes} stateName='selectedExpenceTypes' isInvalid={invalidFields.includes('Expence Types')}/>
                                             </>
                                         }</div>
 

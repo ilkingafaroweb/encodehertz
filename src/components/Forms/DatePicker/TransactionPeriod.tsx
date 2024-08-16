@@ -4,7 +4,7 @@ import 'flatpickr/dist/flatpickr.css';
 import monthSelectPlugin from 'flatpickr/dist/plugins/monthSelect/index';
 import 'flatpickr/dist/plugins/monthSelect/style.css';
 
-const TransactionPeriod: React.FC<{ labelName: string, disabled: boolean, setSelectedData: any,  value: string }> = ({ labelName, disabled, setSelectedData, value }) => {
+const TransactionPeriod: React.FC<{ labelName: string, disabled: boolean, setSelectedData: any,  value: string, isInvalid?: boolean }> = ({ labelName, disabled, setSelectedData, value, isInvalid }) => {
   
   const [inputValue, setInputValue] = useState(value || '');
 
@@ -60,7 +60,7 @@ const TransactionPeriod: React.FC<{ labelName: string, disabled: boolean, setSel
       <div className="relative">
         <input
           disabled={disabled}
-          className={`form-datepicker-${formatPropertyName(propertyName)} w-full rounded border-[1.5px] text-black border-stroke bg-transparent px-5 py-3 font-normal outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:text-white dark:bg-form-input dark:focus:border-primary`}
+          className={`form-datepicker-${formatPropertyName(propertyName)} ${isInvalid ? 'border-danger focus:border-danger active:border-danger dark:border-danger dark:text-white dark:bg-form-input dark:focus:border-danger' : 'focus:border-primary active:border-primary dark:border-form-strokedark dark:text-white dark:bg-form-input dark:focus:border-primary'} w-full rounded border-[1.5px] text-black bg-transparent px-5 py-3 font-normal outline-none transition `}
           placeholder="mm/yyyy"
           data-class="flatpickr-right"
           value={value}

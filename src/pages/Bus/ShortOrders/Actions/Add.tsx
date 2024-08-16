@@ -398,7 +398,7 @@ const AddBusShort = () => {
     };
 
     useEffect(() => {
-        if (selectedCustomer) {
+        if (!!selectedCustomer) {
             fetch(`https://encodehertz.xyz/api/Short/GetContracts?customerCode=${selectedCustomer}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -427,7 +427,7 @@ const AddBusShort = () => {
     }, [selectedCustomer]);
 
     useEffect(() => {
-        if (selectedSupplier) {
+        if (!!selectedSupplier) {
             fetch(`https://encodehertz.xyz/api/Short/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
