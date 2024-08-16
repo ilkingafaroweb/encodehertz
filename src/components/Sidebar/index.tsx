@@ -4,14 +4,24 @@ import SidebarLinkGroup from './SidebarLinkGroup';
 import EncodeLogo from '../../images/logo/encode.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendDown, faFileInvoiceDollar, faMoneyBill, faMoneyBillTransfer, faTag, faToolbox } from '@fortawesome/free-solid-svg-icons';
+import useTranslations from '../../hooks/useTranslations';
+
 
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
 }
 
+interface Translation {
+  dashboard_lbl: string;
+  settings_lbl: string;
+}
+
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+
   const location = useLocation();
+  const { translate } = useTranslations('side_bar'); 
+
   const { pathname } = location;
 
   const trigger = useRef<any>(null);
@@ -19,6 +29,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
   const [sidebarExpanded, setSidebarExpanded] = useState(true)
+
   
   // close on click outside
   useEffect(() => {
@@ -148,7 +159,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             fill=""
                           />
                         </svg>
-                        Dashboard
+                        {translate('dashboard_lbl')}
                         <svg
                           className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current transition-all ${open && 'rotate-180'
                             }`}
@@ -180,7 +191,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && '!text-white')
                               }
                             >
-                              Analytics
+                              {translate('analytics_lbl')}
                             </NavLink>
                           </li>
                         </ul>
@@ -293,7 +304,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             fill=''
                           />
                         </svg>
-                        Bus
+                        {translate('bus_lbl')}
                         <svg
                           className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current transition-all ${open && 'rotate-180'
                             }`}
@@ -325,7 +336,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && '!text-white')
                               }
                             >
-                              Long Orders
+                              {translate('blo_lbl')}
                             </NavLink>
                           </li>
                           <li>
@@ -336,7 +347,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && '!text-white')
                               }
                             >
-                              Short Orders
+                              {translate('bso_lbl')}
                             </NavLink>
                           </li>
                         </ul>
@@ -412,7 +423,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             16.4-49.6 39.6-59.2zM128 288a32 32 0 1 0 -64 0 
                             32 32 0 1 0 64 0zm288 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/>
                         </svg>
-                        Rent a car
+                        {translate('rentcar_lbl')}
                         <svg
                           className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current transition-all ${open && 'rotate-180'
                             }`}
@@ -444,7 +455,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && '!text-white')
                               }
                             >
-                              Long Orders
+                              {translate('rcl_lbl')}
                             </NavLink>
                           </li>
                           <li>
@@ -455,7 +466,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && '!text-white')
                               }
                             >
-                              Short Orders
+                              {translate('rcs_lbl')}
                             </NavLink>
                           </li>
                         </ul>
@@ -488,7 +499,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     21.4L402.9 224H109.1l26.1-74.6c4.5-12.8 16.6-21.4 30.2-21.4zM96 288a32 32 0 
                     1 1 0 64 32 32 0 1 1 0-64zm288 32a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" fill='' />
                   </svg>
-                  Taxi
+                  {translate('taxi_lbl')}
                 </NavLink>
               </li>
               {/* <!-- Menu Item Maintenance --> */}
@@ -517,7 +528,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       5.2-21.8-6-24.2C388.7 1.1 378.5 0 368 0C288.5 0 224 64.5 224 144l0 .8 85.3 85.3c36-9.1 75.8 .5 
                       104 28.7L429 274.5c49-23 83-72.8 83-130.5zM56 432a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z" fill='' />
                   </svg>
-                  Maintenance
+                  {translate('maint_lbl')}
                 </NavLink>
               </li>
               <li>
@@ -527,7 +538,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     }`}
                 >
                   <FontAwesomeIcon icon={faArrowTrendDown} />
-                  Expences
+                  {translate('exp_lbl')}
                 </NavLink>
               </li>
               <li>
@@ -537,7 +548,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     }`}
                 >
                   <FontAwesomeIcon icon={faMoneyBillTransfer} />
-                  All Transactions
+                  {translate('alltrs_lbl')}
                 </NavLink>
               </li>
               <li>
@@ -572,7 +583,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                        0 0c-11-3.3-24.3-7.3-34.8-13.7c-12-7.2-22.6-18.9-22.7-37.3c-.1-19.4 10.8-32.8 23.8-40.5c7.5-4.4 
                        15.8-7.2 24.1-8.7V232c0-8.8 7.2-16 16-16z"/>
                   </svg>
-                  Extra Charges
+                  {translate('ecp_lbl')}
                 </NavLink>
               </li>
               <li>
@@ -593,7 +604,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     317.3c25-25 25-65.5 0-90.5l-176-176c-12-12-28.3-18.7-45.3-18.7H48C21.5 32 0 53.5 
                     0 80zm112 32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/>
                   </svg>
-                  Sources
+                  {translate('src_lbl')}
                 </NavLink>
               </li>
               <li>
@@ -605,7 +616,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   }`}
                 >
                   <FontAwesomeIcon icon={faToolbox} />
-                  Repair Types
+                  {translate('repair_lbl')}
                 </NavLink>
               </li>
               <li>
@@ -617,7 +628,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   }`}
                 >
                   <FontAwesomeIcon icon={faMoneyBill} />
-                  Expence Types
+                  {translate('expType_lbl')}
                 </NavLink>
               </li>
 

@@ -1,6 +1,7 @@
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState, useEffect } from 'react';
+import useTranslations from '../../../hooks/useTranslations';
 
 interface Option {
   value: string;
@@ -11,6 +12,8 @@ interface Option {
 const SelectDB: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<string>();
   const [options, setOptions] = useState<Option[]>([]);
+
+  const { translate } = useTranslations('nav_bar'); 
 
   useEffect(() => {
     const fetchBusinessUnits = async () => {
@@ -77,7 +80,7 @@ const SelectDB: React.FC = () => {
   return (
     <div className="w-max flex items-center">
       <label className="mr-2 hidden text-black dark:text-white lg:block">
-        Selected business unit :
+        {translate('slctdBU_lbl')} :
       </label>
       <div className="relative z-20 bg-transparent dark:bg-form-input rounded-lg">
         <select
