@@ -11,7 +11,7 @@ import useTranslations from '../../hooks/useTranslations';
 
 const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: any, actions: any }) => {
 
-  const { translate } = useTranslations(['general']); 
+  const { translate } = useTranslations(['general']);
 
   /* Initial table data */
   const [selectedIds, setSelectedIds] = useState([]);
@@ -161,8 +161,8 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
 
 
   return (
-    <div className="relative rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-      <div className='w-full mb-6 flex justify-end gap-2'>
+    <div className="relative rounded-sm border border-stroke bg-white px-3 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      <div className='w-full mb-6 flex flex-wrap justify-end gap-1.5'>
         {
           selectedIds.length === 0 && (
             actions.includes('add') && (
@@ -170,7 +170,8 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                 to="./add"
                 className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
               >
-                {translate('add_lbl')} <FontAwesomeIcon icon={faPlus} />
+                <span className="hidden sm:inline">{translate('add_lbl')}</span>
+                <FontAwesomeIcon icon={faPlus} />
               </Link>
             )
           )
@@ -184,7 +185,8 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                   onClick={() => addLocalActionId(selectedIds[0])}
                   className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
                 >
-                  {translate('edit_lbl')} <FontAwesomeIcon icon={faEdit} />
+                  <span className="hidden sm:inline">{translate('edit_lbl')}</span>
+                  <FontAwesomeIcon icon={faEdit} />
                 </Link>
               )}
               {actions.includes('preview') && (
@@ -193,7 +195,8 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                   onClick={() => addLocalActionId(selectedIds[0])}
                   className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
                 >
-                  {translate('preview_lbl')} <FontAwesomeIcon icon={faEye} />
+                  <span className="hidden sm:inline">{translate('preview_lbl')}</span>
+                  <FontAwesomeIcon icon={faEye} />
                 </Link>
               )}
               {actions.includes('duplicate') && (
@@ -202,7 +205,8 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                   onClick={() => addLocalActionId(selectedIds[0])}
                   className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
                 >
-                  {translate('duplicate_lbl')} <FontAwesomeIcon icon={faCopy} />
+                  <span className="hidden sm:inline">{translate('duplicate_lbl')}</span>
+                  <FontAwesomeIcon icon={faCopy} />
                 </Link>
               )}
               {actions.includes('delete') && (
@@ -210,7 +214,8 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                   className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
                   onClick={handleClick}
                 >
-                  {translate('delete_lbl')} <FontAwesomeIcon icon={faTrash} />
+                  <span className="hidden sm:inline">{translate('delete_lbl')}</span>
+                  <FontAwesomeIcon icon={faTrash} />
                 </button>
               )}
             </>
@@ -223,7 +228,8 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                 className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
                 onClick={handleClick}
               >
-                {translate('delete_lbl')} <FontAwesomeIcon icon={faTrash} />
+                <span className="hidden sm:inline">{translate('delete_lbl')}</span>
+                <FontAwesomeIcon icon={faTrash} />
               </button>
             )
           )
@@ -233,14 +239,15 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
             onClick={handleExcelDownload}
             className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium lg:px-6 xl:px-4"
           >
-            Excel <FontAwesomeIcon icon={faDownload} />
+            <span className="hidden sm:inline">Excel</span>
+            <FontAwesomeIcon icon={faDownload} />
           </button>
             <div ref={columnDropRef}>
               <button
                 onClick={() => setColumnDropOpen(!columnDropOpen)}
                 className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium lg:px-6 xl:px-4"
               >
-                {translate('columns_lbl')} {columnDropOpen ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
+                <span className="hidden sm:inline">{translate('columns_lbl')}</span> {columnDropOpen ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
               </button>
               {columnDropOpen && (
                 <div className="origin-top-right absolute p-2 right-7 mt-2 w-max min-w-36 max-h-56 overflow-y-scroll text-lg rounded-lg shadow-lg shadow-boxdark-2 bg-white ring-1 ring-black ring-opacity-5 dark:bg-boxdark-2 dark:text-white">
