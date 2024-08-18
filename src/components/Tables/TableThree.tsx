@@ -7,8 +7,11 @@ import { Tooltip } from "antd";
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 import { isDOMComponent } from 'react-dom/test-utils';
+import useTranslations from '../../hooks/useTranslations';
 
 const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: any, actions: any }) => {
+
+  const { translate } = useTranslations(['general']); 
 
   /* Initial table data */
   const [selectedIds, setSelectedIds] = useState([]);
@@ -167,7 +170,7 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                 to="./add"
                 className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
               >
-                Add <FontAwesomeIcon icon={faPlus} />
+                {translate('add_lbl')} <FontAwesomeIcon icon={faPlus} />
               </Link>
             )
           )
@@ -181,7 +184,7 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                   onClick={() => addLocalActionId(selectedIds[0])}
                   className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
                 >
-                  Edit <FontAwesomeIcon icon={faEdit} />
+                  {translate('edit_lbl')} <FontAwesomeIcon icon={faEdit} />
                 </Link>
               )}
               {actions.includes('preview') && (
@@ -190,7 +193,7 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                   onClick={() => addLocalActionId(selectedIds[0])}
                   className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
                 >
-                  Preview <FontAwesomeIcon icon={faEye} />
+                  {translate('preview_lbl')} <FontAwesomeIcon icon={faEye} />
                 </Link>
               )}
               {actions.includes('duplicate') && (
@@ -199,7 +202,7 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                   onClick={() => addLocalActionId(selectedIds[0])}
                   className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
                 >
-                  Duplicate <FontAwesomeIcon icon={faCopy} />
+                  {translate('duplicate_lbl')} <FontAwesomeIcon icon={faCopy} />
                 </Link>
               )}
               {actions.includes('delete') && (
@@ -207,7 +210,7 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                   className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
                   onClick={handleClick}
                 >
-                  Delete <FontAwesomeIcon icon={faTrash} />
+                  {translate('delete_lbl')} <FontAwesomeIcon icon={faTrash} />
                 </button>
               )}
             </>
@@ -220,7 +223,7 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                 className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
                 onClick={handleClick}
               >
-                Delete <FontAwesomeIcon icon={faTrash} />
+                {translate('delete_lbl')} <FontAwesomeIcon icon={faTrash} />
               </button>
             )
           )
@@ -237,7 +240,7 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
                 onClick={() => setColumnDropOpen(!columnDropOpen)}
                 className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium lg:px-6 xl:px-4"
               >
-                Columns {columnDropOpen ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
+                {translate('columns_lbl')} {columnDropOpen ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
               </button>
               {columnDropOpen && (
                 <div className="origin-top-right absolute p-2 right-7 mt-2 w-max min-w-36 max-h-56 overflow-y-scroll text-lg rounded-lg shadow-lg shadow-boxdark-2 bg-white ring-1 ring-black ring-opacity-5 dark:bg-boxdark-2 dark:text-white">

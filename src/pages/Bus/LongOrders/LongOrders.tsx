@@ -87,7 +87,7 @@ const LongOrders = () => {
 
   return (
     <DefaultLayout>
-      <Breadcrumb pageName='Bus long orders' prevPageName='Dashboard' prevRoute='/' />
+      <Breadcrumb pageName='breadcrumb_blo_lbl' prevPageName='dashboard_lbl' prevRoute='/' />
       <TableThree data={busLong} handleDelete={handleDelete} actions={actions}/>      
     </DefaultLayout>
   );

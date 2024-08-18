@@ -1,15 +1,18 @@
 import React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import useTranslations from '../../hooks/useTranslations';
 
 const DropdownUser = () => {
-  const navigate = useNavigate() 
+  // const navigate = useNavigate() 
   const token = localStorage.getItem('token')
   const [userName, setUserName] = useState('')
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+
+  const { translate } = useTranslations(['profile_dpdown']); 
 
   // close on click outside
   useEffect(() => {
@@ -140,7 +143,7 @@ const DropdownUser = () => {
                   fill=""
                 />
               </svg>
-              My Profile
+              {translate('us_profile_lbl')}
             </Link>
           </li>
           {/* <li>
@@ -211,7 +214,7 @@ const DropdownUser = () => {
               fill=""
             />
           </svg>
-          Log Out
+          {translate('us_logout_lbl')}
         </button>
       </div>
       {/* <!-- Dropdown End --> */}

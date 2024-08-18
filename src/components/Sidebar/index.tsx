@@ -20,7 +20,7 @@ interface Translation {
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   const location = useLocation();
-  const { translate } = useTranslations('side_bar'); 
+  const { translate } = useTranslations(['side_bar']); 
 
   const { pathname } = location;
 

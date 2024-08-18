@@ -13,7 +13,7 @@ const SelectDB: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<string>();
   const [options, setOptions] = useState<Option[]>([]);
 
-  const { translate } = useTranslations('nav_bar'); 
+  const { translate } = useTranslations(['nav_bar']); 
 
   useEffect(() => {
     const fetchBusinessUnits = async () => {
