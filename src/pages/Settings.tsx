@@ -138,7 +138,7 @@ const Profile: React.FC = () => {
   return (
     <DefaultLayout>
       <div className="mx-auto max-w-270">
-        <Breadcrumb pageName="Profile" prevPageName='Dashboard' prevRoute='/'/>
+        <Breadcrumb pageName="Profile" prevPageName='dashboard_lbl' prevRoute='/'/>
         <div className="grid gap-8 max-w-180 mx-auto">
           <div className="col-span-5 xl:col-span-3">
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -149,7 +149,7 @@ const Profile: React.FC = () => {
               </div>
               <div className="p-7">
                 <form>
-                  <div className="mb-4 flex items-center gap-3">
+                  {/* <div className="mb-4 flex items-center gap-3">
                     <div className="h-14 w-14 rounded-full">
                       <img src={"https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"} alt="User" />
                     </div>
@@ -163,9 +163,9 @@ const Profile: React.FC = () => {
                         </button>
                       </span>
                     </div>
-                  </div>
+                  </div> */}
 
-                  <div
+                  {/* <div
                     id="FileUpload"
                     className="relative mb-5.5 block w-full cursor-pointer appearance-none rounded border border-dashed border-primary bg-gray py-4 px-4 dark:bg-meta-4 sm:py-7.5"
                   >
@@ -210,7 +210,7 @@ const Profile: React.FC = () => {
                       <p className="mt-1.5">SVG, PNG, JPG or GIF</p>
                       <p>(max, 800 X 800px)</p>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/2">

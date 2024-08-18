@@ -87,11 +87,11 @@ const DropdownUser = () => {
           <span className="block text-sm font-medium text-black dark:text-white">
             {userName}
           </span>
-          <span className="block text-xs">User Role</span>
+          <span className="block text-xs">{translate('usergroup_lbl')}</span>
         </span>
 
-        <span className="h-12 w-12 rounded-full">
-          <img src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745" alt="User" />
+        <span className="h-14 w-14 rounded-full">
+          <img src="https://icons.veryicon.com/png/o/miscellaneous/two-color-icon-library/user-286.png" alt="User" />
         </span>
 
         <svg

@@ -78,7 +78,7 @@ const DropdownNotification = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute -right-27 mt-2.5 flex h-90 w-75 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark sm:right-0 sm:w-80 ${
+        className={`absolute -right-27 mt-2.5 flex max-h-90 max-w-75 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark sm:right-0 sm:w-80 ${
           dropdownOpen === true ? 'block' : 'hidden'
         }`}
       >
@@ -87,7 +87,7 @@ const DropdownNotification = () => {
         </div>
 
         <ul className="flex h-auto flex-col overflow-y-auto">
-          <li>
+          {/* <li>
             <Link
               className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
               to="#"
@@ -149,7 +149,10 @@ const DropdownNotification = () => {
 
               <p className="text-xs">01 Dec, 2024</p>
             </Link>
-          </li>
+          </li> */}
+          <span className="flex flex-col items-center gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4">
+            You have no notification
+          </span>
         </ul>
       </div>
     </li>
