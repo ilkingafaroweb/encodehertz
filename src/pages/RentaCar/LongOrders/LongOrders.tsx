@@ -51,7 +51,7 @@ const RentLongOrders = () => {
       cancelButtonText: 'No, cancel!'
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/RentCar/Long/Delete?id=${actionID}`;
+        const url = `https://encodehertz.xyz/api/RentCar/Long/DeleteRange?listOfID=${actionID}`;
         fetch(url, {
           method: 'GET',
           headers: {

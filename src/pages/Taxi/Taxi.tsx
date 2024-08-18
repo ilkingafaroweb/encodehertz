@@ -51,7 +51,7 @@ const Taxi = () => {
       cancelButtonText: 'No, cancel!'
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/Taxi/Taxi/Delete?toId=${actionID}`;
+        const url = `https://encodehertz.xyz/api/Taxi/Taxi/DeleteRange?listOfID=${actionID}`;
         fetch(url, {
           method: 'GET',
           headers: {

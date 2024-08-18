@@ -49,7 +49,7 @@ const ShortOrders = () => {
       cancelButtonText: 'No, cancel!'
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/Short/Delete?bsoId=${actionID}`;
+        const url = `https://encodehertz.xyz/api/Short/DeleteRange?listOfID=${actionID}`;
         fetch(url, {
           method: 'GET',
           headers: {

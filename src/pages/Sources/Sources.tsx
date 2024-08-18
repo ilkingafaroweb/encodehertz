@@ -46,7 +46,7 @@ const Sources = () => {
       cancelButtonText: 'No, cancel!'
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/Source/Delete?id=${actionID}`;
+        const url = `https://encodehertz.xyz/api/Source/DeleteRange?listOfID=${actionID}`;
         fetch(url, {
           method: 'GET',
           headers: {

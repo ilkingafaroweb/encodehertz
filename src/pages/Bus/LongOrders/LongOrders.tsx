@@ -47,7 +47,7 @@ const LongOrders = () => {
       cancelButtonText: 'No, cancel!'
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/Long/Delete?bloId=${actionID}`;
+        const url = `https://encodehertz.xyz/api/Long/DeleteRange?listOfID=${actionID}`;
         fetch(url, {
           method: 'GET',
           headers: {
