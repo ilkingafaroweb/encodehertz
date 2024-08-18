@@ -9,7 +9,7 @@ import * as XLSX from 'xlsx';
 import { isDOMComponent } from 'react-dom/test-utils';
 import useTranslations from '../../hooks/useTranslations';
 
-const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: any, actions: any }) => {
+const TableThree = ({layout, data, handleDelete, actions }: {layout: object, data: any, handleDelete: any, actions: any }) => {
 
   const { translate } = useTranslations(['general']);
 

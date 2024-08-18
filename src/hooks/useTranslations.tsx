@@ -1,20 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+
+const cache = new Map();
 
 const useTranslations = (views: string[]) => {
   const [words, setWords] = useState<{ [key: string]: string }>({});
-  const TOKEN = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchTranslations = async () => {
+      const cacheKey = JSON.stringify(views);
+
+      if (cache.has(cacheKey)) {
+        setWords(cache.get(cacheKey));
+        return;
+      }
+
       try {
         const allTranslations = await Promise.all(
           views.map(async (view) => {
-            const response = await fetch(`https://encodehertz.xyz/api/General/Localization/GetViewLanguage?view=${view}`, {
-              headers: {
-                'Authorization': `Bearer ${TOKEN}`,
-                'Content-Type': 'application/json'
-              }
-            });
+            const response = await fetch(`https://encodehertz.xyz/api/General/Localization/GetViewLanguage?view=${view}`);
             if (!response.ok) {
               throw new Error('Network response was not ok');
             }
@@ -26,11 +29,11 @@ const useTranslations = (views: string[]) => {
           })
         );
 
-        // Tüm çevirileri birleştir
         const mergedTranslations = allTranslations.reduce((acc, translations) => {
           return { ...acc, ...translations };
         }, {});
 
+        cache.set(cacheKey, mergedTranslations);
         setWords(mergedTranslations);
       } catch (error) {
         console.error('Error fetching translations:', error);

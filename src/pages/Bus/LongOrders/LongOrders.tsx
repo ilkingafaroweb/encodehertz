@@ -3,11 +3,16 @@ import TableThree from '../../../components/Tables/TableThree';
 import DefaultLayout from '../../../layout/DefaultLayout';
 import Breadcrumb from '../../../components/Breadcrumbs/Breadcrumb';
 import Swal from 'sweetalert2';
+import useLayout from '../../../hooks/useLayout';
 
 const LongOrders = () => {
-  const [busLong, setBusLong] = useState([]);
+
   const token = localStorage.getItem('token')
+  
+  const [busLong, setBusLong] = useState([]);
   const [actions, setActions] = useState(['add', 'edit', 'preview', 'duplicate', 'delete'])
+
+  const { layout, loading, error } = useLayout('buslongorder');
 
   const getBusLongList = () => {
     fetch('https://encodehertz.xyz/api/Long/List', {
@@ -88,7 +93,7 @@ const LongOrders = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='breadcrumb_blo_lbl' prevPageName='dashboard_lbl' prevRoute='/' />
-      <TableThree data={busLong} handleDelete={handleDelete} actions={actions}/>      
+      <TableThree layout={layout} data={busLong} handleDelete={handleDelete} actions={actions}/>      
     </DefaultLayout>
   );
 }
