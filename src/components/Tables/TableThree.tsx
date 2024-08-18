@@ -149,6 +149,14 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
   }, [selectedIds])
 
 
+  const handleClick = async () => {
+    const success = await handleDelete();
+    if (success) {
+      setSelectedIds([]);
+    }
+  };
+
+
   return (
     <div className="relative rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className='w-full mb-6 flex justify-end gap-2'>
@@ -197,10 +205,7 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
               {actions.includes('delete') && (
                 <button
                   className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
-                  onClick={() => {
-                    handleDelete();
-                    setSelectedIds([]);
-                  }}
+                  onClick={handleClick}
                 >
                   Delete <FontAwesomeIcon icon={faTrash} />
                 </button>
@@ -213,10 +218,7 @@ const TableThree = ({ data, handleDelete, actions }: { data: any, handleDelete: 
             actions.includes('delete') && (
               <button
                 className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-gray text-black lg:hover:text-primary dark:bg-boxdark-2 dark:text-white py-2 px-4 text-center font-medium0 lg:px-6 xl:px-4"
-                onClick={() => {
-                  handleDelete();
-                  setSelectedIds([]);
-                }}
+                onClick={handleClick}
               >
                 Delete <FontAwesomeIcon icon={faTrash} />
               </button>

@@ -6,12 +6,12 @@ import Swal from 'sweetalert2';
 import RentLongData from '../../../data/Rentacar/LongOrders'
 
 const RentLongOrders = () => {
+  const token =  localStorage.getItem("token");
   const [carLong, setCarLong] = useState([]);
   const [update, setUpdate] = useState(false); 
   const [actions, setActions] = useState(['add', 'edit', 'preview', 'duplicate', 'delete'])
 
   const getCarLongList = async () => {
-    const token = await localStorage.getItem("token");
 
     fetch('https://encodehertz.xyz/api/RentCar/Long/List', {
       headers: {
@@ -40,48 +40,52 @@ const RentLongOrders = () => {
 
   const handleDelete = async () => {
     const actionID = localStorage.getItem('ActionID');
-    const token = await localStorage.getItem("token");
-
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'You are about to delete data.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel!'
-    }).then((result) => {
+  
+    try {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'You are about to delete data.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!'
+      });
+  
       if (result.isConfirmed) {
         const url = `https://encodehertz.xyz/api/RentCar/Long/DeleteRange?listOfID=${actionID}`;
-        fetch(url, {
+        const response = await fetch(url, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
-          },
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
           }
-          return response.text();
-        })
-        .then(data => {
-          Swal.fire({
-            title: 'Success',
-            text: data,
-            icon: 'success',
-          });
-          getCarLongList()
-        })
-        .catch(error => {
-          Swal.fire({
-            title: 'Error',
-            text: error,
-            icon: 'error',
-          });
         });
+  
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+  
+        const data = await response.text();
+        await Swal.fire({
+          title: 'Success',
+          text: data,
+          icon: 'success',
+        });
+  
+        getCarLongList();
+        return true; 
+      } else {
+        return false; 
       }
-    });
+    } catch (error) {
+      await Swal.fire({
+        title: 'Error',
+        text: error.message,
+        icon: 'error',
+      });
+      console.error('Error deleting data:', error);
+      return false; 
+    }
   };
 
   return (

@@ -35,7 +35,7 @@ const Maintenance = () => {
   }, [])
 
   const handleDelete = async () => {
-    const actionID = await parseInt(localStorage.getItem('ActionID'));
+    const actionID = localStorage.getItem('ActionID');
 
     Swal.fire({
       title: 'Are you sure?',
