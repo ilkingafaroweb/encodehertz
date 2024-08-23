@@ -30,7 +30,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelecte
   }, [selectedOptions]);
 
   useEffect(() => {
-    if(defaultValue){
+    if (defaultValue) {
       setSelectedOptions(defaultValue.filter(option => option.isSelected))
     }
   }, [defaultValue])
@@ -64,7 +64,19 @@ const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelecte
     setSumCustomer(customerSum);
   };
 
-  const formattedPrice = (price) => {
+  const validateNumber = (value: string): number => {
+    const parsedValue = parseFloat(value);
+    return isNaN(parsedValue) ? 0 : parsedValue;
+  };
+
+  const handleChange = (index: number, key: any, value: string) => {
+    const parsedValue = validateNumber(value);
+    const updatedOptions = [...selectedOptions];
+    updatedOptions[index][key] = parsedValue;
+    setSelectedOptions(updatedOptions);
+  };
+
+  const formattedPrice = (price: number) => {
     return new Intl.NumberFormat('tr-TR', {
       style: 'decimal',
       minimumFractionDigits: 2,
@@ -86,45 +98,30 @@ const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelecte
                   <div className="flex flex-col mb-2 lg:w-30">
                     <label className="mb-1 text-black dark:text-white">Quantity</label>
                     <input
-                      type="number"
+                      type="text"
                       disabled={disabled}
-                      value={option.quantity}
-                      onChange={(e) => {
-                        const value = parseFloat(e.target.value);
-                        const updatedOptions = [...selectedOptions];
-                        updatedOptions[index].quantity = value;
-                        setSelectedOptions(updatedOptions);
-                      }}
+                      value={option.quantity === 0 ? '' : option.quantity}
+                      onChange={(e) => handleChange(index, 'quantity', e.target.value)}
                       className="rounded w-full border-[1.5px] border-boxdark-2 bg-transparent py-1 px-2 text-black outline-none transition active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary focus:outline-none focus:border-primary hover:border-primary"
                     />
                   </div>
                   {outsource && <div className="flex flex-col mb-2 w-full lg:w-30">
                     <label className="mb-1 text-black dark:text-white">Outsource price</label>
                     <input
-                      type="number"
+                      type="text"
                       disabled={disabled}
-                      value={option.outsourcePrice}
-                      onChange={(e) => {
-                        const value = parseFloat(e.target.value);
-                        const updatedOptions = [...selectedOptions];
-                        updatedOptions[index].outsourcePrice = value;
-                        setSelectedOptions(updatedOptions);
-                      }}
+                      value={option.outsourcePrice === 0 ? '' : option.outsourcePrice}
+                      onChange={(e) => handleChange(index, 'outsourcePrice', e.target.value)}
                       className="rounded w-full border-[1.5px] border-boxdark-2 bg-transparent py-1 px-2 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>}
                   <div className="flex flex-col mb-2 w-full lg:w-30">
                     <label className="mb-1 text-black dark:text-white">Customer price</label>
                     <input
-                      type="number"
+                      type="text"
                       disabled={disabled}
-                      value={option.customerPrice}
-                      onChange={(e) => {
-                        const value = parseFloat(e.target.value);
-                        const updatedOptions = [...selectedOptions];
-                        updatedOptions[index].customerPrice = value;
-                        setSelectedOptions(updatedOptions);
-                      }}
+                      value={option.customerPrice === 0 ? '' : option.customerPrice}
+                      onChange={(e) => handleChange(index, 'customerPrice', e.target.value)}
                       className="rounded w-full border-[1.5px] border-boxdark-2 bg-transparent py-1 px-2 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
@@ -150,10 +147,10 @@ const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelecte
                   </div>
                   {
                     !disabled && <div className="flex flex-auto flex-row-reverse">
-                    <div onClick={() => toggleOption(option)} className="cursor-pointer pl-2 hover:text-danger">
-                      <FontAwesomeIcon className="text-3xl mx-3" icon={faTimes} />
+                      <div onClick={() => toggleOption(option)} className="cursor-pointer pl-2 hover:text-danger">
+                        <FontAwesomeIcon className="text-3xl mx-3" icon={faTimes} />
+                      </div>
                     </div>
-                  </div>
                   }
                 </div>
               </div>

@@ -103,6 +103,8 @@ const AddBusLong = () => {
   const [formOptions, setFormOptions] = useState<FormData | null>(null);
   const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
   const [invalidFields, setInvalidFields] = useState<string[]>([])
+  const [summaryCustomer, setSummaryCustomer] = useState(0)
+  const [summarySupplier, setSummarySupplier] = useState(0)
 
   const {
     selectedContract,
@@ -131,6 +133,26 @@ const AddBusLong = () => {
     extraChargePanel,
     selectedExtraCharges
   } = selectedData
+
+  function updateSummary(priceToCustomer, priceToSupplier, extraChargePanel) {
+    const totalCustomer = extraChargePanel.reduce(
+      (acc, item) => acc + (+item.quantity || 0) * (+item.customerPrice || 0),
+      +priceToCustomer || 0
+    );
+
+    const totalSupplier = extraChargePanel.reduce(
+      (acc, item) => acc + (+item.quantity || 0) * (+item.outsourcePrice || 0),
+      +priceToSupplier || 0
+    );
+
+    setSummaryCustomer(totalCustomer);
+    setSummarySupplier(totalSupplier);
+  }
+
+  useEffect(() => {
+    updateSummary(priceToCustomer, priceToSupplier, selectedExtraCharges);
+  }, [priceToCustomer, priceToSupplier, selectedExtraCharges]);
+
 
   const getRequiredFields = () => [
     { value: selectedCustomer, label: "Customer" },
@@ -524,26 +546,36 @@ const AddBusLong = () => {
                         Price To Customer
                       </label>
                       <input
-                        type='number'
+                        type="text"
                         disabled={false}
-                        value={priceToCustomer !== 0 ? priceToCustomer : 0}
-                        placeholder='Empty'
+                        value={priceToCustomer}
                         onChange={(e) => {
                           let newValue = e.target.value;
-                          newValue = newValue.replace(/^0+(?=\d)/, '');
+
+                          if (newValue === '') {
+                            setSelectedData(prevData => ({
+                              ...prevData,
+                              priceToCustomer: 0
+                            }));
+                            return;
+                          }
+
+                          newValue = newValue.replace(/^0+(?!\.)/, '');
                           const parsedValue = parseFloat(newValue);
+
                           setSelectedData(prevData => ({
                             ...prevData,
-                            priceToCustomer: !isNaN(parsedValue) ? parsedValue : ''
+                            priceToCustomer: !isNaN(parsedValue) ? parsedValue : 0
                           }));
                         }}
                         className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                       />
+
                     </div>
                   </div>
 
                   {
-                    selectedData.selectedOutsourceVehicle == true && <> <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
+                    selectedOutsourceVehicle == true && <> <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                       <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={false} defaultValue='' isInvalid={invalidFields.includes('Supplier')} />
                       <SelectGroupOne text="Supplier Contract" options={formOptions.supplierContracts || []} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
                     </div>
@@ -555,19 +587,31 @@ const AddBusLong = () => {
                             Price To Supplier
                           </label>
                           <input
-                            type="number"
+                            type="text"
                             disabled={false}
-                            placeholder="Empty"
                             value={priceToSupplier}
                             onChange={(e) => {
-                              const newValue = parseFloat(e.target.value);
+                              let newValue = e.target.value;
+
+                              if (newValue === '') {
+                                setSelectedData(prevData => ({
+                                  ...prevData,
+                                  priceToSupplier: 0
+                                }));
+                                return;
+                              }
+
+                              newValue = newValue.replace(/^0+(?!\.)/, '');
+                              const parsedValue = parseFloat(newValue);
+
                               setSelectedData(prevData => ({
                                 ...prevData,
-                                priceToSupplier: newValue
-                              }))
+                                priceToSupplier: !isNaN(parsedValue) ? parsedValue : 0
+                              }));
                             }}
                             className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                           />
+
                         </div>
                       </div></>
                   }
@@ -581,14 +625,38 @@ const AddBusLong = () => {
                           ...prevData,
                           requestedPerson: e.target.value
                         }))}
+                        value={requestedPerson}
                         type="text"
                         placeholder="Enter person name"
                         className={`w-full rounded border-[1.5px] ${invalidFields.includes("Requested Person") ? 'focus:border-danger active:border-danger border-danger bg-red-100 ' : 'focus:border-primary border-stroke active:border-primary dark:border-form-strokedark dark:bg-form-input'}  bg-transparent py-3 px-5 text-black 
                                     outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`}
                       />
                     </div>
-                    <div className='w-full'>
-
+                    <div className='w-full mb-3 flex flex-col gap-6 xl:flex-row'>
+                      <div className="w-full xl:w-full">
+                        <label className="mb-2.5 block text-xl font-semibold text-black dark:text-white">
+                          Total for customer
+                        </label>
+                        <input
+                          value={summaryCustomer}
+                          type="text"
+                          disabled
+                          className={`w-full rounded border-[1.5px] focus:border-primary border-stroke active:border-primary dark:border-form-strokedark dark:bg-form-input bg-transparent py-3 px-5 text-black 
+                                    outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`}
+                        />
+                      </div>
+                      {selectedOutsourceVehicle && <div className="w-full xl:w-full">
+                        <label className="mb-2.5 block text-xl font-semibold text-black dark:text-white">
+                          Total for supplier
+                        </label>
+                        <input
+                          value={summarySupplier}
+                          type="text"
+                          disabled
+                          className={`w-full rounded border-[1.5px] focus:border-primary border-stroke active:border-primary dark:border-form-strokedark dark:bg-form-input bg-transparent py-3 px-5 text-black 
+                                    outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`}
+                        />
+                      </div>}
                     </div>
                   </div>
                   {

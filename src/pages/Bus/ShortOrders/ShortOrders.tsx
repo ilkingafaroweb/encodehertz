@@ -90,7 +90,7 @@ const ShortOrders = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName='breadcrumb_bso_lbl' prevPageName='dashboard_lbl' prevRoute='/' />
-      <TableThree data={busShort} handleDelete={handleDelete} actions={actions} />      
+      <TableThree data={busShort} handleDelete={handleDelete} actions={actions} layout={null}/>      
     </DefaultLayout>
   )
 }

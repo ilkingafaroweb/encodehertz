@@ -11,7 +11,7 @@ const Expences = () => {
 
   const removeLocalActionId = () => {
     localStorage.removeItem("ActionID");
-}
+  }
 
   const getExpencesList = () => {
     fetch('http://85.190.242.108:4483/api/Expences/Expence/List', {
@@ -41,7 +41,7 @@ const Expences = () => {
 
   const handleDelete = async () => {
     const actionID = localStorage.getItem('ActionID');
-  
+
     try {
       const result = await Swal.fire({
         title: 'Are you sure?',
@@ -51,7 +51,7 @@ const Expences = () => {
         confirmButtonText: 'Yes, delete it!',
         cancelButtonText: 'No, cancel!'
       });
-  
+
       if (result.isConfirmed) {
         const url = `http://85.190.242.108:4483/api/Expences/Expence/DeleteRange?listOfID=${actionID}`;
         const response = await fetch(url, {
@@ -61,22 +61,22 @@ const Expences = () => {
             'Content-Type': 'application/json'
           }
         });
-  
+
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-  
+
         const data = await response.text();
         await Swal.fire({
           title: 'Success',
           text: data,
           icon: 'success',
         });
-  
+
         getExpencesList();
-        return true; 
+        return true;
       } else {
-        return false; 
+        return false;
       }
     } catch (error) {
       await Swal.fire({
@@ -85,14 +85,14 @@ const Expences = () => {
         icon: 'error',
       });
       console.error('Error deleting data:', error);
-      return false; 
+      return false;
     }
   };
 
   return (
     <DefaultLayout>
       <Breadcrumb pageName='Expences' prevPageName='Dashboard' prevRoute='/' />
-      <TableThree data={expences} handleDelete={handleDelete} actions={actions} />
+      <TableThree data={expences} handleDelete={handleDelete} actions={actions} layout={null} />
     </DefaultLayout>
   );
 };
