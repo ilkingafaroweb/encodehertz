@@ -43,7 +43,7 @@ const AddRepairTypes: React.FC = () => {
   };
 
   const handleAdd = () => {
-    fetch('https://encodehertz.xyz/api/RepairTypes/RepairTypes/Create', {
+    fetch('http://85.190.242.108:4483/api/RepairTypes/RepairTypes/Create', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

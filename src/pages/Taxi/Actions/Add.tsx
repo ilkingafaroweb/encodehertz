@@ -106,7 +106,7 @@ const AddTaxi = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://encodehertz.xyz/api/Taxi/Taxi/Create', {
+                const response = await fetch('http://85.190.242.108:4483/api/Taxi/Taxi/Create', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -136,7 +136,7 @@ const AddTaxi = () => {
 
         if (!validateForm()) return;
 
-        await fetch('https://encodehertz.xyz/api/Taxi/Taxi/Create', {
+        await fetch('http://85.190.242.108:4483/api/Taxi/Taxi/Create', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

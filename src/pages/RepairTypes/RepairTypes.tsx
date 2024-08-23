@@ -10,7 +10,7 @@ const RepairTypes = () => {
   const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
   const getRepairTypesList = () => {
-    fetch('https://encodehertz.xyz/api/RepairTypes/RepairTypes/List', {
+    fetch('http://85.190.242.108:4483/api/RepairTypes/RepairTypes/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -48,7 +48,7 @@ const RepairTypes = () => {
       });
   
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/RepairTypes/RepairTypes/DeleteRange?listOfID=${actionID}`;
+        const url = `http://85.190.242.108:4483/api/RepairTypes/RepairTypes/DeleteRange?listOfID=${actionID}`;
         const response = await fetch(url, {
           method: 'GET',
           headers: {

@@ -15,7 +15,7 @@ const LongOrders = () => {
   const { layout, loading, error } = useLayout('buslongorder');
 
   const getBusLongList = () => {
-    fetch('https://encodehertz.xyz/api/Long/List', {
+    fetch('http://85.190.242.108:4483/api/Long/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ const LongOrders = () => {
       });
   
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/Long/DeleteRange?listOfID=${actionID}`;
+        const url = `http://85.190.242.108:4483/api/Long/DeleteRange?listOfID=${actionID}`;
         const response = await fetch(url, {
           method: 'GET',
           headers: {

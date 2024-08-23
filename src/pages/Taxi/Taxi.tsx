@@ -14,7 +14,7 @@ const Taxi = () => {
 }
 
   const getTaxiList = () => {
-    fetch('https://encodehertz.xyz/api/Taxi/Taxi/List', {
+    fetch('http://85.190.242.108:4483/api/Taxi/Taxi/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -53,7 +53,7 @@ const Taxi = () => {
       });
   
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/Taxi/Taxi/DeleteRange?listOfID=${actionID}`;
+        const url = `http://85.190.242.108:4483/api/Taxi/Taxi/DeleteRange?listOfID=${actionID}`;
         const response = await fetch(url, {
           method: 'GET',
           headers: {

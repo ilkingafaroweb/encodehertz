@@ -12,7 +12,7 @@ const ShortOrders = () => {
   const [actions, setActions] = useState(['add', 'edit', 'preview', 'duplicate', 'delete'])
 
   const getBusShortList = () => {
-    fetch('https://encodehertz.xyz/api/Short/List', {
+    fetch('http://85.190.242.108:4483/api/Short/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -51,7 +51,7 @@ const ShortOrders = () => {
       });
   
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/Short/DeleteRange?listOfID=${actionID}`;
+        const url = `http://85.190.242.108:4483/api/Short/DeleteRange?listOfID=${actionID}`;
         const response = await fetch(url, {
           method: 'GET',
           headers: {

@@ -9,8 +9,8 @@ const AllTransactions = () => {
     const [allTransactions, setAllTransactions] = useState([]);
     const [actions, setActions] = useState([])
 
-    const getExpencesList = () => {
-        fetch('https://encodehertz.xyz/api/General/Transaction/AllTransactions', {
+    const getAllTransactionsList = () => {
+        fetch('http://85.190.242.108:4483/api/General/Transaction/AllTransactions', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -31,13 +31,13 @@ const AllTransactions = () => {
     }
 
     useEffect(() => {
-        getExpencesList()
+        getAllTransactionsList()
     }, [])
 
     return (
         <DefaultLayout>
             <Breadcrumb pageName='All Transactions' prevPageName='Dashboard' prevRoute='/' />
-            <TableThree data={allTransactions} handleDelete={null} actions={actions}/>
+            <TableThree data={allTransactions} handleDelete={null} actions={actions} layout={null}/>
         </DefaultLayout>
     )
 }

@@ -53,7 +53,7 @@ const AddSources: React.FC = () => {
   };
 
   const handleAdd = () => {
-    fetch('https://encodehertz.xyz/api/Source/Create', {
+    fetch('http://85.190.242.108:4483/api/Source/Create', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

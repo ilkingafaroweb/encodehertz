@@ -12,7 +12,7 @@ const RentShortOrders = () => {
 
   const getCarShortList = async () => {
 
-    fetch('https://encodehertz.xyz/api/RentCar/Short/List', {
+    fetch('http://85.190.242.108:4483/api/RentCar/Short/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -51,7 +51,7 @@ const RentShortOrders = () => {
       });
   
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/RentCar/Short/DeleteRange?listOfID=${actionID}`;
+        const url = `http://85.190.242.108:4483/api/RentCar/Short/DeleteRange?listOfID=${actionID}`;
         const response = await fetch(url, {
           method: 'GET',
           headers: {

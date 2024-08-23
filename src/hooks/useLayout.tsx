@@ -8,7 +8,7 @@ const useLayout = (view: string) => {
   useEffect(() => {
     const fetchLayoutData = async () => {
       try {
-        const response = await fetch(`https://encodehertz.xyz/api/General/Layout/GetLayout?view=${view}`);
+        const response = await fetch(`http://85.190.242.108:4483/api/General/Layout/GetLayout?view=${view}`);
         
         if (!response.ok) {
           throw new Error('Network response was not ok');

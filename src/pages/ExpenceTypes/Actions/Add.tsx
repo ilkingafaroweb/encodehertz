@@ -43,7 +43,7 @@ const AddExpenceTypes: React.FC = () => {
   };
 
   const handleAdd = () => {
-    fetch('https://encodehertz.xyz/api/Expences/ExpenceType/Create', {
+    fetch('http://85.190.242.108:4483/api/Expences/ExpenceType/Create', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

@@ -32,7 +32,7 @@ export const Reset = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch('https://encodehertz.xyz/api/Auth/ResetPassword', {
+            const response = await fetch('http://85.190.242.108:4483/api/Auth/ResetPassword', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

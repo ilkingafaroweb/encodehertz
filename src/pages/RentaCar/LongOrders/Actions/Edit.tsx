@@ -118,7 +118,7 @@ const EditRentLong = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('https://encodehertz.xyz/api/RentCar/Long/Create', {
+            const response = await fetch('http://85.190.242.108:4483/api/RentCar/Long/Create', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -137,7 +137,7 @@ const EditRentLong = () => {
     const getPreview = async () => {
         try {
             const ActionID = await localStorage.getItem("ActionID")
-            const response = await fetch(`https://encodehertz.xyz/api/RentCar/Long/Edit?id=${ActionID}`, {
+            const response = await fetch(`http://85.190.242.108:4483/api/RentCar/Long/Edit?id=${ActionID}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -236,7 +236,7 @@ const EditRentLong = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://encodehertz.xyz/api/RentCar/Long/Create', {
+                const response = await fetch('http://85.190.242.108:4483/api/RentCar/Long/Create', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -292,7 +292,7 @@ const EditRentLong = () => {
         console.log("Edit Post Data : ", JSON.stringify(postData));
 
         try {
-            const response = await fetch('https://encodehertz.xyz/api/RentCar/Long/Edit', {
+            const response = await fetch('http://85.190.242.108:4483/api/RentCar/Long/Edit', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -325,7 +325,7 @@ const EditRentLong = () => {
 
     const getVehicleList = async () => {
         if (!!selectedVehicleGroup && !!startDateTime && !!endDateTime) {
-            await fetch(`https://encodehertz.xyz/api/RentCar/Long/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
+            await fetch(`http://85.190.242.108:4483/api/RentCar/Long/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -368,7 +368,7 @@ const EditRentLong = () => {
             extraChargePanel: []
         }));
         if (!!selectedCustomer && !!selectedVehicleGroup) {
-            await fetch(`https://encodehertz.xyz/api/RentCar/Long/GetExtraCharges?customerCode=${selectedCustomer}&vehicleGroup=${selectedVehicleGroup}`, {
+            await fetch(`http://85.190.242.108:4483/api/RentCar/Long/GetExtraCharges?customerCode=${selectedCustomer}&vehicleGroup=${selectedVehicleGroup}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -422,7 +422,7 @@ const EditRentLong = () => {
         const id = await localStorage.getItem('ActionID')
 
         try {
-            const response = await fetch(`https://encodehertz.xyz/api/RentCar/Long/Send?id=${id}`, {
+            const response = await fetch(`http://85.190.242.108:4483/api/RentCar/Long/Send?id=${id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,

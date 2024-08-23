@@ -61,7 +61,7 @@ const PreviewMaintenance = () => {
 
     const getFormOptions = async () => {
         try {
-            const response = await fetch('https://encodehertz.xyz/api/MaintenanceMaintenance/Create', {
+            const response = await fetch('http://85.190.242.108:4483/api/MaintenanceMaintenance/Create', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -80,7 +80,7 @@ const PreviewMaintenance = () => {
     const getEdit = async () => {
         try {
             const ActionID = await localStorage.getItem("ActionID")
-            const response = await fetch(`https://encodehertz.xyz/api/MaintenanceMaintenance/Edit?id=${ActionID}`, {
+            const response = await fetch(`http://85.190.242.108:4483/api/MaintenanceMaintenance/Edit?id=${ActionID}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -112,7 +112,7 @@ const PreviewMaintenance = () => {
 
     const getVehicleList = async () => {
         if (!!startDateTime && !!endDateTime) {
-            await fetch(`https://encodehertz.xyz/api/MaintenanceMaintenance/GetVehicles?startDate=${startDateTime}&endDate=${endDateTime}`, {
+            await fetch(`http://85.190.242.108:4483/api/MaintenanceMaintenance/GetVehicles?startDate=${startDateTime}&endDate=${endDateTime}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

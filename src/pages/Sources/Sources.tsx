@@ -10,7 +10,7 @@ const Sources = () => {
   const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
   const getSourcesList = () => {
-    fetch('https://encodehertz.xyz/api/Source/List', {
+    fetch('http://85.190.242.108:4483/api/Source/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -48,7 +48,7 @@ const Sources = () => {
       });
   
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/Source/DeleteRange?listOfID=${actionID}`;
+        const url = `http://85.190.242.108:4483/api/Source/DeleteRange?listOfID=${actionID}`;
         const response = await fetch(url, {
           method: 'GET',
           headers: {

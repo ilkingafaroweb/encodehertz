@@ -57,7 +57,7 @@ const DuplicateExtraCharge: React.FC = () => {
     const fetchData = async () => {
       try {
         const ActionID = localStorage.getItem("ActionID")
-        const response = await fetch(`https://encodehertz.xyz/api/ECP/Duplicate?extraChargeId=${ActionID}`, {
+        const response = await fetch(`http://85.190.242.108:4483/api/ECP/Duplicate?extraChargeId=${ActionID}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -99,7 +99,7 @@ const DuplicateExtraCharge: React.FC = () => {
   };
 
   const handleAdd = () => {
-    fetch('https://encodehertz.xyz/api/ECP/Duplicate', {
+    fetch('http://85.190.242.108:4483/api/ECP/Duplicate', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

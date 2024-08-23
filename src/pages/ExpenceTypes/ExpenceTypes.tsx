@@ -10,7 +10,7 @@ const ExpenceTypes = () => {
   const [actions, setActions] = useState(['preview'])
 
   const getExpenceTypesList = () => {
-    fetch('https://encodehertz.xyz/api/Expences/ExpenceType/List', {
+    fetch('http://85.190.242.108:4483/api/Expences/ExpenceType/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -48,7 +48,7 @@ const ExpenceTypes = () => {
   //     });
   
   //     if (result.isConfirmed) {
-  //       const url = `https://encodehertz.xyz/api/ECP/DeleteRange?listOfID=${actionID}`;
+  //       const url = `http://85.190.242.108:4483/api/ECP/DeleteRange?listOfID=${actionID}`;
   //       const response = await fetch(url, {
   //         method: 'GET',
   //         headers: {

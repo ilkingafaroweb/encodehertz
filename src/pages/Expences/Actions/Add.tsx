@@ -120,7 +120,7 @@ const AddExpences = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://encodehertz.xyz/api/Expences/Expence/Create', {
+                const response = await fetch('http://85.190.242.108:4483/api/Expences/Expence/Create', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -148,7 +148,7 @@ const AddExpences = () => {
 
         if (!validateForm()) return;
 
-        await fetch('https://encodehertz.xyz/api/Expences/Expence/Create', {
+        await fetch('http://85.190.242.108:4483/api/Expences/Expence/Create', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

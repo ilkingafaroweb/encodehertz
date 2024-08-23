@@ -106,7 +106,7 @@ const PreviewBusLong = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('https://encodehertz.xyz/api/Long/Create', {
+      const response = await fetch('http://85.190.242.108:4483/api/Long/Create', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -125,7 +125,7 @@ const PreviewBusLong = () => {
   const getPreview = async () => {
     try {
       const ActionID = await localStorage.getItem("ActionID")
-      const response = await fetch(`https://encodehertz.xyz/api/Long/Edit?id=${ActionID}`, {
+      const response = await fetch(`http://85.190.242.108:4483/api/Long/Edit?id=${ActionID}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -180,7 +180,7 @@ const PreviewBusLong = () => {
  
   const getVehicleList = async () => {
     if (!!cardNumber && !!selectedVehicleClass && !!startDateTime && !!endDateTime) {
-      await fetch(`https://encodehertz.xyz/api/Long/GetVehiclesOnEdit?cardNumber=${cardNumber}&vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
+      await fetch(`http://85.190.242.108:4483/api/Long/GetVehiclesOnEdit?cardNumber=${cardNumber}&vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -222,7 +222,7 @@ const PreviewBusLong = () => {
 
   useEffect(() => {
     if (!!selectedCustomer) {
-      fetch(`https://encodehertz.xyz/api/Long/GetContracts?customerCode=${selectedCustomer}`, {
+      fetch(`http://85.190.242.108:4483/api/Long/GetContracts?customerCode=${selectedCustomer}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -252,7 +252,7 @@ const PreviewBusLong = () => {
 
   useEffect(() => {
     if (!!selectedSupplier) {
-      fetch(`https://encodehertz.xyz/api/Long/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
+      fetch(`http://85.190.242.108:4483/api/Long/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

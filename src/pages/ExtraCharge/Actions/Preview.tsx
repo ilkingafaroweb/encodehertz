@@ -44,7 +44,7 @@ const PreviewExtraCharge: React.FC = () => {
     const fetchData = async () => {
       try {
         const ActionID = localStorage.getItem("ActionID")
-        const response = await fetch(`https://encodehertz.xyz/api/ECP/Edit?id=${ActionID}`, {
+        const response = await fetch(`http://85.190.242.108:4483/api/ECP/Edit?id=${ActionID}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

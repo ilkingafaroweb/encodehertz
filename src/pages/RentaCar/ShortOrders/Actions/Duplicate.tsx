@@ -120,7 +120,7 @@ const DuplicateRentShort = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('https://encodehertz.xyz/api/RentCar/Short/Create', {
+            const response = await fetch('http://85.190.242.108:4483/api/RentCar/Short/Create', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -139,7 +139,7 @@ const DuplicateRentShort = () => {
     const getPreview = async () => {
         try {
             const ActionID = await localStorage.getItem("ActionID")
-            const response = await fetch(`https://encodehertz.xyz/api/RentCar/Short/Edit?id=${ActionID}`, {
+            const response = await fetch(`http://85.190.242.108:4483/api/RentCar/Short/Edit?id=${ActionID}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -259,7 +259,7 @@ const DuplicateRentShort = () => {
 
     const getVehicleList = async () => {
         if (!!selectedVehicleGroup && !!startDateTime && !!endDateTime) {
-            await fetch(`https://encodehertz.xyz/api/RentCar/Long/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
+            await fetch(`http://85.190.242.108:4483/api/RentCar/Long/GetVehicles?vehicleGroup=${selectedVehicleGroup}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -302,7 +302,7 @@ const DuplicateRentShort = () => {
             extraChargePanel: []
         }));
         if (!!selectedCustomer && !!selectedVehicleGroup) {
-            await fetch(`https://encodehertz.xyz/api/RentCar/Short/GetExtraCharges?customerCode=${selectedCustomer}&vehicleGroup=${selectedVehicleGroup}`, {
+            await fetch(`http://85.190.242.108:4483/api/RentCar/Short/GetExtraCharges?customerCode=${selectedCustomer}&vehicleGroup=${selectedVehicleGroup}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -336,7 +336,7 @@ const DuplicateRentShort = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://encodehertz.xyz/api/RentCar/Short/Create', {
+                const response = await fetch('http://85.190.242.108:4483/api/RentCar/Short/Create', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -358,7 +358,7 @@ const DuplicateRentShort = () => {
     const addCarShort = async () => {
         if (!validateForm()) return;
 
-        await fetch('https://encodehertz.xyz/api/RentCar/Short/Create', {
+        await fetch('http://85.190.242.108:4483/api/RentCar/Short/Create', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

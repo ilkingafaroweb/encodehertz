@@ -43,7 +43,7 @@ const DropdownUser = () => {
   // Logout
 
   const handleLogout = async () => {
-    await fetch(`https://encodehertz.xyz/api/User/Logout`)
+    await fetch(`http://85.190.242.108:4483/api/User/Logout`)
         .then(response => response.text())
         .then(data => {
           console.log('Response is :', data);
@@ -58,7 +58,7 @@ const DropdownUser = () => {
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     if (userId) {
-      fetch(`https://encodehertz.xyz/api/User/Profile`, {
+      fetch(`http://85.190.242.108:4483/api/User/Profile`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

@@ -71,7 +71,7 @@ const PreviewTaxi = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://encodehertz.xyz/api/Taxi/Taxi/Create', {
+                const response = await fetch('http://85.190.242.108:4483/api/Taxi/Taxi/Create', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -90,7 +90,7 @@ const PreviewTaxi = () => {
         const previewData = async () => {
             const actionID = localStorage.getItem("ActionID")
             try {
-                const response = await fetch(`https://encodehertz.xyz/api/Taxi/Taxi/Edit?toId=${actionID}`, {
+                const response = await fetch(`http://85.190.242.108:4483/api/Taxi/Taxi/Edit?toId=${actionID}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'

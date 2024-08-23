@@ -47,7 +47,7 @@ const ForgotPassword = () => {
     }
 
     try {
-      const response = await fetch('https://encodehertz.xyz/api/Auth/ForgotPassword', {
+      const response = await fetch('http://85.190.242.108:4483/api/Auth/ForgotPassword', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

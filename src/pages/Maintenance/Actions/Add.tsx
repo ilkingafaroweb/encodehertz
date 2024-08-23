@@ -114,7 +114,7 @@ const AddMaintenance = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://encodehertz.xyz/api/MaintenanceMaintenance/Create', {
+                const response = await fetch('http://85.190.242.108:4483/api/MaintenanceMaintenance/Create', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -142,7 +142,7 @@ const AddMaintenance = () => {
 
     const getVehicleList = async () => {
         if (!!startDateTime && !!endDateTime) {
-            await fetch(`https://encodehertz.xyz/api/MaintenanceMaintenance/GetVehicles?startDate=${startDateTime}&endDate=${endDateTime}`, {
+            await fetch(`http://85.190.242.108:4483/api/MaintenanceMaintenance/GetVehicles?startDate=${startDateTime}&endDate=${endDateTime}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -176,7 +176,7 @@ const AddMaintenance = () => {
         
         if (!validateForm()) return;
 
-        await fetch('https://encodehertz.xyz/api/MaintenanceMaintenance/Create', {
+        await fetch('http://85.190.242.108:4483/api/MaintenanceMaintenance/Create', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

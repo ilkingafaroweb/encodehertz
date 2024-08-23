@@ -14,7 +14,7 @@ const Expences = () => {
 }
 
   const getExpencesList = () => {
-    fetch('https://encodehertz.xyz/api/Expences/Expence/List', {
+    fetch('http://85.190.242.108:4483/api/Expences/Expence/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -53,7 +53,7 @@ const Expences = () => {
       });
   
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/Expences/Expence/DeleteRange?listOfID=${actionID}`;
+        const url = `http://85.190.242.108:4483/api/Expences/Expence/DeleteRange?listOfID=${actionID}`;
         const response = await fetch(url, {
           method: 'GET',
           headers: {

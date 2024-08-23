@@ -49,7 +49,7 @@ const Profile: React.FC = () => {
   };
 
   useEffect(() => {
-      fetch(`https://encodehertz.xyz/api/User/Profile`, {
+      fetch(`http://85.190.242.108:4483/api/User/Profile`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ const Profile: React.FC = () => {
   }, []);
 
   const handleSave = () => {
-    fetch('https://encodehertz.xyz/api/User/UpdateProfile', {
+    fetch('http://85.190.242.108:4483/api/User/UpdateProfile', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

@@ -10,7 +10,7 @@ const ExtraCharges = () => {
   const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
   const getExtraChargesList = () => {
-    fetch('https://encodehertz.xyz/api/ECP/List', {
+    fetch('http://85.190.242.108:4483/api/ECP/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -48,7 +48,7 @@ const ExtraCharges = () => {
       });
   
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/ECP/DeleteRange?listOfID=${actionID}`;
+        const url = `http://85.190.242.108:4483/api/ECP/DeleteRange?listOfID=${actionID}`;
         const response = await fetch(url, {
           method: 'GET',
           headers: {

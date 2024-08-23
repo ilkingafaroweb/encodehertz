@@ -126,7 +126,7 @@ const EditExpences = () => {
 
     const getFormOptions = async () => {
         try {
-            const response = await fetch('https://encodehertz.xyz/api/Expences/Expence/Create', {
+            const response = await fetch('http://85.190.242.108:4483/api/Expences/Expence/Create', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -145,7 +145,7 @@ const EditExpences = () => {
     const getEdit = async () => {
         try {
             const ActionID = await localStorage.getItem("ActionID")
-            const response = await fetch(`https://encodehertz.xyz/api/Expences/Expence/Edit?id=${ActionID}`, {
+            const response = await fetch(`http://85.190.242.108:4483/api/Expences/Expence/Edit?id=${ActionID}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -176,7 +176,7 @@ const EditExpences = () => {
 
         if (!validateForm()) return;
 
-        await fetch('https://encodehertz.xyz/api/Expences/Expence/Edit', {
+        await fetch('http://85.190.242.108:4483/api/Expences/Expence/Edit', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -215,7 +215,7 @@ const EditExpences = () => {
         const expID = localStorage.getItem('ActionID')
     
         try {
-          const response = await fetch(`https://encodehertz.xyz/api/Expences/Expence/Send?id=${expID}`, {
+          const response = await fetch(`http://85.190.242.108:4483/api/Expences/Expence/Send?id=${expID}`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,

@@ -10,7 +10,7 @@ const Maintenance = () => {
   const [actions, setActions] = useState(['add', 'edit', 'preview', 'delete'])
 
   const getMaintenanceList = () => {
-    fetch('https://encodehertz.xyz/api/MaintenanceMaintenance/List', {
+    fetch('http://85.190.242.108:4483/api/MaintenanceMaintenance/List', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -46,7 +46,7 @@ const Maintenance = () => {
       cancelButtonText: 'No, cancel!'
     }).then((result) => {
       if (result.isConfirmed) {
-        const url = `https://encodehertz.xyz/api/MaintenanceMaintenance/DeleteRange?listOfID=${actionID}`;
+        const url = `http://85.190.242.108:4483/api/MaintenanceMaintenance/DeleteRange?listOfID=${actionID}`;
         fetch(url, {
           method: 'GET',
           headers: {

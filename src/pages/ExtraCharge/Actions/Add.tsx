@@ -56,7 +56,7 @@ const AddExtraCharge: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://encodehertz.xyz/api/ECP/Create', {
+        const response = await fetch('http://85.190.242.108:4483/api/ECP/Create', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -99,7 +99,7 @@ const AddExtraCharge: React.FC = () => {
   };
 
   const handleAdd = () => {
-    fetch('https://encodehertz.xyz/api/ECP/Create', {
+    fetch('http://85.190.242.108:4483/api/ECP/Create', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

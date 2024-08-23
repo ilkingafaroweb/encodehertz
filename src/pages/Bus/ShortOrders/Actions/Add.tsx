@@ -218,7 +218,7 @@ const AddBusShort = () => {
 
         if (!validateForm()) return;
 
-        await fetch('https://encodehertz.xyz/api/Short/Create', {
+        await fetch('http://85.190.242.108:4483/api/Short/Create', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -253,7 +253,7 @@ const AddBusShort = () => {
 
     useEffect(() => {
         if (selectedServiceType && selectedCustomer && selectedServiceTypeDetail && selectedVehicleClass) {
-            let apiUrl = `https://encodehertz.xyz/api/Short/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
+            let apiUrl = `http://85.190.242.108:4483/api/Short/GetCustomerMonthlyPaymentCWD?selectedCustomer=${selectedCustomer}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
 
             fetch(apiUrl, {
                 headers: {
@@ -283,7 +283,7 @@ const AddBusShort = () => {
 
     useEffect(() => {
         if (selectedServiceType && selectedSupplier && selectedServiceTypeDetail && selectedVehicleClass) {
-            let apiUrl = `https://encodehertz.xyz/api/Short/GetSupplierMonthlyPaymentCWD?selectedCustomer=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
+            let apiUrl = `http://85.190.242.108:4483/api/Short/GetSupplierMonthlyPaymentCWD?selectedCustomer=${selectedSupplier}&selectedVehicleClass=${selectedVehicleClass}&selectedServiceType=${selectedServiceType}&selectedServiceTypeDetail=${selectedServiceTypeDetail}`;
 
             fetch(apiUrl, {
                 headers: {
@@ -313,7 +313,7 @@ const AddBusShort = () => {
 
     const getVehicleList = async () => {
         if (!!selectedVehicleClass && !!startDateTime && !!endDateTime) {
-            await fetch(`https://encodehertz.xyz/api/Short/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
+            await fetch(`http://85.190.242.108:4483/api/Short/GetVehicles?vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -353,7 +353,7 @@ const AddBusShort = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://encodehertz.xyz/api/Short/Create', {
+                const response = await fetch('http://85.190.242.108:4483/api/Short/Create', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -399,7 +399,7 @@ const AddBusShort = () => {
 
     useEffect(() => {
         if (!!selectedCustomer) {
-            fetch(`https://encodehertz.xyz/api/Short/GetContracts?customerCode=${selectedCustomer}`, {
+            fetch(`http://85.190.242.108:4483/api/Short/GetContracts?customerCode=${selectedCustomer}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -428,7 +428,7 @@ const AddBusShort = () => {
 
     useEffect(() => {
         if (!!selectedSupplier) {
-            fetch(`https://encodehertz.xyz/api/Short/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
+            fetch(`http://85.190.242.108:4483/api/Short/GetSupplierContracts?supplierCode=${selectedSupplier}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -454,7 +454,7 @@ const AddBusShort = () => {
 
     useEffect(() => {
         if (selectedServiceType) {
-            fetch(`https://encodehertz.xyz/api/Short/GetServiceTypeDetails?selectedServiceType=${selectedServiceType}`, {
+            fetch(`http://85.190.242.108:4483/api/Short/GetServiceTypeDetails?selectedServiceType=${selectedServiceType}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -486,7 +486,7 @@ const AddBusShort = () => {
             extraChargePanel: []
         }));
         if (selectedCustomer && selectedVehicleClass) {
-            await fetch(`https://encodehertz.xyz/api/Short/GetExtraCharges?customerCode=${selectedCustomer}&vehicleClass=${selectedVehicleClass}`, {
+            await fetch(`http://85.190.242.108:4483/api/Short/GetExtraCharges?customerCode=${selectedCustomer}&vehicleClass=${selectedVehicleClass}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

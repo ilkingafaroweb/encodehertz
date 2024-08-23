@@ -86,7 +86,7 @@ const Login: React.FC<LoginProps> = ({ setUserToken }) => {
   
     if (!emailError && !passwordError) {
       try {
-        const response = await fetch('https://encodehertz.xyz/api/User/Login', {
+        const response = await fetch('http://85.190.242.108:4483/api/User/Login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

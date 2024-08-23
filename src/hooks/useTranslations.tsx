@@ -17,7 +17,7 @@ const useTranslations = (views: string[]) => {
       try {
         const allTranslations = await Promise.all(
           views.map(async (view) => {
-            const response = await fetch(`https://encodehertz.xyz/api/General/Localization/GetViewLanguage?view=${view}`);
+            const response = await fetch(`http://85.190.242.108:4483/api/General/Localization/GetViewLanguage?view=${view}`);
             if (!response.ok) {
               throw new Error('Network response was not ok');
             }

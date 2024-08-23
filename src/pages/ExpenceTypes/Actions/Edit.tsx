@@ -29,7 +29,7 @@ const EditExpenceTypes: React.FC = () => {
         const fetchData = async () => {
             try {
                 const ActionID = localStorage.getItem("ActionID")
-                const response = await fetch(`https://encodehertz.xyz/api/Expences/ExpenceType/Edit?id=${ActionID}`, {
+                const response = await fetch(`http://85.190.242.108:4483/api/Expences/ExpenceType/Edit?id=${ActionID}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ const EditExpenceTypes: React.FC = () => {
     };
 
     const handleSave = () => {
-        fetch('https://encodehertz.xyz/api/Expences/ExpenceType/Edit', {
+        fetch('http://85.190.242.108:4483/api/Expences/ExpenceType/Edit', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
