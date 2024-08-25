@@ -8,6 +8,7 @@ import MultiSelect from '../../../../components/Forms/MultiSelect';
 import Swal from 'sweetalert2';
 import FormCheckbox from '../../../../components/Forms/Checkbox/FormCheckbox';
 import { toast } from 'react-toastify';
+import useTotalPrices from '../../../../hooks/useTotalPrices';
 
 interface FormData {
   cardNumber: string | null;
@@ -103,8 +104,6 @@ const AddBusLong = () => {
   const [formOptions, setFormOptions] = useState<FormData | null>(null);
   const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
   const [invalidFields, setInvalidFields] = useState<string[]>([])
-  const [summaryCustomer, setSummaryCustomer] = useState(0)
-  const [summarySupplier, setSummarySupplier] = useState(0)
 
   const {
     selectedContract,
@@ -134,25 +133,7 @@ const AddBusLong = () => {
     selectedExtraCharges
   } = selectedData
 
-  function updateSummary(priceToCustomer, priceToSupplier, extraChargePanel) {
-    const totalCustomer = extraChargePanel.reduce(
-      (acc, item) => acc + (+item.quantity || 0) * (+item.customerPrice || 0),
-      +priceToCustomer || 0
-    );
-
-    const totalSupplier = extraChargePanel.reduce(
-      (acc, item) => acc + (+item.quantity || 0) * (+item.outsourcePrice || 0),
-      +priceToSupplier || 0
-    );
-
-    setSummaryCustomer(totalCustomer);
-    setSummarySupplier(totalSupplier);
-  }
-
-  useEffect(() => {
-    updateSummary(priceToCustomer, priceToSupplier, selectedExtraCharges);
-  }, [priceToCustomer, priceToSupplier, selectedExtraCharges]);
-
+  const { summaryCustomer, summarySupplier } = useTotalPrices(priceToCustomer, priceToSupplier, selectedExtraCharges);
 
   const getRequiredFields = () => [
     { value: selectedCustomer, label: "Customer" },
@@ -189,7 +170,6 @@ const AddBusLong = () => {
   }, [selectedCustomer, selectedServiceType, startDateTime, endDateTime, selectedDriver, requestedPerson, selectedVehicleClass, selectedVehicle, selectedSupplier]);
 
   useEffect(() => {
-    console.clear();
     console.log('SELECTED DATA -->', selectedData);
   }, [selectedData])
 
@@ -202,22 +182,11 @@ const AddBusLong = () => {
   }, [selectedOutsourceVehicle]);
 
   useEffect(() => {
-    if (!priceToCustomer) {
-      setSelectedData(prevData => ({
-        ...prevData,
-        priceToCustomer: 0
-      }));
-    }
-  }, [priceToCustomer])
-
-  useEffect(() => {
-    if (!priceToSupplier) {
-      setSelectedData(prevData => ({
-        ...prevData,
-        priceToSupplier: 0
-      }));
-    }
-  }, [priceToSupplier])
+    setSelectedData(prevData => ({
+      ...prevData,
+      selectedVehicle: ''
+    }));
+  }, [formOptions.vehicles])
 
   // Bus long order post 
 
@@ -233,26 +202,21 @@ const AddBusLong = () => {
       body: JSON.stringify(selectedData),
     })
       .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.text();
-      })
-      .then(data => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: data,
+        return response.text().then(text => {
+          return {
+            ok: response.ok,
+            status: response.status,
+            text: text
+          };
         });
-        navigate('/bus/long-orders');
       })
-      .catch(error => {
+      .then(({ ok, text }) => {
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.message,
+          icon: ok ? 'success' : 'error',
+          title: ok ? 'Success' : 'Error',
+          text: text,
         });
-      });
+      })
   };
 
   // Customer monthly payment default
@@ -535,7 +499,7 @@ const AddBusLong = () => {
                       <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue="" />
                       <SelectGroupOne text="Vehicle Class" options={formOptions.vehicleClasses || []} setSelectedData={setSelectedData} disabled={false} defaultValue='' isInvalid={invalidFields.includes('Vehicle Class')} />
                       <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false} />
-                      <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={formOptions.vehicles ? false : true} defaultValue='' isInvalid={invalidFields.includes('Vehicle')} />
+                      <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={formOptions.vehicles ? false : true} defaultValue="" isInvalid={invalidFields.includes('Vehicle')} />
                     </div>
                   }
 
@@ -611,7 +575,6 @@ const AddBusLong = () => {
                             }}
                             className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                           />
-
                         </div>
                       </div></>
                   }
@@ -660,7 +623,7 @@ const AddBusLong = () => {
                     </div>
                   </div>
                   {
-                    formOptions.extraChargePanel.length !== 0 && <div className='mb-6 flex flex-col gap-3'>
+                    formOptions?.extraChargePanel?.length > 0 && <div className='mb-6 flex flex-col gap-3'>
                       <label className="mt-3 block text-md font-medium text-black dark:text-white">
                         Extra Charge Panel
                       </label>

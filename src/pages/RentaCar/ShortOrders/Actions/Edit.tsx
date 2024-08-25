@@ -425,6 +425,18 @@ const EditRentShort = () => {
 
         const id = await localStorage.getItem('ActionID')
 
+        const lastExtraCharge = selectedExtraCharges?.map((ec: any) => {
+            ec.isSelected = true;
+            return ec;
+        });
+
+        const postData = {
+            ...selectedData,
+            extraChargePanel: lastExtraCharge
+        };
+
+        delete postData.selectedExtraCharges;
+
         try {
             const response = await fetch(`http://85.190.242.108:4483/api/RentCar/Short/Send?id=${id}`, {
                 method: 'GET',

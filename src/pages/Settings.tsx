@@ -11,8 +11,6 @@ interface UserProfile {
   surname: string;
   email: string;
   groups: string[];
-  // imageUrl: string | null;
-  // imageUpload: any;
   selectedLanguage: string;
   languages: { value: string; text: string }[];
   password: string;
@@ -25,8 +23,6 @@ const initialUserProfile: UserProfile = {
   surname: "",
   email: "",
   groups: [],
-  // imageUrl: null,
-  // imageUpload: null,
   selectedLanguage: "",
   languages: [],
   password: "",
@@ -305,7 +301,7 @@ const Profile: React.FC = () => {
                           className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                           name="selectedLanguage"
                           id="Language"
-                          // value={userProfile.selectedLanguage}
+                          value={userProfile.selectedLanguage}
                           onChange={(e) => {
                             handleInputChange(e);
                           }}

@@ -5,10 +5,8 @@ import SelectGroupOne from '../../../../components/Forms/SelectGroup/SelectGroup
 import DefaultLayout from '../../../../layout/DefaultLayout';
 import DatePickerOne from '../../../../components/Forms/DatePicker/DatePickerOne';
 import MultiSelect from '../../../../components/Forms/MultiSelect';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-import Swal from 'sweetalert2';
 import FormCheckbox from '../../../../components/Forms/Checkbox/FormCheckbox';
+import useTotalPrices from '../../../../hooks/useTotalPrices';
 
 interface FormData {
   cardNumber: string | null;
@@ -97,10 +95,8 @@ const initialSelectedData: SelectedData = {
 };
 
 const PreviewBusLong = () => {
-  const [showExtraCharge, setShowExtraCharge] = useState(true)
   const navigate = useNavigate()
   const token = localStorage.getItem('token')
-
   const [formOptions, setFormOptions] = useState<FormData | null>(null);
   const [selectedData, setSelectedData] = useState<SelectedData>(initialSelectedData);
 
@@ -177,6 +173,7 @@ const PreviewBusLong = () => {
     extraChargePanel
   } = selectedData
 
+  const { summaryCustomer, summarySupplier } = useTotalPrices(priceToCustomer, priceToSupplier, extraChargePanel);
  
   const getVehicleList = async () => {
     if (!!cardNumber && !!selectedVehicleClass && !!startDateTime && !!endDateTime) {
@@ -362,25 +359,35 @@ const PreviewBusLong = () => {
                         className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                       />
                     </div>
-                    <div className='w-full'>
-
+                    <div className='w-full mb-3 flex flex-col gap-6 xl:flex-row'>
+                      <div className="w-full xl:w-full">
+                        <label className="mb-2.5 block text-xl font-semibold text-black dark:text-white">
+                          Total for customer
+                        </label>
+                        <input
+                          value={summaryCustomer}
+                          type="text"
+                          disabled
+                          className={`w-full rounded border-[1.5px] focus:border-primary border-stroke active:border-primary dark:border-form-strokedark dark:bg-form-input bg-transparent py-3 px-5 text-black 
+                                    outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`}
+                        />
+                      </div>
+                      {selectedOutsourceVehicle && <div className="w-full xl:w-full">
+                        <label className="mb-2.5 block text-xl font-semibold text-black dark:text-white">
+                          Total for supplier
+                        </label>
+                        <input
+                          value={summarySupplier}
+                          type="text"
+                          disabled
+                          className={`w-full rounded border-[1.5px] focus:border-primary border-stroke active:border-primary dark:border-form-strokedark dark:bg-form-input bg-transparent py-3 px-5 text-black 
+                                    outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`}
+                        />
+                      </div>}
                     </div>
                   </div>
-
-                  {/* <div className='mb-3 w-full flex justify-start items-end gap-3'>
-                    <button
-                      type='button'
-                    //   onClick={() => setShowExtraCharge(!showExtraCharge)}
-                      className='flex w-12 h-12 justify-center items-center rounded bg-white border border-stroke dark:bg-boxdark-2 p-3 font-medium dark:border-form-strokedark dark:text-gray hover:bg-opacity-90'>
-                      {showExtraCharge ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
-                    </button>
-                    <label className="mb-3 block text-md font-medium text-black dark:text-white">
-                      Extra Charge Panel
-                    </label>
-
-                  </div> */}
                   {
-                    extraChargePanel.length !== 0 && <div className='mb-6 flex flex-col gap-3'>
+                    extraChargePanel.length > 0 && <div className='mb-6 flex flex-col gap-3'>
                       <label className="mt-3 block text-md font-medium text-black dark:text-white">
                         Extra Charge Panel
                       </label>

@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import DatePickerTwo from '../../../../components/Forms/DatePicker/DatePickerTwo';
 import FormCheckbox from '../../../../components/Forms/Checkbox/FormCheckbox';
 import { toast } from 'react-toastify';
+import useTotalPrices from '../../../../hooks/useTotalPrices';
 
 interface FormData {
     cardNumber: string | null;
@@ -136,6 +137,8 @@ const AddRentLong = () => {
         extraChargePanel,
         selectedExtraCharges
     } = selectedData
+
+    const { summaryCustomer, summarySupplier } = useTotalPrices(priceToCustomer, priceToSupplier, extraChargePanel);
 
     const getRequiredFields = () => [
         { value: selectedCustomer, label: "Customer" },
@@ -332,6 +335,13 @@ const AddRentLong = () => {
             });
     }
 
+    useEffect(() => {
+        setSelectedData(prevData => ({
+            ...prevData,
+            selectedVehicle: ''
+        }));
+    }, [formOptions.vehicles])
+
     return (
         <DefaultLayout>
             <Breadcrumb pageName="Insert" prevPageName='Rentacar long orders' prevRoute='/car/long-orders' />
@@ -342,7 +352,7 @@ const AddRentLong = () => {
                             <form>
                                 <div className="p-6.5">
                                     <div className="mb-3 flex flex-col gap-6 xl:flex-row">
-                                        <SelectGroupOne text="Customer" options={formOptions.customers || []} setSelectedData={setSelectedData} disabled={!formOptions.customers} defaultValue='' isInvalid={invalidFields.includes('Customer')}/>
+                                        <SelectGroupOne text="Customer" options={formOptions.customers || []} setSelectedData={setSelectedData} disabled={!formOptions.customers} defaultValue='' isInvalid={invalidFields.includes('Customer')} />
                                         <div className="w-full xl:w-full">
                                             <label className="mb-2.5 block text-black dark:text-white">
                                                 Customer Name
@@ -361,7 +371,7 @@ const AddRentLong = () => {
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                        <SelectGroupOne text="Service Type" options={formOptions.serviceTypes || []} setSelectedData={setSelectedData} disabled={!formOptions.serviceTypes} defaultValue='' isInvalid={invalidFields.includes('Service Type')}/>
+                                        <SelectGroupOne text="Service Type" options={formOptions.serviceTypes || []} setSelectedData={setSelectedData} disabled={!formOptions.serviceTypes} defaultValue='' isInvalid={invalidFields.includes('Service Type')} />
                                         <div className="w-full xl:w-full">
                                             <label className="mb-2.5 block text-black dark:text-white">
                                                 Driver
@@ -380,59 +390,82 @@ const AddRentLong = () => {
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                        <DatePickerTwo labelName="Start Date Time" disabled={false} setSelectedData={setSelectedData} value={startDateTime} isInvalid={invalidFields.includes('Start Date Time')}/>
-                                        <DatePickerTwo labelName="End Date Time" disabled={false} setSelectedData={setSelectedData} value={endDateTime} isInvalid={invalidFields.includes('End Date Time')}/>
+                                        <DatePickerTwo labelName="Start Date Time" disabled={false} setSelectedData={setSelectedData} value={startDateTime} isInvalid={invalidFields.includes('Start Date Time')} />
+                                        <DatePickerTwo labelName="End Date Time" disabled={false} setSelectedData={setSelectedData} value={endDateTime} isInvalid={invalidFields.includes('End Date Time')} />
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <SelectGroupOne text="Outsource Vehicle" options={[{ value: "true", text: "Outsource" }, { value: '', text: "Internal" }]} setSelectedData={setSelectedData} disabled={false} defaultValue="" />
-                                        <SelectGroupOne text="Vehicle Group" options={formOptions.vehicleGroups || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicleGroups} defaultValue='' isInvalid={invalidFields.includes('Vehicle Group')}/>
+                                        <SelectGroupOne text="Vehicle Group" options={formOptions.vehicleGroups || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicleGroups} defaultValue='' isInvalid={invalidFields.includes('Vehicle Group')} />
                                         <FormCheckbox label="Show all vehicles" value={isAllVehiclesSelected} set={handleCheckboxChange} disabled={false} />
-                                        <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue='' isInvalid={invalidFields.includes('Vehicle')}/>
+                                        <SelectGroupOne text="Vehicle" options={formOptions.vehicles || []} setSelectedData={setSelectedData} disabled={!formOptions.vehicles} defaultValue='' isInvalid={invalidFields.includes('Vehicle')} />
                                     </div>
 
                                     <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
                                         <SelectGroupOne text="Customer Payment Method" options={formOptions.customerPaymentMethods || []} setSelectedData={setSelectedData} disabled={false} defaultValue='' />
                                         <div className="w-full xl:w-full">
                                             <label className="mb-2.5 block text-black dark:text-white">
-                                                Price To Costumer Monthly
+                                                Price To Customer
                                             </label>
                                             <input
-                                                type='number'
+                                                type="text"
                                                 disabled={false}
                                                 value={priceToCustomer}
-                                                placeholder='Empty'
                                                 onChange={(e) => {
-                                                    const newValue = parseFloat(e.target.value);
+                                                    let newValue = e.target.value;
+
+                                                    if (newValue === '') {
+                                                        setSelectedData(prevData => ({
+                                                            ...prevData,
+                                                            priceToCustomer: 0
+                                                        }));
+                                                        return;
+                                                    }
+
+                                                    newValue = newValue.replace(/^0+(?!\.)/, '');
+                                                    const parsedValue = parseFloat(newValue);
+
                                                     setSelectedData(prevData => ({
                                                         ...prevData,
-                                                        priceToCustomer: !isNaN(newValue) && newValue
+                                                        priceToCustomer: !isNaN(parsedValue) ? parsedValue : 0
                                                     }));
                                                 }}
                                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                             />
+
                                         </div>
                                     </div>
                                     {
                                         selectedData.selectedOutsourceVehicle == true &&
                                         <div className='mb-3 flex flex-col gap-6 xl:flex-row'>
-                                            <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={!formOptions.suppliers} defaultValue='' isInvalid={invalidFields.includes('Supplier')}/>
+                                            <SelectGroupOne text="Supplier" options={formOptions.suppliers || []} setSelectedData={setSelectedData} disabled={!formOptions.suppliers} defaultValue='' isInvalid={invalidFields.includes('Supplier')} />
                                             <SelectGroupOne text="Supplier Payment Method" options={formOptions.supplierPaymentMethods || []} setSelectedData={setSelectedData} disabled={!formOptions.supplierPaymentMethods} defaultValue='' />
                                             <div className="w-full xl:w-full">
                                                 <label className="mb-2.5 block text-black dark:text-white">
                                                     Price To Supplier
                                                 </label>
                                                 <input
-                                                    type="number"
+                                                    type="text"
                                                     disabled={false}
-                                                    placeholder="Empty"
                                                     value={priceToSupplier}
                                                     onChange={(e) => {
-                                                        const newValue = parseFloat(e.target.value);
+                                                        let newValue = e.target.value;
+
+                                                        if (newValue === '') {
+                                                            setSelectedData(prevData => ({
+                                                                ...prevData,
+                                                                priceToSupplier: 0
+                                                            }));
+                                                            return;
+                                                        }
+
+                                                        newValue = newValue.replace(/^0+(?!\.)/, '');
+                                                        const parsedValue = parseFloat(newValue);
+
                                                         setSelectedData(prevData => ({
                                                             ...prevData,
-                                                            priceToSupplier: newValue
-                                                        }))
+                                                            priceToSupplier: !isNaN(parsedValue) ? parsedValue : 0
+                                                        }));
                                                     }}
                                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 />
@@ -452,15 +485,38 @@ const AddRentLong = () => {
                                                 type="text"
                                                 placeholder="Enter person name"
                                                 className={`w-full rounded border-[1.5px] ${invalidFields.includes("Requested Person") ? 'focus:border-danger active:border-danger border-danger bg-red-100 ' : 'focus:border-primary border-stroke active:border-primary dark:border-form-strokedark dark:bg-form-input'}  bg-transparent py-3 px-5 text-black 
-                                                outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`}/>
+                                                outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`} />
                                         </div>
-                                        <div className="w-full hidden xl:w-full xl:block">
-
+                                        <div className='w-full mb-3 flex flex-col gap-6 xl:flex-row'>
+                                            <div className="w-full xl:w-full">
+                                                <label className="mb-2.5 block text-xl font-semibold text-black dark:text-white">
+                                                    Total for customer
+                                                </label>
+                                                <input
+                                                    value={summaryCustomer}
+                                                    type="text"
+                                                    disabled
+                                                    className={`w-full rounded border-[1.5px] focus:border-primary border-stroke active:border-primary dark:border-form-strokedark dark:bg-form-input bg-transparent py-3 px-5 text-black 
+                                    outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`}
+                                                />
+                                            </div>
+                                            {selectedOutsourceVehicle && <div className="w-full xl:w-full">
+                                                <label className="mb-2.5 block text-xl font-semibold text-black dark:text-white">
+                                                    Total for supplier
+                                                </label>
+                                                <input
+                                                    value={summarySupplier}
+                                                    type="text"
+                                                    disabled
+                                                    className={`w-full rounded border-[1.5px] focus:border-primary border-stroke active:border-primary dark:border-form-strokedark dark:bg-form-input bg-transparent py-3 px-5 text-black 
+                                    outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`}
+                                                />
+                                            </div>}
                                         </div>
                                         {/* <SelectGroupOne text="Source" options={formOptions.sources} setSelectedData={setSelectedData} disabled={!formOptions.sources} defaultValue={null} /> */}
                                     </div>
                                     {
-                                        formOptions?.extraChargePanel?.length !== 0 && <div className='mb-6 flex flex-col gap-3'>
+                                        formOptions?.extraChargePanel?.length > 0 && <div className='mb-6 flex flex-col gap-3'>
                                             <label className="mt-3 block text-md font-medium text-black dark:text-white">
                                                 Extra Charge Panel
                                             </label>

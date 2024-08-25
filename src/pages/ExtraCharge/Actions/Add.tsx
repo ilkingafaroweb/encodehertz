@@ -108,27 +108,23 @@ const AddExtraCharge: React.FC = () => {
       body: JSON.stringify(postData),
     })
       .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.text();
-      })
-      .then(data => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: data,
+        return response.text().then(text => {
+          return {
+            ok: response.ok,
+            status: response.status,
+            text: text
+          };
         });
       })
-      .catch(error => {
+      .then(({ ok, text }) => {
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error,
+          icon: ok ? 'success' : 'error',
+          title: ok ? 'Success' : 'Error',
+          text: text,
         });
-      });
-
+      })
   };
+  
 
   return (
     <DefaultLayout>

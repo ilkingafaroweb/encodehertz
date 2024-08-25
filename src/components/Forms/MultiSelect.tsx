@@ -20,20 +20,24 @@ interface DropdownProps {
 }
 
 const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelectedData, defaultValue, outsource }) => {
+  const [options, setOptions] = useState<Option[]>(ecpOptions)
   const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [sumOutsource, setSumOutsource] = useState(0);
   const [sumCustomer, setSumCustomer] = useState(0);
 
   useEffect(() => {
-    calculateSums();
-  }, [selectedOptions]);
-
+    calculateSums()
+    setOptions(ecpOptions.filter(option =>
+      !selectedOptions.some(selected => selected.name === option.name)
+    ));
+  }, [ecpOptions, selectedOptions]); 
+  
   useEffect(() => {
-    if (defaultValue) {
-      setSelectedOptions(defaultValue.filter(option => option.isSelected))
+    if(defaultValue){
+      setSelectedOptions(defaultValue.filter(option => option.isSelected));
     }
-  }, [defaultValue])
+  }, [defaultValue]);
 
   useEffect(() => {
     setSelectedData(prevSelectedData => ({
@@ -158,6 +162,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelecte
             {!selectedOptions.length && (
               <div className="flex-1">
                 <input
+                  readOnly
                   disabled={disabled}
                   placeholder="Select an option"
                   className="h-full w-full appearance-none bg-transparent p-1 px-2 outline-none"
@@ -191,9 +196,9 @@ const MultiSelect: React.FC<DropdownProps> = ({ ecpOptions, disabled, setSelecte
       </div>
       {showDropdown && (
         <div className="max-h-select  top-full left-0 z-40 w-full overflow-y-auto rounded bg-white shadow dark:bg-form-input">
-          {ecpOptions.map((option) => (
+          {options.map((option) => (
             <div
-              key={option.id}
+              key={option.name}
               className={`cursor-pointer rounded-t border-b border-stroke hover:bg-primary/5 dark:border-form-strokedark`}
               onClick={() => toggleOption(option)}
             >

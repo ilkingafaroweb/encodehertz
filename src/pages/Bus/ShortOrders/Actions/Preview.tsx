@@ -4,8 +4,8 @@ import Breadcrumb from '../../../../components/Breadcrumbs/Breadcrumb';
 import SelectGroupOne from '../../../../components/Forms/SelectGroup/SelectGroupOne';
 import DefaultLayout from '../../../../layout/DefaultLayout';
 import MultiSelect from '../../../../components/Forms/MultiSelect';
-import Swal from 'sweetalert2';
 import DatePickerTwo from '../../../../components/Forms/DatePicker/DatePickerTwo';
+import useTotalPrices from '../../../../hooks/useTotalPrices';
 
 interface FormData {
   address: string;
@@ -200,6 +200,8 @@ const PreviewBusShort = () => {
     selectedExtraCharges
   } = selectedData
 
+  const { summaryCustomer, summarySupplier } = useTotalPrices(priceToCustomer, priceToSupplier, extraChargePanel);
+
   const getVehicleList = async () => {
     if (!!cardNumber && !!selectedVehicleClass && !!startDateTime && !!endDateTime) {
       await fetch(`http://85.190.242.108:4483/api/Short/GetVehiclesOnEdit?cardNumber=${cardNumber}&vehicleClass=${selectedVehicleClass}&isOutsourceVehicle=${selectedOutsourceVehicle}&isAllVehiclesSelected=${isAllVehiclesSelected}&startDate=${startDateTime}&endDate=${endDateTime}`, {
@@ -239,29 +241,29 @@ const PreviewBusShort = () => {
 
   useEffect(() => {
     if (selectedServiceType) {
-        fetch(`http://85.190.242.108:4483/api/Short/GetServiceTypeDetails?selectedServiceType=${selectedServiceType}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
+      fetch(`http://85.190.242.108:4483/api/Short/GetServiceTypeDetails?selectedServiceType=${selectedServiceType}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                setFormOptions(prevData => ({
-                    ...prevData,
-                    serviceTypeDetails: data
-                }));
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
+        .then(data => {
+          setFormOptions(prevData => ({
+            ...prevData,
+            serviceTypeDetails: data
+          }));
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
     }
-}, [selectedServiceType]);
+  }, [selectedServiceType]);
 
 
   const handleBack = () => {
@@ -466,21 +468,31 @@ const PreviewBusShort = () => {
                         Price To Customer
                       </label>
                       <input
-                        type='number'
-                        disabled={true}
-                        value={priceToCustomer !== 0 ? priceToCustomer : 0}
-                        placeholder='Empty'
+                        type="text"
+                        disabled={false}
+                        value={priceToCustomer}
                         onChange={(e) => {
                           let newValue = e.target.value;
-                          newValue = newValue.replace(/^0+(?=\d)/, '');
+
+                          if (newValue === '') {
+                            setSelectedData(prevData => ({
+                              ...prevData,
+                              priceToCustomer: 0
+                            }));
+                            return;
+                          }
+
+                          newValue = newValue.replace(/^0+(?!\.)/, '');
                           const parsedValue = parseFloat(newValue);
+
                           setSelectedData(prevData => ({
                             ...prevData,
-                            priceToCustomer: !isNaN(parsedValue) ? parsedValue : ''
+                            priceToCustomer: !isNaN(parsedValue) ? parsedValue : 0
                           }));
                         }}
                         className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                       />
+
                     </div>
                   </div>
                   {
@@ -493,19 +505,30 @@ const PreviewBusShort = () => {
                         <SelectGroupOne text="Supplier Payment Method" options={formOptions.supplierPaymentMethods || []} setSelectedData={setSelectedData} disabled={true} defaultValue={selectedSupplierPaymentMethod} />
                         <div className="w-full xl:w-full">
                           <label className="mb-2.5 block text-black dark:text-white">
-                            Price To Outsource Monthly
+                            Price To Supplier
                           </label>
                           <input
-                            type="number"
-                            disabled={true}
-                            placeholder="Empty"
+                            type="text"
+                            disabled={false}
                             value={priceToSupplier}
                             onChange={(e) => {
-                              const newValue = parseFloat(e.target.value);
+                              let newValue = e.target.value;
+
+                              if (newValue === '') {
+                                setSelectedData(prevData => ({
+                                  ...prevData,
+                                  priceToSupplier: 0
+                                }));
+                                return;
+                              }
+
+                              newValue = newValue.replace(/^0+(?!\.)/, '');
+                              const parsedValue = parseFloat(newValue);
+
                               setSelectedData(prevData => ({
                                 ...prevData,
-                                priceToSupplier: newValue
-                              }))
+                                priceToSupplier: !isNaN(parsedValue) ? parsedValue : 0
+                              }));
                             }}
                             className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                           />
@@ -530,8 +553,31 @@ const PreviewBusShort = () => {
                         className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                       />
                     </div>
-                    <div className='w-full'>
-
+                    <div className='w-full mb-3 flex flex-col gap-6 xl:flex-row'>
+                      <div className="w-full xl:w-full">
+                        <label className="mb-2.5 block text-xl font-semibold text-black dark:text-white">
+                          Total for customer
+                        </label>
+                        <input
+                          value={summaryCustomer}
+                          type="text"
+                          disabled
+                          className={`w-full rounded border-[1.5px] focus:border-primary border-stroke active:border-primary dark:border-form-strokedark dark:bg-form-input bg-transparent py-3 px-5 text-black 
+                                    outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`}
+                        />
+                      </div>
+                      {selectedOutsourceVehicle && <div className="w-full xl:w-full">
+                        <label className="mb-2.5 block text-xl font-semibold text-black dark:text-white">
+                          Total for supplier
+                        </label>
+                        <input
+                          value={summarySupplier}
+                          type="text"
+                          disabled
+                          className={`w-full rounded border-[1.5px] focus:border-primary border-stroke active:border-primary dark:border-form-strokedark dark:bg-form-input bg-transparent py-3 px-5 text-black 
+                                    outline-none transition  disabled:cursor-default disabled:bg-whiter  dark:text-white`}
+                        />
+                      </div>}
                     </div>
                   </div>
 
